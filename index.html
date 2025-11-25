@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sliding Menu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+   
+
+    <div class="hamburger">
+      <a class="main-nav-toggle" href="#main-nav" id="menuToggle">
+        <!-- <i>Menu</i> -->
+      </a>
+    </div>
+
+    
+    <div class="menu-overlay" id="menuOverlay">
+        <nav class="menu-nav">
+            <ul class="menu-list">
+                <li class="menu-item">
+                    <a href="#physical" class="menu-link active" data-page="physical">
+                        <span class="menu-text">physical</span>
+                        <span class="menu-line"></span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#digital" class="menu-link" data-page="digital">
+                        <span class="menu-text">digital</span>
+                        <span class="menu-line"></span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#xr" class="menu-link" data-page="xr">
+                        <span class="menu-text">xr</span>
+                        <span class="menu-line"></span>
+                    </a>
+                </li>
+                
+            </ul>
+        </nav>
+
+        
+    </div>
+
+
+
+    <div class="image-comparison">
+    <div class="comparison-container">
+      <!-- Base image (bottom layer) -->
+      <img src="image1.jpg" alt="Base Image" class="comparison-image base-image">
+      
+      <!-- Top image (will be revealed through the square) -->
+      <img src="image2.jpg" alt="Top Image" class="comparison-image top-image">
+      
+      <!-- Reveal square with crosshair lines -->
+      <div class="reveal-square">
+        <div class="crosshair-horizontal"></div>
+        <div class="crosshair-vertical"></div>
+      </div>
+      
+      <!-- White border lines that follow the square -->
+      <div class="follow-lines">
+        <div class="line line-top"></div>
+        <div class="line line-right"></div>
+        <div class="line line-bottom"></div>
+        <div class="line line-left"></div>
+      </div>
+    </div>
+</div>
+
+    
+    <script type="module" src="/src/main.js"></script>
+
+</body>
+</html>
