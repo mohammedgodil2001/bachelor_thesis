@@ -463,6 +463,66 @@ body {
 
 
 
+.fullscreen-btn {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    z-index: 10000;
+    /* width: 50px;
+    height: 50px; */
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
 
+.fullscreen-icon {
+    width: 100%;
+    height: 100%;
+    display: block;
+    transition: opacity 0.3s ease;
+}
 
+.fullscreen-btn .exit-icon {
+    display: none;
+}
+
+.fullscreen-btn.active .enter-icon {
+    display: none;
+}
+
+.fullscreen-btn.active .exit-icon {
+    display: block;
+}
+
+/* Fullscreen hint message */
+.fullscreen-hint {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10001;
+    background: rgba(0, 0, 0, 0.8);
+    color: #ffffff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 300;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.fullscreen-hint.show {
+    opacity: 1;
+}
+
+.fullscreen-hint kbd {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: 'Delight', monospace;
+    font-weight: 500;
+    margin: 0 4px;
+}
 

@@ -4,6 +4,7 @@
 
 // gsap.registerPlugin(ScrollTrigger);
 
+
 // const menuToggle = document.getElementById('menuToggle');
 // const menuOverlay = document.getElementById('menuOverlay');
 // const menuLinks = document.querySelectorAll('.menu-link');
@@ -26,8 +27,6 @@
 //     }
 // });
 
-
-
 // function openMenu() {
 //     if (isMenuOpen) return;
     
@@ -38,11 +37,10 @@
     
 //     const activeLine = document.querySelector('.menu-link.active .menu-line');
 //     if (activeLine) {
-//         // Reset BOTH scaleX and Y position
 //         gsap.set(activeLine, { 
 //             scaleX: 0,
-//             y: '0%',      // ADD THIS - Reset Y position
-//             opacity: 1    // ADD THIS - Reset opacity
+//             y: '0%',
+//             opacity: 1
 //         });
 //     }
     
@@ -73,7 +71,6 @@
 //     }
 // }
 
-
 // function closeMenuFunc() {
 //     if (!isMenuOpen) return;
     
@@ -81,8 +78,6 @@
 //         onComplete: () => {
 //             isMenuOpen = false;
 //             menuOverlay.classList.remove('menu-open');
-            
-//             // Convert X back to hamburger
 //             menuToggle.classList.remove('active-menu');
 //         }
 //     });
@@ -174,6 +169,159 @@
 
 
 
+
+// const container = document.querySelector('.comparison-container');
+// const topImage = document.querySelector('.top-image');
+// const revealSquare = document.querySelector('.reveal-square');
+// const lines = {
+//   top: document.querySelector('.line-top'),
+//   right: document.querySelector('.line-right'),
+//   bottom: document.querySelector('.line-bottom'),
+//   left: document.querySelector('.line-left')
+// };
+
+// if (container && topImage && revealSquare) {
+//     let mouseX = 0;
+//     let mouseY = 0;
+//     const squareSize = 100;
+//     let ticking = false;
+
+//     container.addEventListener('mousemove', (e) => {
+//         const rect = container.getBoundingClientRect();
+//         mouseX = e.clientX - rect.left;
+//         mouseY = e.clientY - rect.top;
+        
+//         if (!ticking) {
+//             requestAnimationFrame(() => {
+//                 updateRevealEffect(mouseX, mouseY);
+//                 ticking = false;
+//             });
+//             ticking = true;
+//         }
+//     });
+
+//     container.addEventListener('mouseleave', () => {
+//         topImage.style.clipPath = 'inset(100% 100% 100% 100%)';
+//     });
+
+
+// // function updateRevealEffect(x, y) {
+// //     const halfSize = squareSize / 2;
+
+// //     const width = container.offsetWidth;
+// //     const height = container.offsetHeight;
+
+// //     // Clamp inside container
+// //     const safeX = Math.max(halfSize, Math.min(width - halfSize, x));
+// //     const safeY = Math.max(halfSize, Math.min(height - halfSize, y));
+
+// //     // Round everything to remove sub-pixel jitter
+// //     const left = Math.round(safeX - halfSize);
+// //     const right = Math.round(safeX + halfSize);
+// //     const top = Math.round(safeY - halfSize);
+// //     const bottom = Math.round(safeY + halfSize);
+
+// //     // ✅ Move square using absolute positioning (not transform)
+// //     revealSquare.style.left = `${left}px`;
+// //     revealSquare.style.top = `${top}px`;
+
+// //     // ✅ Apply clean clip-path
+// //     topImage.style.clipPath = `inset(
+// //         ${top}px 
+// //         ${width - right}px 
+// //         ${height - bottom}px 
+// //         ${left}px
+// //     )`;
+
+  
+// // if (lines.top) {
+// //     lines.top.style.top = `${top}px`;
+// //     lines.top.style.left = `0px`;
+// //     lines.top.style.width = `${left}px`;
+// // }
+
+// // if (lines.left) {
+// //     lines.left.style.left = `${left}px`;
+// //     lines.left.style.top = `0px`;
+// //     lines.left.style.height = `${top}px`;
+// // }
+
+
+
+// // if (lines.bottom) {
+// //     lines.bottom.style.top = `${bottom}px`;
+// //     lines.bottom.style.left = `${right}px`;
+// //     lines.bottom.style.width = `${width - right}px`;
+// // }
+
+// // if (lines.right) {
+// //     lines.right.style.left = `${right}px`;
+// //     lines.right.style.top = `${bottom}px`;
+// //     lines.right.style.height = `${height - bottom}px`;
+// // }
+
+
+    
+// // }
+
+
+
+// function updateRevealEffect(x, y) {
+//     const halfSize = squareSize / 2;
+
+//     const width = container.offsetWidth;
+//     const height = container.offsetHeight;
+
+//     const safeX = Math.max(halfSize, Math.min(width - halfSize, x));
+//     const safeY = Math.max(halfSize, Math.min(height - halfSize, y));
+
+//     const left = Math.round(safeX - halfSize);
+//     const right = Math.round(safeX + halfSize);
+//     const top = Math.round(safeY - halfSize);
+//     const bottom = Math.round(safeY + halfSize);
+
+//     revealSquare.style.left = `${left}px`;
+//     revealSquare.style.top = `${top}px`;
+
+//     topImage.style.clipPath = `polygon(
+//         ${left}px ${top}px,
+//         ${right}px ${top}px,
+//         ${right}px ${bottom}px,
+//         ${left}px ${bottom}px
+//     )`;
+
+//     if (lines.top) {
+//         lines.top.style.top = `${top}px`;
+//         lines.top.style.left = `0px`;
+//         lines.top.style.width = `${left}px`;
+//     }
+
+//     if (lines.left) {
+//         lines.left.style.left = `${left}px`;
+//         lines.left.style.top = `0px`;
+//         lines.left.style.height = `${top}px`;
+//     }
+
+//     if (lines.bottom) {
+//         lines.bottom.style.top = `${bottom}px`;
+//         lines.bottom.style.left = `${right}px`;
+//         lines.bottom.style.width = `${width - right}px`;
+//     }
+
+//     if (lines.right) {
+//         lines.right.style.left = `${right}px`;
+//         lines.right.style.top = `${bottom}px`;
+//         lines.right.style.height = `${height - bottom}px`;
+//     }
+// }
+
+
+
+// }
+
+
+
+
 import './style.css'
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -188,27 +336,33 @@ const menuTexts = document.querySelectorAll('.menu-text');
 
 let isMenuOpen = false;
 let menuTimeline;
+const currentPage = 'physical';
 
-const currentPage = 'physical'; 
-setActivePage(currentPage);
+const container = document.querySelector('.comparison-container');
+const topImage = document.querySelector('.top-image');
+const revealSquare = document.querySelector('.reveal-square');
+const lines = {
+    top: document.querySelector('.line-top'),
+    right: document.querySelector('.line-right'),
+    bottom: document.querySelector('.line-bottom'),
+    left: document.querySelector('.line-left')
+};
 
-// Toggle menu on hamburger click
-menuToggle.addEventListener('click', (e) => {
-    e.preventDefault();
-    
-    if (isMenuOpen) {
-        closeMenuFunc();
-    } else {
-        openMenu();
-    }
-});
+let mouseX = 0;
+let mouseY = 0;
+const squareSize = 100;
+let ticking = false;
 
-function openMenu() {
+const fullscreenBtn = document.getElementById('fullscreenBtn');
+const fullscreenHint = document.getElementById('fullscreenHint');
+let isFullscreen = false;
+let hintTimeout = null;
+
+
+const openMenu = () => {
     if (isMenuOpen) return;
     
     isMenuOpen = true;
-    
-    // Convert hamburger to X
     menuToggle.classList.add('active-menu');
     
     const activeLine = document.querySelector('.menu-link.active .menu-line');
@@ -247,7 +401,7 @@ function openMenu() {
     }
 }
 
-function closeMenuFunc() {
+const closeMenuFunc = () => {
     if (!isMenuOpen) return;
     
     const closeTimeline = gsap.timeline({
@@ -284,47 +438,7 @@ function closeMenuFunc() {
     }, '-=0.4');
 }
 
-menuLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-        const page = link.getAttribute('data-page');
-        
-        if (link.classList.contains('active')) {
-            closeMenuFunc();
-            return;
-        }
-        
-        const currentActiveLine = document.querySelector('.menu-link.active .menu-line');
-        const newLink = link;
-        const newLine = newLink.querySelector('.menu-line');
-        
-        menuLinks.forEach(l => l.classList.remove('active'));
-        newLink.classList.add('active');
-        
-        const lineTransition = gsap.timeline({
-            onComplete: () => {
-                closeMenuFunc();
-            }
-        });
-        
-        if (currentActiveLine && currentActiveLine !== newLine) {
-            lineTransition.to(currentActiveLine, {
-                scaleX: 0,
-                duration: 0.4,
-                ease: 'expo.inOut'
-            });
-        }
-        
-        lineTransition.to(newLine, {
-            scaleX: 1,
-            duration: 0.5,
-            ease: 'expo.inOut'
-        }, currentActiveLine && currentActiveLine !== newLine ? '-=0.2' : 0);
-        
-        console.log('Navigate to:', page);
-    });
-});
-
-function setActivePage(page) {
+const setActivePage = (page) => {
     menuLinks.forEach(link => {
         link.classList.remove('active');
         const line = link.querySelector('.menu-line');
@@ -337,114 +451,80 @@ function setActivePage(page) {
     }
 }
 
-document.addEventListener('keydown', (e) => {
+const handleMenuToggleClick = (e) => {
+    e.preventDefault();
+    
+    if (isMenuOpen) {
+        closeMenuFunc();
+    } else {
+        openMenu();
+    }
+}
+
+const handleMenuLinkClick = (link) => {
+    const page = link.getAttribute('data-page');
+    
+    if (link.classList.contains('active')) {
+        closeMenuFunc();
+        return;
+    }
+    
+    const currentActiveLine = document.querySelector('.menu-link.active .menu-line');
+    const newLink = link;
+    const newLine = newLink.querySelector('.menu-line');
+    
+    menuLinks.forEach(l => l.classList.remove('active'));
+    newLink.classList.add('active');
+    
+    const lineTransition = gsap.timeline({
+        onComplete: closeMenuFunc
+    });
+    
+    if (currentActiveLine && currentActiveLine !== newLine) {
+        lineTransition.to(currentActiveLine, {
+            scaleX: 0,
+            duration: 0.4,
+            ease: 'expo.inOut'
+        });
+    }
+    
+    lineTransition.to(newLine, {
+        scaleX: 1,
+        duration: 0.5,
+        ease: 'expo.inOut'
+    }, currentActiveLine && currentActiveLine !== newLine ? '-=0.2' : 0);
+    
+    console.log('Navigate to:', page);
+}
+
+const handleMenuEscapeKey = (e) => {
     if (e.key === 'Escape' && isMenuOpen) {
         closeMenuFunc();
     }
-});
+}
 
-
-
-
-const container = document.querySelector('.comparison-container');
-const topImage = document.querySelector('.top-image');
-const revealSquare = document.querySelector('.reveal-square');
-const lines = {
-  top: document.querySelector('.line-top'),
-  right: document.querySelector('.line-right'),
-  bottom: document.querySelector('.line-bottom'),
-  left: document.querySelector('.line-left')
-};
-
-if (container && topImage && revealSquare) {
-    let mouseX = 0;
-    let mouseY = 0;
-    const squareSize = 100;
-    let ticking = false;
-
-    container.addEventListener('mousemove', (e) => {
-        const rect = container.getBoundingClientRect();
-        mouseX = e.clientX - rect.left;
-        mouseY = e.clientY - rect.top;
-        
-        if (!ticking) {
-            requestAnimationFrame(() => {
-                updateRevealEffect(mouseX, mouseY);
-                ticking = false;
-            });
-            ticking = true;
-        }
-    });
-
-    container.addEventListener('mouseleave', () => {
-        topImage.style.clipPath = 'inset(100% 100% 100% 100%)';
-    });
-
-
-// function updateRevealEffect(x, y) {
-//     const halfSize = squareSize / 2;
-
-//     const width = container.offsetWidth;
-//     const height = container.offsetHeight;
-
-//     // Clamp inside container
-//     const safeX = Math.max(halfSize, Math.min(width - halfSize, x));
-//     const safeY = Math.max(halfSize, Math.min(height - halfSize, y));
-
-//     // Round everything to remove sub-pixel jitter
-//     const left = Math.round(safeX - halfSize);
-//     const right = Math.round(safeX + halfSize);
-//     const top = Math.round(safeY - halfSize);
-//     const bottom = Math.round(safeY + halfSize);
-
-//     // ✅ Move square using absolute positioning (not transform)
-//     revealSquare.style.left = `${left}px`;
-//     revealSquare.style.top = `${top}px`;
-
-//     // ✅ Apply clean clip-path
-//     topImage.style.clipPath = `inset(
-//         ${top}px 
-//         ${width - right}px 
-//         ${height - bottom}px 
-//         ${left}px
-//     )`;
-
-  
-// if (lines.top) {
-//     lines.top.style.top = `${top}px`;
-//     lines.top.style.left = `0px`;
-//     lines.top.style.width = `${left}px`;
-// }
-
-// if (lines.left) {
-//     lines.left.style.left = `${left}px`;
-//     lines.left.style.top = `0px`;
-//     lines.left.style.height = `${top}px`;
-// }
-
-
-
-// if (lines.bottom) {
-//     lines.bottom.style.top = `${bottom}px`;
-//     lines.bottom.style.left = `${right}px`;
-//     lines.bottom.style.width = `${width - right}px`;
-// }
-
-// if (lines.right) {
-//     lines.right.style.left = `${right}px`;
-//     lines.right.style.top = `${bottom}px`;
-//     lines.right.style.height = `${height - bottom}px`;
-// }
-
-
+const handleMouseMove = (e) => {
+    const rect = container.getBoundingClientRect();
+    mouseX = e.clientX - rect.left;
+    mouseY = e.clientY - rect.top;
     
-// }
+    if (!ticking) {
+        requestAnimationFrame(updateRevealEffectFrame);
+        ticking = true;
+    }
+}
 
+const updateRevealEffectFrame = () => {
+    updateRevealEffect(mouseX, mouseY);
+    ticking = false;
+}
 
+const handleMouseLeave = () => {
+    topImage.style.clipPath = 'inset(100% 100% 100% 100%)';
+}
 
-function updateRevealEffect(x, y) {
+const updateRevealEffect = (x, y) => {
     const halfSize = squareSize / 2;
-
     const width = container.offsetWidth;
     const height = container.offsetHeight;
 
@@ -466,6 +546,10 @@ function updateRevealEffect(x, y) {
         ${left}px ${bottom}px
     )`;
 
+    updateLines(left, right, top, bottom, width, height);
+}
+
+const updateLines = (left, right, top, bottom, width, height) => {
     if (lines.top) {
         lines.top.style.top = `${top}px`;
         lines.top.style.left = `0px`;
@@ -491,8 +575,126 @@ function updateRevealEffect(x, y) {
     }
 }
 
-
-
+const toggleFullscreen = () => {
+    if (!isFullscreen) {
+        enterFullscreen();
+    } else {
+        exitFullscreen();
+    }
 }
+
+const enterFullscreen = () => {
+    document.documentElement.requestFullscreen()
+        .then(() => {
+            isFullscreen = true;
+            updateFullscreenUI(true);
+            showFullscreenHint();
+        })
+        .catch((err) => {
+            console.error(`Error entering fullscreen: ${err.message}`);
+        });
+}
+
+const exitFullscreen = () => {
+    if (document.exitFullscreen) {
+        document.exitFullscreen()
+            .then(() => {
+                isFullscreen = false;
+                updateFullscreenUI(false);
+                hideFullscreenHint();
+            })
+            .catch((err) => {
+                console.error(`Error exiting fullscreen: ${err.message}`);
+            });
+    }
+}
+
+const updateFullscreenUI = (isActive) => {
+    if (isActive) {
+        fullscreenBtn.classList.add('active');
+    } else {
+        fullscreenBtn.classList.remove('active');
+    }
+}
+
+const showFullscreenHint = () => {
+    if (fullscreenHint) {
+        fullscreenHint.classList.add('show');
+        
+        if (hintTimeout) {
+            clearTimeout(hintTimeout);
+        }
+        
+        hintTimeout = setTimeout(hideFullscreenHint, 3000);
+    }
+}
+
+const hideFullscreenHint = () => {
+    if (fullscreenHint) {
+        fullscreenHint.classList.remove('show');
+    }
+}
+
+const handleFullscreenChange = () => {
+    if (!document.fullscreenElement) {
+        isFullscreen = false;
+        updateFullscreenUI(false);
+        hideFullscreenHint();
+        
+        if (hintTimeout) {
+            clearTimeout(hintTimeout);
+        }
+    } else {
+        isFullscreen = true;
+        updateFullscreenUI(true);
+    }
+}
+
+const handleFullscreenEscapeKey = (e) => {
+    if (e.key === 'Escape' && isFullscreen) {
+        return;
+    }
+}
+
+
+const initMenuListeners = () => {
+    if (menuToggle) {
+        menuToggle.addEventListener('click', handleMenuToggleClick);
+    }
+
+    menuLinks.forEach(link => {
+        link.addEventListener('click', () => handleMenuLinkClick(link));
+    });
+
+    document.addEventListener('keydown', handleMenuEscapeKey);
+}
+
+const initImageComparisonListeners = () => {
+    if (container && topImage && revealSquare) {
+        container.addEventListener('mousemove', handleMouseMove);
+        container.addEventListener('mouseleave', handleMouseLeave);
+    }
+}
+
+const initFullscreenListeners = () => {
+    if (fullscreenBtn) {
+        fullscreenBtn.addEventListener('click', toggleFullscreen);
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('keydown', handleFullscreenEscapeKey);
+    }
+}
+
+
+const init = () => {
+    
+    setActivePage(currentPage);
+    initMenuListeners();
+    initImageComparisonListeners();
+    initFullscreenListeners();
+}
+
+
+init();
+
 
 
