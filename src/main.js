@@ -381,38 +381,65 @@ if (container && topImage && revealSquare) {
     });
 
 
-//     function updateRevealEffect(x, y) {
-//   const halfSize = squareSize / 2;
+// function updateRevealEffect(x, y) {
+//     const halfSize = squareSize / 2;
 
-//   // Clamp square center safely inside container
-//   const safeX = Math.max(halfSize, Math.min(container.offsetWidth - halfSize, x));
-//   const safeY = Math.max(halfSize, Math.min(container.offsetHeight - halfSize, y));
+//     const width = container.offsetWidth;
+//     const height = container.offsetHeight;
 
-//   // Move the square border
-//   revealSquare.style.transform = `translate(${safeX - halfSize}px, ${safeY - halfSize}px)`;
+//     // Clamp inside container
+//     const safeX = Math.max(halfSize, Math.min(width - halfSize, x));
+//     const safeY = Math.max(halfSize, Math.min(height - halfSize, y));
 
-//   // Calculate square corners
-//   const left = safeX - halfSize;
-//   const right = safeX + halfSize;
-//   const top = safeY - halfSize;
-//   const bottom = safeY + halfSize;
+//     // Round everything to remove sub-pixel jitter
+//     const left = Math.round(safeX - halfSize);
+//     const right = Math.round(safeX + halfSize);
+//     const top = Math.round(safeY - halfSize);
+//     const bottom = Math.round(safeY + halfSize);
 
-//   // 💯 Stable polygon mask (never leaks)
-//   topImage.style.clipPath = `
-//     polygon(
-//       ${left}px ${top}px,
-//       ${right}px ${top}px,
-//       ${right}px ${bottom}px,
-//       ${left}px ${bottom}px
-//     )
-//   `;
+//     // ✅ Move square using absolute positioning (not transform)
+//     revealSquare.style.left = `${left}px`;
+//     revealSquare.style.top = `${top}px`;
 
-//   // Move white guide lines
-//   lines.top.style.transform = `translateY(${top}px)`;
-//   lines.bottom.style.transform = `translateY(${bottom}px)`;
-//   lines.left.style.transform = `translateX(${left}px)`;
-//   lines.right.style.transform = `translateX(${right}px)`;
+//     // ✅ Apply clean clip-path
+//     topImage.style.clipPath = `inset(
+//         ${top}px 
+//         ${width - right}px 
+//         ${height - bottom}px 
+//         ${left}px
+//     )`;
+
+  
+// if (lines.top) {
+//     lines.top.style.top = `${top}px`;
+//     lines.top.style.left = `0px`;
+//     lines.top.style.width = `${left}px`;
 // }
+
+// if (lines.left) {
+//     lines.left.style.left = `${left}px`;
+//     lines.left.style.top = `0px`;
+//     lines.left.style.height = `${top}px`;
+// }
+
+
+
+// if (lines.bottom) {
+//     lines.bottom.style.top = `${bottom}px`;
+//     lines.bottom.style.left = `${right}px`;
+//     lines.bottom.style.width = `${width - right}px`;
+// }
+
+// if (lines.right) {
+//     lines.right.style.left = `${right}px`;
+//     lines.right.style.top = `${bottom}px`;
+//     lines.right.style.height = `${height - bottom}px`;
+// }
+
+
+    
+// }
+
 
 
 function updateRevealEffect(x, y) {
@@ -421,59 +448,48 @@ function updateRevealEffect(x, y) {
     const width = container.offsetWidth;
     const height = container.offsetHeight;
 
-    // Clamp inside container
     const safeX = Math.max(halfSize, Math.min(width - halfSize, x));
     const safeY = Math.max(halfSize, Math.min(height - halfSize, y));
 
-    // Round everything to remove sub-pixel jitter
     const left = Math.round(safeX - halfSize);
     const right = Math.round(safeX + halfSize);
     const top = Math.round(safeY - halfSize);
     const bottom = Math.round(safeY + halfSize);
 
-    // ✅ Move square using absolute positioning (not transform)
     revealSquare.style.left = `${left}px`;
     revealSquare.style.top = `${top}px`;
 
-    // ✅ Apply clean clip-path
-    topImage.style.clipPath = `inset(
-        ${top}px 
-        ${width - right}px 
-        ${height - bottom}px 
-        ${left}px
+    topImage.style.clipPath = `polygon(
+        ${left}px ${top}px,
+        ${right}px ${top}px,
+        ${right}px ${bottom}px,
+        ${left}px ${bottom}px
     )`;
 
-  
-if (lines.top) {
-    lines.top.style.top = `${top}px`;
-    lines.top.style.left = `0px`;
-    lines.top.style.width = `${left}px`;
+    if (lines.top) {
+        lines.top.style.top = `${top}px`;
+        lines.top.style.left = `0px`;
+        lines.top.style.width = `${left}px`;
+    }
+
+    if (lines.left) {
+        lines.left.style.left = `${left}px`;
+        lines.left.style.top = `0px`;
+        lines.left.style.height = `${top}px`;
+    }
+
+    if (lines.bottom) {
+        lines.bottom.style.top = `${bottom}px`;
+        lines.bottom.style.left = `${right}px`;
+        lines.bottom.style.width = `${width - right}px`;
+    }
+
+    if (lines.right) {
+        lines.right.style.left = `${right}px`;
+        lines.right.style.top = `${bottom}px`;
+        lines.right.style.height = `${height - bottom}px`;
+    }
 }
-
-if (lines.left) {
-    lines.left.style.left = `${left}px`;
-    lines.left.style.top = `0px`;
-    lines.left.style.height = `${top}px`;
-}
-
-
-
-if (lines.bottom) {
-    lines.bottom.style.top = `${bottom}px`;
-    lines.bottom.style.left = `${right}px`;
-    lines.bottom.style.width = `${width - right}px`;
-}
-
-if (lines.right) {
-    lines.right.style.left = `${right}px`;
-    lines.right.style.top = `${bottom}px`;
-    lines.right.style.height = `${height - bottom}px`;
-}
-
-
-    
-}
-
 
 
 

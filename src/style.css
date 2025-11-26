@@ -350,6 +350,18 @@ body {
   transition: opacity 0.3s ease;
 }
 
+.line-text {
+    position: absolute;
+    color: #ffffff;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-100%);
+}
+
+
+
 .comparison-container:hover .follow-lines {
   opacity: 1;
 }
