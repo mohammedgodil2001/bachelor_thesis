@@ -1,84 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sliding Menu</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sliding Menu</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-   
 
-    <div class="hamburger">
-      <a class="main-nav-toggle" href="#main-nav" id="menuToggle">
-      </a>
-    </div>
 
-   
-   <button class="fullscreen-btn" id="fullscreenBtn">
-        <img src="./src/images/full_screen.svg" alt="Enter Fullscreen" class="fullscreen-icon enter-icon">
-        <img src="./src/images/default.svg" alt="Exit Fullscreen" class="fullscreen-icon exit-icon">
+  <!-- <div class="hamburger">
+    <button class="main-nav-toggle" type="button" aria-label="Toggle Menu" id="menuToggle">
     </button>
+  </div> -->
+  <div class="hamburger">
+     <a class="main-nav-toggle" href="#main-nav" id="menuToggle">
+     </a>
+  </div>
+
+
+  <button class="fullscreen-btn" id="fullscreenBtn">
+    <img src="./src/images/full_screen.svg" alt="Enter Fullscreen" class="fullscreen-icon enter-icon">
+    <img src="./src/images/default.svg" alt="Exit Fullscreen" class="fullscreen-icon exit-icon">
+  </button>
 
 
 
 
-   
-
-   
-
-    
-    <div class="menu-overlay" id="menuOverlay">
-        <nav class="menu-nav">
-            <ul class="menu-list">
-                <li class="menu-item">
-                    <a href="#physical" class="menu-link active" data-page="physical">
-                        <span class="menu-text">
-                          <span class="menu-index">00.1</span>
-                          physical
-                        </span>
-                        <span class="menu-line"></span>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="#digital" class="menu-link" data-page="digital">
-                        <span class="menu-text"><span class="menu-index">00.2</span>digital</span>
-                        <span class="menu-line"></span>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="#xr" class="menu-link" data-page="xr">
-                        <span class="menu-text"><span class="menu-index">00.3</span>xr</span>
-                        <span class="menu-line"></span>
-                    </a>
-                </li>
-                
-            </ul>
-        </nav>
-
-        
-    </div>
 
 
 
-    <div class="image-comparison">
+
+
+  <div class="menu-overlay" id="menuOverlay">
+    <nav class="menu-nav">
+      <ul class="menu-list">
+        <li class="menu-item">
+          <a href="#physical" class="menu-link active" data-page="physical">
+            <span class="menu-text">
+              <span class="menu-index">00.1</span>
+              physical
+            </span>
+            <span class="menu-line"></span>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="#digital" class="menu-link" data-page="digital">
+            <span class="menu-text"><span class="menu-index">00.2</span>digital</span>
+            <span class="menu-line"></span>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="#xr" class="menu-link" data-page="xr">
+            <span class="menu-text"><span class="menu-index">00.3</span>xr</span>
+            <span class="menu-line"></span>
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+
+
+  </div>
+
+
+
+  <main>
+    <section class="image-comparison" aria-label="Image Comparison">
       <div class="comparison-container">
         <!-- Base image - bottom layer -->
         <img src="./bottom_image.png" alt="Base Image" class="comparison-image base-image">
-        
-        <!-- Top image - will be revealed through the square -->
-        
-        <img src="./top_image.png" alt="Top Image" class="comparison-image top-image">
-        
-        
-      <div class="reveal-square">
-        <div class="corner corner-bl"></div>
-        <div class="corner corner-br"></div>
-      </div>
 
-        
+        <!-- Top image - will be revealed through the square -->
+
+        <img src="./top_image.png" alt="Top Image" class="comparison-image top-image">
+
+
+        <div class="reveal-square" aria-hidden="true">
+          <div class="corner corner-bl"></div>
+          <div class="corner corner-br"></div>
+        </div>
+
+
         <!-- White border lines that follow the square -->
-        <div class="follow-lines">
+        <div class="follow-lines" aria-hidden="true">
           <div class="line line-top">
           </div>
           <div class="line line-right"></div>
@@ -88,14 +95,16 @@
           <div class="line line-left"></div>
         </div>
 
-    
+
 
       </div>
-    </div>
+    </section>
+  </main>
 
 
-    
-    <script type="module" src="/src/main.js"></script>
+
+  <script type="module" src="/src/main.js"></script>
 
 </body>
+
 </html>
