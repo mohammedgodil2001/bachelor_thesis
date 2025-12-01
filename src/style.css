@@ -68,6 +68,11 @@ body {
   white-space: nowrap;
 }
 
+.content-wrapper{
+  /* width: 95%;
+  margin: auto; */
+}
+
 
 .menu-overlay {
     position: fixed;

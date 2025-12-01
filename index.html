@@ -9,84 +9,86 @@
 </head>
 
 <body>
-  <header>
-    <div class="hamburger">
-       <a class="main-nav-toggle" href="#main-nav" id="menuToggle">
-       </a>
-    </div>
-  
-    <button class="fullscreen-btn" id="fullscreenBtn">
-      <img src="./src/images/full_screen.svg" alt="Enter Fullscreen" class="fullscreen-icon enter-icon">
-      <img src="./src/images/default.svg" alt="Exit Fullscreen" class="fullscreen-icon exit-icon">
-    </button>
-  
-    <div class="menu-overlay" id="menuOverlay">
-      <nav class="menu-nav">
-        <ul class="menu-list">
-          <li class="menu-item">
-            <a href="#physical" class="menu-link active" data-page="physical">
-              <span class="menu-text">
-                <span class="menu-index">00.1</span>
-                physical
-              </span>
-              <span class="menu-line"></span>
-            </a>
-          </li>
-          <li class="menu-item">
-            <a href="#digital" class="menu-link" data-page="digital">
-              <span class="menu-text"><span class="menu-index">00.2</span>digital</span>
-              <span class="menu-line"></span>
-            </a>
-          </li>
-          <li class="menu-item">
-            <a href="#xr" class="menu-link" data-page="xr">
-              <span class="menu-text"><span class="menu-index">00.3</span>xr</span>
-              <span class="menu-line"></span>
-            </a>
-          </li>
-  
-        </ul>
-      </nav>
-  
-  
-    </div>
-  </header>
-  
- <main>
-  <h1 class="visually-hidden">main section</h1>
-   <section class="image-comparison">
-    <h2 id="comparisonTitle" class="visually-hidden">Image Comparison</h2>
-     <div class="comparison-container">
-       <!-- Base image - bottom layer -->
-       <img src="./bottom_image.png" alt="Base Image" class="comparison-image base-image">
- 
-       <!-- Top image - will be revealed through the square -->
- 
-       <img src="./top_image.png" alt="Top Image" class="comparison-image top-image">
- 
- 
-       <div class="reveal-square" aria-hidden="true">
-         <div class="corner corner-bl"></div>
-         <div class="corner corner-br"></div>
-       </div>
- 
- 
-       <!-- White border lines that follow the square -->
-       <div class="follow-lines" aria-hidden="true">
-         <div class="line line-top">
+  <div class="content-wrapper">
+    <header>
+      <div class="hamburger">
+         <a class="main-nav-toggle" href="#main-nav" id="menuToggle">
+         </a>
+      </div>
+    
+      <button class="fullscreen-btn" id="fullscreenBtn">
+        <img src="./src/images/full_screen.svg" alt="Enter Fullscreen" class="fullscreen-icon enter-icon">
+        <img src="./src/images/default.svg" alt="Exit Fullscreen" class="fullscreen-icon exit-icon">
+      </button>
+    
+      <div class="menu-overlay" id="menuOverlay">
+        <nav class="menu-nav">
+          <ul class="menu-list">
+            <li class="menu-item">
+              <a href="#physical" class="menu-link active" data-page="physical">
+                <span class="menu-text">
+                  <span class="menu-index">00.1</span>
+                  physical
+                </span>
+                <span class="menu-line"></span>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="#digital" class="menu-link" data-page="digital">
+                <span class="menu-text"><span class="menu-index">00.2</span>digital</span>
+                <span class="menu-line"></span>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="#xr" class="menu-link" data-page="xr">
+                <span class="menu-text"><span class="menu-index">00.3</span>xr</span>
+                <span class="menu-line"></span>
+              </a>
+            </li>
+    
+          </ul>
+        </nav>
+    
+    
+      </div>
+    </header>
+    
+   <main>
+    <h1 class="visually-hidden">main section</h1>
+     <section class="image-comparison">
+      <h2 id="comparisonTitle" class="visually-hidden">Image Comparison</h2>
+       <div class="comparison-container">
+         <!-- Base image - bottom layer -->
+         <img src="./bottom_image.png" alt="Base Image" class="comparison-image base-image">
+   
+         <!-- Top image - will be revealed through the square -->
+   
+         <img src="./top_image.png" alt="Top Image" class="comparison-image top-image">
+   
+   
+         <div class="reveal-square" aria-hidden="true">
+           <div class="corner corner-bl"></div>
+           <div class="corner corner-br"></div>
          </div>
-         <div class="line line-right"></div>
-         <div class="line line-bottom">
-           <span class="line-text">DIG MODAL</span>
+   
+   
+         <!-- White border lines that follow the square -->
+         <div class="follow-lines" aria-hidden="true">
+           <div class="line line-top">
+           </div>
+           <div class="line line-right"></div>
+           <div class="line line-bottom">
+             <span class="line-text">DIG MODAL</span>
+           </div>
+           <div class="line line-left"></div>
          </div>
-         <div class="line line-left"></div>
+   
+   
+   
        </div>
- 
- 
- 
-     </div>
-   </section>
- </main>
+     </section>
+   </main>
+  </div>
   
 
 
