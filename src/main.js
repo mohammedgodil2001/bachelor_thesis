@@ -368,31 +368,25 @@ const handleMenuEscapeKey = (e) => {
     }
 }
 
-const handleMouseMove = (e) => {
+// Robust Reveal Effect Logic
+let revealState = {
+    mouseX: 0,
+    mouseY: 0,
+    isActive: false
+};
+
+const updateRevealEffect = () => {
+    if (!revealState.isActive || !container) return;
+
     const rect = container.getBoundingClientRect();
-    mouseX = e.clientX - rect.left;
-    mouseY = e.clientY - rect.top;
-    
-    if (!ticking) {
-        requestAnimationFrame(updateRevealEffectFrame);
-        ticking = true;
-    }
-}
+    const x = revealState.mouseX - rect.left;
+    const y = revealState.mouseY - rect.top;
 
-const updateRevealEffectFrame = () => {
-    updateRevealEffect(mouseX, mouseY);
-    ticking = false;
-}
-
-const handleMouseLeave = () => {
-    topImage.style.clipPath = 'inset(100% 100% 100% 100%)';
-}
-
-const updateRevealEffect = (x, y) => {
     const halfSize = squareSize / 2;
     const width = container.offsetWidth;
     const height = container.offsetHeight;
 
+    // Clamp coordinates to stay within container
     const safeX = Math.max(halfSize, Math.min(width - halfSize, x));
     const safeY = Math.max(halfSize, Math.min(height - halfSize, y));
 
@@ -401,6 +395,7 @@ const updateRevealEffect = (x, y) => {
     const top = Math.round(safeY - halfSize);
     const bottom = Math.round(safeY + halfSize);
 
+    // Update positions using left/top as per original implementation
     revealSquare.style.left = `${left}px`;
     revealSquare.style.top = `${top}px`;
 
@@ -412,6 +407,42 @@ const updateRevealEffect = (x, y) => {
     )`;
 
     updateLines(left, right, top, bottom, width, height);
+}
+
+const handleGlobalMouseMove = (e) => {
+    if (!container) return;
+    
+    revealState.mouseX = e.clientX;
+    revealState.mouseY = e.clientY;
+    
+    const rect = container.getBoundingClientRect();
+    
+    // Check if mouse is near the container (with some buffer) or inside
+    const buffer = 100; // Larger buffer for robustness
+    const isInside = (
+        e.clientX >= rect.left - buffer && 
+        e.clientX <= rect.right + buffer && 
+        e.clientY >= rect.top - buffer && 
+        e.clientY <= rect.bottom + buffer
+    );
+
+    if (isInside) {
+        if (!revealState.isActive) {
+            revealState.isActive = true;
+            topImage.style.clipPath = 'none'; // Prepare for updates
+        }
+    } else {
+        if (revealState.isActive) {
+            revealState.isActive = false;
+            // Reset to full cover when leaving
+            topImage.style.clipPath = 'inset(100% 100% 100% 100%)';
+             // Hide lines
+            if (lines.top) lines.top.style.width = '0px';
+            if (lines.left) lines.left.style.height = '0px';
+            if (lines.bottom) lines.bottom.style.width = '0px';
+            if (lines.right) lines.right.style.height = '0px';
+        }
+    }
 }
 
 const updateLines = (left, right, top, bottom, width, height) => {
@@ -552,8 +583,16 @@ const initMenuListeners = () => {
 
 const initImageComparisonListeners = () => {
     if (container && topImage && revealSquare) {
-        container.addEventListener('mousemove', handleMouseMove);
-        container.addEventListener('mouseleave', handleMouseLeave);
+        // Disable transitions that interfere with JS tracking to prevent desync
+        topImage.style.transition = 'none';
+        // Ensure revealSquare only transitions opacity, not movement (left/top)
+        revealSquare.style.transition = 'opacity 0.3s ease';
+
+        // Use global window listener for robustness
+        window.addEventListener('mousemove', handleGlobalMouseMove);
+        
+        // Use GSAP ticker for smooth updates
+        gsap.ticker.add(updateRevealEffect);
     }
 }
 
