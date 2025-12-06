@@ -292,15 +292,62 @@
 
       </section>
 
+      <!-- Video Scroll Section -->
+      <section>
+        <svg style="position: absolute; width: 0; height: 0;">
+          <filter id="liquid-glass" primitiveUnits="objectBoundingBox">
+            <feImage result="map" width="100%" height="100%" x="0" y="0"
+              href="data:image/webp;base64,UklGRq4vAABXRUJQVlA4WAoAAAAQAAAA5wEAhwAAQUxQSOYWAAABHAVpGzCrf9t7EiJC..." />
 
 
+            <feGaussianBlur in="SourceGraphic" stdDeviation="0.04" result="blur" />
+            <feDisplacementMap in="blur" in2="map" scale="0.5" xChannelSelector="R" yChannelSelector="G">
+            </feDisplacementMap>
+          </filter>
+        </svg>
 
+        <section id="scroll-container">
+          <video src="./src/images/updated_slower_720p.mp4" playsinline webkit-playsinline preload="auto" muted
+            class="video-background">
+          </video>
+
+
+          <!-- <div id="scroll-tracker">
+                 <div id="progress-bar"></div>
+                 <div id="progress-text">0%</div>
+             </div> -->
+
+
+          <article class="text-overlay" id="text-1">
+            <img src="./src/images/communication.gif" alt="" class="overlay-video">
+            <span>DigiPHY, a combination of VR & physical supports into an interactive XR design environment.</span>
+          </article>
+          <article class="text-overlay" id="text-2">
+            <img src="./src/images/communication.gif" alt="" class="overlay-video">
+            <span>Allows designers and engineers to adjust to the ergonomics of any
+              vehicle in a matter of seconds.</span>
+          </article>
+          <article class="text-overlay" id="text-3">
+            <img src="./src/images/communication.gif" alt="" class="overlay-video">
+            <span>Designed by GRANSTUDIO to assist in a leaner and more User
+              Experience
+              driven design process.</span>
+          </article>
+          <article class="text-overlay" id="text-4">
+            <img src="./src/images/communication.gif" alt="" class="overlay-video">
+            <span>A driver software refined for an easier access for designers. A
+              single
+              click away for a fast testing for new changes</span>
+          </article>
+
+
+        </section>
+      </section>
 
     </main>
   </div>
 
-
-
+  <div class="overlay"></div>
 
   <script type="module" src="/src/main.js"></script>
 

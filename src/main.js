@@ -1,8 +1,99 @@
 import './style.css'
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import SplitType from 'split-type';
+import Lenis from 'lenis';
+import { Overlay } from './overlay.js'; // Import Overlay class
 
 gsap.registerPlugin(ScrollTrigger);
+
+// ... existing code ...
+
+// Initialize Overlay
+const overlayEl = document.querySelector('.overlay');
+const overlay = new Overlay(overlayEl, {
+    rows: 8,
+    columns: 14
+});
+
+const initPixelTransition = () => {
+    let isAnimating = false;
+
+    // Ensure image comparison is visible initially
+    gsap.set(".image-comparison", { autoAlpha: 1 });
+
+    ScrollTrigger.create({
+        trigger: ".image-comparison",
+        start: "top top",
+        end: "+=100vh", // Pin distance before transition
+        pin: true,
+        scrub: false,
+        // When scrolling down past the pin
+        onLeave: () => {
+            if (isAnimating) return;
+            isAnimating = true;
+            
+            if (window.lenis) window.lenis.stop();
+
+            overlay.show({
+                duration: 0.4,
+                ease: 'power3.inOut',
+                stagger: index => 0.02 * (overlay.cells.flat()[index].row + gsap.utils.random(0, 5))
+            }).then(() => {
+                // Hide image comparison to reveal video
+                gsap.set(".image-comparison", { autoAlpha: 0 });
+                
+                overlay.hide({
+                    duration: 0.4,
+                    ease: 'power2',
+                    stagger: index => 0.02 * (overlay.cells.flat()[index].row + gsap.utils.random(0, 5))
+                }).then(() => {
+                    isAnimating = false;
+                    if (window.lenis) window.lenis.start();
+                    // Refresh ScrollTrigger after transition
+                    ScrollTrigger.refresh();
+                });
+            });
+        },
+        // When scrolling back up into the pin
+        onEnterBack: () => {
+            if (isAnimating) return;
+            isAnimating = true;
+            
+            if (window.lenis) window.lenis.stop();
+
+            overlay.show({
+                duration: 0.4,
+                ease: 'power3.inOut',
+                stagger: index => 0.02 * (overlay.cells.flat()[index].row + gsap.utils.random(0, 5))
+            }).then(() => {
+                // Show image comparison
+                gsap.set(".image-comparison", { autoAlpha: 1 });
+                
+                overlay.hide({
+                    duration: 0.4,
+                    ease: 'power2',
+                    stagger: index => 0.02 * (overlay.cells.flat()[index].row + gsap.utils.random(0, 5))
+                }).then(() => {
+                    isAnimating = false;
+                    if (window.lenis) window.lenis.start();
+                    // Refresh ScrollTrigger after transition
+                    ScrollTrigger.refresh();
+                });
+            });
+        }
+    });
+};
+
+const init = () => {
+    setActivePage(currentPage);
+    initMenuListeners();
+    initImageComparisonListeners();
+    initFullscreenListeners();
+    animateProjectDescription();
+    initVideoScroll();
+    initPixelTransition(); 
+}
 
 
 const menuToggle = document.getElementById('menuToggle');
@@ -397,14 +488,186 @@ const animateProjectDescription = () => {
     });
 }
 
-const init = () => {
+// Video Scroll Configuration and Logic
+const CONFIG = {
+    scrollScrub: 1.5, // Reduced from 1.5 for more immediate response
+    textTimings: {
+        text1: { show: 0.05, hide: 0.15 },
+        text2: { show: 0.18, hide: 0.28 },
+        text3: { show: 0.39, hide: 0.60 },
+        text4: { show: 0.67, hide: null }
+    },
+    animation: {
+        charDuration: 0.03,
+        charStagger: 0.015,
+        fadeInDuration: 0.01,
+        fadeOutDuration: 0.02
+    }
+};
 
-    setActivePage(currentPage);
-    initMenuListeners();
-    initImageComparisonListeners();
-    initFullscreenListeners();
-    animateProjectDescription();
-}
+// ... (rest of the file)
+
+const initVideoScroll = () => {
+    const video = document.querySelector(".video-background");
+    if (!video) return;
+    
+    const src = video.currentSrc || video.src;
+
+    setupIOSVideoActivation(video);
+    setupSmoothScroll();
+    loadVideoOptimized(video, src);
+};
+
+const setupIOSVideoActivation = (video) => {
+    const activateIOS = () => {
+        video.play();
+        video.pause();
+    };
+    
+    document.documentElement.addEventListener("touchstart", activateIOS, { once: true });
+};
+
+const setupSmoothScroll = () => {
+    const lenis = new Lenis();
+    window.lenis = lenis; // Expose globally
+
+    lenis.on('scroll', ScrollTrigger.update);
+
+    gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+    });
+
+    gsap.ticker.lagSmoothing(0);
+    // ScrollTrigger already registered at the top
+};
+
+const loadVideoOptimized = (video, src) => {
+    if (window.fetch) {
+        fetch(src)
+            .then(response => response.blob())
+            .then(blob => {
+                const blobURL = URL.createObjectURL(blob);
+                video.src = blobURL;
+                video.addEventListener("loadedmetadata", () => initScrollAnimation(video), { once: true });
+            })
+            .catch(() => {
+                initScrollAnimation(video);
+            });
+    } else {
+        initScrollAnimation(video);
+    }
+};
+
+const initScrollAnimation = (video) => {
+    if (!video.duration || isNaN(video.duration)) {
+        video.addEventListener("loadedmetadata", () => initScrollAnimation(video), { once: true });
+        return;
+    }
+
+    cleanupScrollTriggers();
+    
+    const timeline = createMainTimeline(video);
+    
+    addVideoScrubbing(timeline, video);
+    addTextAnimations(timeline);
+};
+
+const cleanupScrollTriggers = () => {
+    ScrollTrigger.getAll().forEach(trigger => {
+        if (trigger.trigger === "#scroll-container") {
+            trigger.kill();
+        }
+    });
+};
+
+const createMainTimeline = (video) => {
+    return gsap.timeline({
+        scrollTrigger: {
+            trigger: "#scroll-container",
+            start: "top top",
+            end: "bottom bottom",
+            scrub: CONFIG.scrollScrub,
+            onUpdate: updateScrollProgress
+        }
+    });
+};
+
+const updateScrollProgress = (self) => {
+    const progress = Math.round(self.progress * 100);
+    
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    
+    if (progressBar && progressText) {
+        progressBar.style.setProperty('--progress', `${progress}%`);
+        progressText.textContent = `${progress}%`;
+    }
+};
+
+const addVideoScrubbing = (timeline, video) => {
+    timeline.fromTo(
+        video,
+        { currentTime: 0 },
+        { 
+            currentTime: video.duration, 
+            ease: "none", 
+            duration: 1 
+        }
+    );
+};
+
+const addTextAnimations = (timeline) => {
+    // Pre-split text for performance
+    document.querySelectorAll(".text-overlay").forEach(element => {
+        const spanElement = element.querySelector("span");
+        if (spanElement) {
+            // Store the SplitType instance on the element to access it later
+            element.splitInstance = new SplitType(spanElement, { types: "chars" });
+        }
+    });
+
+    const timings = CONFIG.textTimings;
+    
+    addTextOverlay(timeline, "#text-1", timings.text1.show, timings.text1.hide);
+    addTextOverlay(timeline, "#text-2", timings.text2.show, timings.text2.hide);
+    addTextOverlay(timeline, "#text-3", timings.text3.show, timings.text3.hide);
+    addTextOverlay(timeline, "#text-4", timings.text4.show, timings.text4.hide);
+};
+
+const addTextOverlay = (timeline, selector, showAt, hideAt) => {
+    timeline.to(selector, {
+        opacity: 1,
+        duration: CONFIG.animation.fadeInDuration,
+        onStart: () => animateTypingEffect(selector)
+    }, showAt);
+    
+    if (hideAt !== null) {
+        timeline.to(selector, {
+            opacity: 0,
+            duration: CONFIG.animation.fadeOutDuration
+        }, hideAt);
+    }
+};
+
+const animateTypingEffect = (selector) => {
+    const element = document.querySelector(selector);
+    if (!element || !element.splitInstance) return;
+
+    gsap.fromTo(
+        element.splitInstance.chars,
+        {
+            opacity: 0,
+            y: 8
+        },
+        {
+            opacity: 1,
+            y: 0,
+            duration: CONFIG.animation.charDuration,
+            ease: "power1.out",
+            stagger: CONFIG.animation.charStagger
+        }
+    );
+};
 
 
 init();

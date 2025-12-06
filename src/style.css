@@ -731,3 +731,197 @@ body {
     opacity: 0;
   }
 }
+
+/* Video Scroll Section Styles */
+#scroll-container {
+  position: relative;
+  height: 800vh;
+  margin-top: -100vh;
+  z-index: 1;
+  /* Sits above video to capture scroll, but transparent */
+  /* background: #000; Removed to allow video to show through */
+}
+
+.video-background {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  will-change: transform;
+  z-index: 0;
+  /* Behind content but in front of body background */
+}
+
+.image-comparison {
+  position: relative;
+  z-index: 2;
+  /* Ensure this sits ON TOP of the fixed video */
+  background: #fff;
+  /* Ensure it's opaque so video is hidden initially */
+}
+
+.text-overlay {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: fixed;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 1rem;
+  font-family: 'Delight', sans-serif;
+  text-align: left;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10;
+  width: 40%;
+  max-width: 800px;
+  line-height: 1.5;
+  padding: 20px 30px;
+
+  background-color: rgba(187, 187, 188, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 3px dashed rgba(255, 255, 255, 0.6);
+
+  will-change: transform, opacity;
+}
+
+.text-overlay::before,
+.text-overlay::after,
+.text-overlay span::before,
+.text-overlay span::after {
+  content: '';
+  position: absolute;
+  background: white;
+  z-index: 2;
+}
+
+.text-overlay::before {
+  width: 40px;
+  height: 15px;
+  top: -9px;
+  left: -20px;
+}
+
+.text-overlay::after {
+  width: 80px;
+  height: 30px;
+  top: -15px;
+  right: -40px;
+}
+
+.text-overlay span::before {
+  width: 15px;
+  height: 15px;
+  bottom: -9px;
+  left: -8px;
+  top: auto;
+}
+
+.text-overlay span::after {
+  width: 30px;
+  height: 15px;
+  bottom: -9px;
+  right: -15px;
+  top: auto;
+}
+
+.text-overlay span {
+  display: block;
+  position: static;
+}
+
+#scroll-tracker {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: white;
+  font-family: monospace;
+}
+
+#progress-bar {
+  width: 200px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  margin-bottom: 5px;
+  overflow: hidden;
+}
+
+#progress-bar::after {
+  content: '';
+  display: block;
+  height: 100%;
+  background: white;
+  width: var(--progress, 0%);
+  transition: width 0.1s;
+}
+
+#progress-text {
+  text-align: center;
+  font-size: 14px;
+}
+
+.overlay-text {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  font-size: 48px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.text-overlay .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(8px);
+  will-change: transform, opacity;
+}
+
+.overlay-video {
+  width: 3rem;
+  height: auto;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+/* Overlay Transition Styles */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(var(--columns), 1fr);
+  z-index: 9999;
+  /* Very high z-index to cover everything */
+  pointer-events: none;
+  opacity: 0;
+  /* Hide initially */
+}
+
+.cell {
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  /* Color of the pixels */
+  transform-origin: 50% 50%;
+}
