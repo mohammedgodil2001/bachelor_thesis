@@ -253,6 +253,10 @@ body {
   z-index: 10001;
   display: inline-block;
   height: 26px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .main-nav-toggle {
@@ -501,6 +505,10 @@ body {
   border: none;
   cursor: pointer;
   padding: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .fullscreen-icon {
@@ -922,6 +930,87 @@ body {
   width: 100%;
   height: 100%;
   background-color: #000;
-  /* Color of the pixels */
   transform-origin: 50% 50%;
+}
+
+#btnText {
+  font-family: 'Delight', sans-serif;
+  font-weight: 200;
+}
+
+.submit-btn {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #fff;
+  color: #000;
+  border: none;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 5px 5px 5px 15px;
+}
+
+.btn-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: #000;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.btn-arrow svg {
+  width: 15px;
+  height: 15px;
+  color: #fff;
+  transform: rotate(90deg);
+  transition: transform 0.3s ease;
+}
+
+.submit-btn .btn-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.submit-btn:hover .btn-arrow {
+  transform: translateY(0);
+}
+
+.submit-btn:hover .btn-arrow svg {
+  transform: rotate(135deg);
+  transition: transform 0.3s ease;
+}
+
+header .submit-btn {
+  position: fixed;
+  top: 30px;
+  left: 30px;
+  z-index: 10001;
+  /* Match hamburger z-index */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+header .logo {
+  position: fixed;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }

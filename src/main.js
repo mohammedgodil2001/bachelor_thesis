@@ -19,8 +19,12 @@ const overlay = new Overlay(overlayEl, {
 const initPixelTransition = () => {
     let isAnimating = false;
 
-    // Ensure image comparison is visible initially
+    // Ensure image comparison is visible initially and header is hidden
     gsap.set(".image-comparison", { autoAlpha: 1 });
+    gsap.set("header .submit-btn, header .logo, header .hamburger, header .fullscreen-btn", {
+        autoAlpha: 0,
+        pointerEvents: 'none'
+    });
 
     ScrollTrigger.create({
         trigger: ".image-comparison",
@@ -48,6 +52,19 @@ const initPixelTransition = () => {
                     ease: 'power2',
                     stagger: index => 0.02 * (overlay.cells.flat()[index].row + gsap.utils.random(0, 5))
                 }).then(() => {
+                    // Show header elements after transition
+                    gsap.to("header .submit-btn, header .logo, header .hamburger, header .fullscreen-btn", {
+                        autoAlpha: 1,
+                        duration: 0.6,
+                        ease: 'power2.out',
+                        stagger: 0.1,
+                        onStart: () => {
+                            gsap.set("header .submit-btn, header .logo, header .hamburger, header .fullscreen-btn", {
+                                pointerEvents: 'auto'
+                            });
+                        }
+                    });
+
                     isAnimating = false;
                     if (window.lenis) window.lenis.start();
                     // Refresh ScrollTrigger after transition
@@ -62,6 +79,18 @@ const initPixelTransition = () => {
             
             if (window.lenis) window.lenis.stop();
 
+            // Hide header elements first
+            gsap.to("header .submit-btn, header .logo, header .hamburger, header .fullscreen-btn", {
+                autoAlpha: 0,
+                duration: 0.3,
+                ease: 'power2.in',
+                onStart: () => {
+                    gsap.set("header .submit-btn, header .logo, header .hamburger, header .fullscreen-btn", {
+                        pointerEvents: 'none'
+                    });
+                }
+            });
+
             overlay.show({
                 duration: 0.4,
                 ease: 'power3.inOut',
@@ -69,7 +98,7 @@ const initPixelTransition = () => {
             }).then(() => {
                 // Show image comparison
                 gsap.set(".image-comparison", { autoAlpha: 1 });
-                
+
                 overlay.hide({
                     duration: 0.4,
                     ease: 'power2',
@@ -128,29 +157,36 @@ let hintTimeout = null;
 
 const openMenu = () => {
     if (isMenuOpen) return;
-    
+
     isMenuOpen = true;
     menuToggle.classList.add('active-menu');
-    
+
     const activeLine = document.querySelector('.menu-link.active .menu-line');
     if (activeLine) {
-        gsap.set(activeLine, { 
+        gsap.set(activeLine, {
             scaleX: 0,
             y: '0%',
             opacity: 1
         });
     }
-    
+
     menuTimeline = gsap.timeline();
-    
+
+    // Hide logo and contact button when menu opens
+    menuTimeline.to("header .submit-btn, header .logo", {
+        autoAlpha: 0,
+        duration: 0.3,
+        ease: 'power2.out'
+    }, 0);
+
     menuTimeline.to(menuOverlay, {
         x: '0%',
         duration: 1.8,
         ease: 'expo.inOut'
-    });
-    
+    }, 0);
+
     menuOverlay.classList.add('menu-open');
-    
+
     menuTimeline.to(menuTexts, {
         y: '0%',
         opacity: 1,
@@ -158,7 +194,7 @@ const openMenu = () => {
         stagger: 0.1,
         ease: 'expo.out'
     }, '-=0.2');
-    
+
     if (activeLine) {
         menuTimeline.to(activeLine, {
             scaleX: 1,
@@ -170,12 +206,19 @@ const openMenu = () => {
 
 const closeMenuFunc = () => {
     if (!isMenuOpen) return;
-    
+
     const closeTimeline = gsap.timeline({
         onComplete: () => {
             isMenuOpen = false;
             menuOverlay.classList.remove('menu-open');
             menuToggle.classList.remove('active-menu');
+
+            // Show logo and contact button when menu closes
+            gsap.to("header .submit-btn, header .logo", {
+                autoAlpha: 1,
+                duration: 0.4,
+                ease: 'power2.out'
+            });
         }
     });
     
