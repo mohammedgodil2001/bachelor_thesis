@@ -65,6 +65,9 @@ const initPixelTransition = () => {
                         }
                     });
 
+                    // Activate custom cursor
+                    activateCustomCursor();
+
                     isAnimating = false;
                     if (window.lenis) window.lenis.start();
                     // Refresh ScrollTrigger after transition
@@ -78,6 +81,9 @@ const initPixelTransition = () => {
             isAnimating = true;
             
             if (window.lenis) window.lenis.stop();
+
+            // Deactivate custom cursor when going back
+            deactivateCustomCursor();
 
             // Hide header elements first
             gsap.to("header .submit-btn, header .logo, header .hamburger, header .fullscreen-btn", {
@@ -122,6 +128,7 @@ const init = () => {
     animateProjectDescription();
     initVideoScroll();
     initPixelTransition(); 
+    initCustomCursor();
 }
 
 
@@ -153,6 +160,54 @@ const fullscreenBtn = document.getElementById('fullscreenBtn');
 const fullscreenHint = document.getElementById('fullscreenHint');
 let isFullscreen = false;
 let hintTimeout = null;
+
+// Custom Cursor Logic
+const initCustomCursor = () => {
+    const cursor = document.querySelector('.custom-cursor');
+
+    if (!cursor) return;
+
+    // Use quickTo for high performance mouse movement
+    const xTo = gsap.quickTo(cursor, "x", { duration: 0.1, ease: "power3" });
+    const yTo = gsap.quickTo(cursor, "y", { duration: 0.1, ease: "power3" });
+
+    // Move cursor
+    window.addEventListener('mousemove', (e) => {
+        xTo(e.clientX);
+        yTo(e.clientY);
+    });
+
+    // Hover effect
+    const interactiveElements = document.querySelectorAll('a, button, .submit-btn, .menu-link, .system-settings');
+
+    interactiveElements.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            cursor.classList.add('hovered');
+        });
+
+        el.addEventListener('mouseleave', () => {
+            cursor.classList.remove('hovered');
+        });
+    });
+};
+
+// Function to activate custom cursor
+const activateCustomCursor = () => {
+    const cursor = document.querySelector('.custom-cursor');
+    if (cursor) {
+        cursor.classList.add('active');
+        document.documentElement.classList.add('custom-cursor-active');
+    }
+};
+
+// Function to deactivate custom cursor
+const deactivateCustomCursor = () => {
+    const cursor = document.querySelector('.custom-cursor');
+    if (cursor) {
+        cursor.classList.remove('active');
+        document.documentElement.classList.remove('custom-cursor-active');
+    }
+};
 
 
 const openMenu = () => {

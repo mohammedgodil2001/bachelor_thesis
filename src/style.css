@@ -1014,3 +1014,88 @@ header .logo {
   pointer-events: none;
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
+
+/* Custom Cursor */
+html,
+body,
+* {
+  cursor: auto;
+  /* Default cursor initially */
+}
+
+html.custom-cursor-active,
+html.custom-cursor-active body,
+html.custom-cursor-active * {
+  cursor: none !important;
+  /* Hide default cursor only when custom cursor is active */
+}
+
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 60px;
+  height: 60px;
+  border: 2px solid white;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10002;
+  /* Above everything */
+  transform: translate(-50%, -50%);
+  /* Separate transitions for different properties */
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  mix-blend-mode: difference;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.cursor-dot {
+  width: 8px;
+  /* Slightly larger dot */
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.cursor-arrow {
+  position: absolute;
+  opacity: 0;
+  transform: scale(0.5);
+  /* Start slightly smaller */
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cursor-arrow svg {
+  width: 24px;
+  /* Larger arrow */
+  height: 24px;
+}
+
+/* Hover State */
+.custom-cursor.hovered {
+  /* Size remains the same */
+  background-color: transparent;
+}
+
+.custom-cursor.hovered .cursor-dot {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.custom-cursor.hovered .cursor-arrow {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Active state when visible */
+.custom-cursor.active {
+  opacity: 1;
+  visibility: visible;
+}
