@@ -549,7 +549,28 @@ body {
 }
 
 
+.svg-text-container {
+  position: absolute;
+  top: 59%;
+  left: 50%;
+  transform: translate(-50%);
+  z-index: 100;
+  display: flex;
+  gap: 25rem;
+  align-items: center;
+  pointer-events: none;
+}
 
+.svg-text-container svg {
+  display: block;
+}
+
+.svg-right{
+  transform: translateX(8rem);
+}
+.svg-left{
+  transform: translateX(-0.5rem);
+}
 
 
 
