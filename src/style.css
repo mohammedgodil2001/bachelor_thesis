@@ -597,9 +597,9 @@ body {
 
 
 .project-info {
-  position: absolute;
-  top: 15%;
-  right: 3%;
+  position: fixed;
+  top: 15vh;
+  right: 3rem;
   z-index: 50;
   color: #ffffff;
   pointer-events: none;
