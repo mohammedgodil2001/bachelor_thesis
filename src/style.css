@@ -83,6 +83,7 @@
   --z-content: 1;
   --z-overlay: 999;
   --z-menu: 10001;
+  --z-fullscreen-btn: 10000;
   --z-cursor: 10002;
   --z-mobile: 99999;
 }
@@ -538,9 +539,9 @@ body {
   border: none;
   cursor: pointer;
   padding: 0;
-  opacity: 0;
+  /* opacity: 0;
   visibility: hidden;
-  pointer-events: none;
+  pointer-events: none; */
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
@@ -1054,11 +1055,22 @@ header .logo {
 }
 
 /* Custom Cursor */
+/* Default cursor behavior */
 html,
-body,
-* {
+body {
   cursor: auto;
-  /* Default cursor initially */
+}
+
+/* Ensure pointer cursor for interactive elements when custom cursor is inactive */
+a,
+button,
+.submit-btn,
+.menu-link,
+.system-settings,
+.main-nav-toggle,
+.close-btn,
+.fullscreen-btn {
+  cursor: pointer;
 }
 
 html.custom-cursor-active,

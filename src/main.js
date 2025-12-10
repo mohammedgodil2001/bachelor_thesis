@@ -18,7 +18,7 @@ const initPixelTransition = () => {
 
     // Ensure image comparison is visible initially and header is hidden
     gsap.set(".image-comparison", { autoAlpha: 1 });
-    gsap.set("header .submit-btn, header .logo, header .hamburger, header .fullscreen-btn", {
+    gsap.set("header .submit-btn, header .logo, header .hamburger", {
         autoAlpha: 0,
         pointerEvents: 'none'
     });
@@ -50,13 +50,13 @@ const initPixelTransition = () => {
                     stagger: index => 0.02 * (overlay.cells.flat()[index].row + gsap.utils.random(0, 5))
                 }).then(() => {
                     // Show header elements after transition
-                    gsap.to("header .submit-btn, header .logo, header .hamburger, header .fullscreen-btn", {
+                    gsap.to("header .submit-btn, header .logo, header .hamburger", {
                         autoAlpha: 1,
                         duration: 0.6,
                         ease: 'power2.out',
                         stagger: 0.1,
                         onStart: () => {
-                            gsap.set("header .submit-btn, header .logo, header .hamburger, header .fullscreen-btn", {
+                            gsap.set("header .submit-btn, header .logo, header .hamburger", {
                                 pointerEvents: 'auto'
                             });
                         }
@@ -83,12 +83,12 @@ const initPixelTransition = () => {
             deactivateCustomCursor();
 
             // Hide header elements first
-            gsap.to("header .submit-btn, header .logo, header .hamburger, header .fullscreen-btn", {
+            gsap.to("header .submit-btn, header .logo, header .hamburger", {
                 autoAlpha: 0,
                 duration: 0.3,
                 ease: 'power2.in',
                 onStart: () => {
-                    gsap.set("header .submit-btn, header .logo, header .hamburger, header .fullscreen-btn", {
+                    gsap.set("header .submit-btn, header .logo, header .hamburger", {
                         pointerEvents: 'none'
                     });
                 }
