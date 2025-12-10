@@ -756,7 +756,7 @@ const addTextAnimations = (timeline) => {
         const spanElement = element.querySelector("span");
         if (spanElement) {
             // Store the SplitType instance on the element to access it later
-            element.splitInstance = new SplitType(spanElement, { types: "chars" });
+            element.splitInstance = new SplitType(spanElement, { types: "words, chars" });
         }
     });
 

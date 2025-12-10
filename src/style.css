@@ -936,6 +936,11 @@ body {
   will-change: transform, opacity;
 }
 
+.text-overlay .word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
 .overlay-video {
   width: 3rem;
   height: auto;
