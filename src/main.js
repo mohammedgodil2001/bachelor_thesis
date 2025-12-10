@@ -7,9 +7,6 @@ import { Overlay } from './overlay.js'; // Import Overlay class
 
 gsap.registerPlugin(ScrollTrigger);
 
-// ... existing code ...
-
-// Initialize Overlay
 const overlayEl = document.querySelector('.overlay');
 const overlay = new Overlay(overlayEl, {
     rows: 8,
