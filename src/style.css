@@ -54,9 +54,42 @@
 }
 
 
+:root {
+  /* Colors */
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* Fonts */
+  --font-primary: 'Delight', sans-serif;
+  --font-secondary: 'Delight', monospace;
+
+  /* Spacing */
+  --spacing-sm: 10px;
+  --spacing-md: 20px;
+  --spacing-lg: 30px;
+  --spacing-xl: 50px;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-full: 50%;
+  --radius-pill: 50px;
+
+  /* Transitions */
+  --transition-fast: 0.1s ease-out;
+  --transition-default: 0.3s ease;
+
+  /* Z-Indices */
+  --z-content: 1;
+  --z-overlay: 999;
+  --z-menu: 10001;
+  --z-cursor: 10002;
+  --z-mobile: 99999;
+}
+
 body {
   overflow-x: hidden;
-  font-family: 'Delight', sans-serif;
+  font-family: var(--font-primary);
 }
 
 .visually-hidden {
@@ -87,7 +120,7 @@ body {
   right: 0;
   width: 100%;
   height: 100vh;
-  background: #ffffff;
+  background: var(--color-white);
   z-index: 999;
   display: flex;
   align-items: center;
@@ -104,18 +137,18 @@ body {
 
 .close-btn {
   position: absolute;
-  top: 30px;
-  left: 30px;
+  top: var(--spacing-lg);
+  left: var(--spacing-lg);
   width: 60px;
   height: 60px;
-  border: 2px solid #000;
-  border-radius: 50%;
+  border: 2px solid var(--color-black);
+  border-radius: var(--radius-full);
   background: none;
   cursor: pointer;
   font-size: 40px;
   line-height: 1;
-  color: #000;
-  transition: 0.3s;
+  color: var(--color-black);
+  transition: var(--transition-default);
 }
 
 .close-btn:hover {
@@ -125,7 +158,7 @@ body {
 .menu-nav {
   width: 100%;
   max-width: 1200px;
-  padding: 0 50px;
+  padding: 0 var(--spacing-xl);
 }
 
 .menu-list {
@@ -141,11 +174,11 @@ body {
   position: relative;
   display: inline-block;
   text-decoration: none;
-  color: #000;
+  color: var(--color-black);
   /* font-size: clamp(3rem, 8vw, 7rem); */
   font-size: 9.3rem;
   font-weight: 100;
-  transition: 0.3s;
+  transition: var(--transition-default);
   text-transform: uppercase;
 }
 
@@ -165,7 +198,7 @@ body {
   top: 50%;
   width: 100%;
   height: 7px;
-  background: #000;
+  background: var(--color-black);
   transform: scaleX(0);
   transform-origin: left;
   opacity: 0;
@@ -178,14 +211,14 @@ body {
 .system-settings {
   position: absolute;
   bottom: 100px;
-  right: 50px;
-  padding: 15px 30px;
+  right: var(--spacing-xl);
+  padding: 15px var(--spacing-lg);
   background: rgba(255, 255, 255, 0.3);
   border: 2px solid rgba(0, 0, 0, 0.2);
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: var(--transition-default);
   opacity: 0;
   transform: translateY(30px);
 }
@@ -196,10 +229,10 @@ body {
 
 .menu-footer {
   position: absolute;
-  bottom: 50px;
-  right: 50px;
+  bottom: var(--spacing-xl);
+  right: var(--spacing-xl);
   font-size: 18px;
-  color: #000;
+  color: var(--color-black);
   opacity: 0;
   transform: translateY(30px);
 }
@@ -207,7 +240,7 @@ body {
 .menu-overlay::before {
   content: 'DIVINE';
   position: absolute;
-  left: 30px;
+  left: var(--spacing-lg);
   top: 50%;
   transform: translateY(-50%) rotate(-90deg);
   transform-origin: center;
@@ -219,8 +252,8 @@ body {
 .menu-overlay::after {
   content: '★★★★';
   position: absolute;
-  left: 30px;
-  bottom: 30px;
+  left: var(--spacing-lg);
+  bottom: var(--spacing-lg);
   font-size: 14px;
   letter-spacing: 0.2em;
   opacity: 0;
@@ -233,11 +266,11 @@ body {
 
   .system-settings,
   .menu-footer {
-    right: 30px;
+    right: var(--spacing-lg);
   }
 
   .menu-nav {
-    padding: 0 30px;
+    padding: 0 var(--spacing-lg);
   }
 }
 
@@ -248,9 +281,9 @@ body {
 
 .hamburger {
   position: fixed;
-  top: 30px;
-  right: 30px;
-  z-index: 10001;
+  top: var(--spacing-lg);
+  right: var(--spacing-lg);
+  z-index: var(--z-menu);
   display: inline-block;
   height: 26px;
   opacity: 0;
@@ -274,7 +307,7 @@ body {
   left: 0;
   width: 100%;
   height: 2px;
-  background-color: #ffffff;
+  background-color: var(--color-white);
   transition: all ease-out 0.3s;
 }
 
@@ -298,7 +331,7 @@ body {
 
 .main-nav-toggle.active-menu:before,
 .main-nav-toggle.active-menu:after {
-  background-color: rgb(0, 0, 0);
+  background-color: var(--color-black);
   /* width: 50%;
   left: 25%;
   top: 50%; */
@@ -380,7 +413,7 @@ body {
 
 .line-text {
   position: absolute;
-  color: #ffffff;
+  color: var(--color-white);
   font-size: 1.2rem;
   text-transform: uppercase;
   left: 10px;
@@ -438,7 +471,7 @@ body {
 .reveal-square::after {
   content: '';
   position: absolute;
-  background: #fff;
+  background: var(--color-white);
   border-radius: 0;
 }
 
@@ -471,7 +504,7 @@ body {
 /* Bottom corners */
 .corner {
   position: absolute;
-  background: white;
+  background: var(--color-white);
   border-radius: 0;
   /* Sharp corners, not rounded */
 }
@@ -496,9 +529,9 @@ body {
 
 .fullscreen-btn {
   position: fixed;
-  bottom: 30px;
-  left: 30px;
-  z-index: 10000;
+  bottom: var(--spacing-lg);
+  left: var(--spacing-lg);
+  z-index: var(--z-fullscreen-btn);
   /* width: 50px;
     height: 50px; */
   background: transparent;
@@ -533,12 +566,12 @@ body {
 /* Fullscreen hint message */
 .fullscreen-hint {
   position: fixed;
-  top: 30px;
+  top: var(--spacing-lg);
   left: 50%;
   transform: translateX(-50%);
-  z-index: 10001;
+  z-index: var(--z-menu);
   background: rgba(0, 0, 0, 0.8);
-  color: #ffffff;
+  color: var(--color-white);
   padding: 12px 24px;
   border-radius: 8px;
   font-size: 14px;
@@ -556,7 +589,7 @@ body {
   background: rgba(255, 255, 255, 0.2);
   padding: 4px 8px;
   border-radius: 4px;
-  font-family: 'Delight', monospace;
+  font-family: var(--font-secondary);
   font-weight: 500;
   margin: 0 4px;
 }
@@ -593,13 +626,13 @@ body {
 }
 
 .tagline {
-  color: #ffffff;
+  color: var(--color-white);
   font-weight: 300;
   align-self: flex-start;
   margin-top: -1rem;
   margin-left: -0.7rem;
   text-transform: uppercase;
-  font-family: 'Delight', monospace;
+  font-family: var(--font-secondary);
 }
 
 .tagline .highlight {
@@ -614,7 +647,7 @@ body {
   top: 15vh;
   right: 3rem;
   z-index: 50;
-  color: #ffffff;
+  color: var(--color-white);
   pointer-events: none;
   display: flex;
   flex-direction: column;
@@ -687,7 +720,7 @@ body {
 .mouse {
   width: 30px;
   height: 40px;
-  border: 2px solid white;
+  border: 2px solid var(--color-white);
   border-radius: 20px;
   position: relative;
 }
@@ -707,17 +740,17 @@ body {
 .scroll-thumb {
   width: 100%;
   height: 50%;
-  background: white;
+  background: var(--color-white);
   border-radius: 4px;
   animation: scroll 1.5s ease-in-out infinite;
 }
 
 .scroll-text {
-  color: white;
+  color: var(--color-white);
   margin-top: 10px;
   font-weight: 400;
   text-transform: uppercase;
-  font-family: 'Delight', sans-serif;
+  font-family: var(--font-primary);
 }
 
 @keyframes scroll {
@@ -769,7 +802,7 @@ body {
   position: relative;
   z-index: 2;
   /* Ensure this sits ON TOP of the fixed video */
-  background: #fff;
+  background: var(--color-white);
   /* Ensure it's opaque so video is hidden initially */
 }
 
@@ -781,9 +814,9 @@ body {
   bottom: 10%;
   left: 50%;
   transform: translateX(-50%);
-  color: white;
+  color: var(--color-white);
   font-size: 1rem;
-  font-family: 'Delight', sans-serif;
+  font-family: var(--font-primary);
   text-align: left;
   opacity: 0;
   pointer-events: none;
@@ -807,7 +840,7 @@ body {
 .text-overlay span::after {
   content: '';
   position: absolute;
-  background: white;
+  background: var(--color-white);
   z-index: 2;
 }
 
@@ -854,7 +887,7 @@ body {
   background: rgba(0, 0, 0, 0.7);
   padding: 10px 20px;
   border-radius: 10px;
-  color: white;
+  color: var(--color-white);
   font-family: monospace;
 }
 
@@ -871,7 +904,7 @@ body {
   content: '';
   display: block;
   height: 100%;
-  background: white;
+  background: var(--color-white);
   width: var(--progress, 0%);
   transition: width 0.1s;
 }
@@ -888,7 +921,7 @@ body {
   transform: translate(-50%, -50%);
   z-index: 999;
   font-size: 48px;
-  color: white;
+  color: var(--color-white);
   font-weight: bold;
   text-align: center;
   opacity: 0;
@@ -906,7 +939,7 @@ body {
 .overlay-video {
   width: 3rem;
   height: auto;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   flex-shrink: 0;
 }
 
@@ -929,12 +962,12 @@ body {
 .cell {
   width: 100%;
   height: 100%;
-  background-color: #000;
+  background-color: var(--color-black);
   transform-origin: 50% 50%;
 }
 
 #btnText {
-  font-family: 'Delight', sans-serif;
+  font-family: var(--font-primary);
   font-weight: 200;
 }
 
@@ -942,10 +975,10 @@ body {
   display: flex;
   align-items: center;
   gap: 16px;
-  background: #fff;
-  color: #000;
+  background: var(--color-white);
+  color: var(--color-black);
   border: none;
-  border-radius: 50px;
+  border-radius: var(--radius-pill);
   font-size: 18px;
   font-weight: 400;
   cursor: pointer;
@@ -960,15 +993,15 @@ body {
   justify-content: center;
   width: 30px;
   height: 30px;
-  background: #000;
-  border-radius: 50%;
+  background: var(--color-black);
+  border-radius: var(--radius-full);
   flex-shrink: 0;
 }
 
 .btn-arrow svg {
   width: 15px;
   height: 15px;
-  color: #fff;
+  color: var(--color-white);
   transform: rotate(90deg);
   transition: transform 0.3s ease;
 }
@@ -991,9 +1024,9 @@ body {
 
 header .submit-btn {
   position: fixed;
-  top: 30px;
-  left: 30px;
-  z-index: 10001;
+  top: var(--spacing-lg);
+  left: var(--spacing-lg);
+  z-index: var(--z-menu);
   /* Match hamburger z-index */
   opacity: 0;
   visibility: hidden;
@@ -1003,10 +1036,10 @@ header .submit-btn {
 
 header .logo {
   position: fixed;
-  top: 30px;
+  top: var(--spacing-lg);
   left: 50%;
   transform: translateX(-50%);
-  z-index: 10001;
+  z-index: var(--z-menu);
   display: flex;
   align-items: center;
   opacity: 0;
@@ -1036,10 +1069,10 @@ html.custom-cursor-active * {
   left: 0;
   width: 60px;
   height: 60px;
-  border: 2px solid white;
-  border-radius: 50%;
+  border: 2px solid var(--color-white);
+  border-radius: var(--radius-full);
   pointer-events: none;
-  z-index: 10002;
+  z-index: var(--z-cursor);
   /* Above everything */
   transform: translate(-50%, -50%);
   /* Separate transitions for different properties */
@@ -1056,8 +1089,8 @@ html.custom-cursor-active * {
   width: 8px;
   /* Slightly larger dot */
   height: 8px;
-  background: white;
-  border-radius: 50%;
+  background: var(--color-white);
+  border-radius: var(--radius-full);
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
@@ -1108,8 +1141,8 @@ html.custom-cursor-active * {
   left: 0;
   width: 100%;
   height: 100vh;
-  background-color: #ffffff;
-  z-index: 99999;
+  background-color: var(--color-white);
+  z-index: var(--z-mobile);
   padding: 20px;
 }
 
@@ -1129,8 +1162,8 @@ html.custom-cursor-active * {
   position: absolute;
   width: clamp(6px, 1.5vw, 10px);
   height: clamp(6px, 1.5vw, 10px);
-  background-color: #000;
-  border-radius: 50%;
+  background-color: var(--color-black);
+  border-radius: var(--radius-full);
 }
 
 .mobile-view__dot--tl {
@@ -1180,13 +1213,13 @@ html.custom-cursor-active * {
 }
 
 .mobile-view__title {
-  font-family: 'Delight', sans-serif;
+  font-family: var(--font-primary);
   font-weight: 800;
   font-size: clamp(1.5rem, 5vw, 2rem);
   line-height: 1.3;
   text-transform: uppercase;
   margin-bottom: 0.7rem;
-  color: #000;
+  color: var(--color-black);
   width: 90%;
 }
 
@@ -1204,23 +1237,23 @@ html.custom-cursor-active * {
 }
 
 .mobile-view__description {
-  font-family: 'Delight', sans-serif;
+  font-family: var(--font-primary);
   font-weight: 200;
   font-size: clamp(0.875rem, 3.5vw, 1.125rem);
   line-height: 1.4;
-  color: #000;
+  color: var(--color-black);
   max-width: 70%;
 }
 
 .mobile-view__footer {
   position: absolute;
   bottom: 1.5rem;
-  font-family: 'Delight', sans-serif;
+  font-family: var(--font-primary);
   font-weight: 300;
   font-size: clamp(0.875rem, 3.5vw, 1.125rem);
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #000;
+  color: var(--color-black);
 }
 
 /* Toggle footer text based on device */
