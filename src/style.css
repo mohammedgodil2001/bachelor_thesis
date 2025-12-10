@@ -1127,30 +1127,30 @@ html.custom-cursor-active * {
 
 .mobile-view__dot {
   position: absolute;
-  width: 6px;
-  height: 6px;
+  width: clamp(6px, 1.5vw, 10px);
+  height: clamp(6px, 1.5vw, 10px);
   background-color: #000;
   border-radius: 50%;
 }
 
 .mobile-view__dot--tl {
-  top: -3px;
-  left: -3px;
+  top: calc(clamp(6px, 1.5vw, 10px) / -2);
+  left: calc(clamp(6px, 1.5vw, 10px) / -2);
 }
 
 .mobile-view__dot--tr {
-  top: -3px;
-  right: -3px;
+  top: calc(clamp(6px, 1.5vw, 10px) / -2);
+  right: calc(clamp(6px, 1.5vw, 10px) / -2);
 }
 
 .mobile-view__dot--bl {
-  bottom: -3px;
-  left: -3px;
+  bottom: calc(clamp(6px, 1.5vw, 10px) / -2);
+  left: calc(clamp(6px, 1.5vw, 10px) / -2);
 }
 
 .mobile-view__dot--br {
-  bottom: -3px;
-  right: -3px;
+  bottom: calc(clamp(6px, 1.5vw, 10px) / -2);
+  right: calc(clamp(6px, 1.5vw, 10px) / -2);
 }
 
 .mobile-view__content {
