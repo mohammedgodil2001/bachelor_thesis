@@ -62,13 +62,20 @@ const initPixelTransition = () => {
                         }
                     });
 
+                    // Show action hint
+                    gsap.to(".action-hint", {
+                        autoAlpha: 1,
+                        y: 0,
+                        duration: 0.6,
+                        ease: 'power2.out',
+                        delay: 0.2
+                    });
+
                     // Activate custom cursor
                     activateCustomCursor();
 
                     isAnimating = false;
                     if (window.lenis) window.lenis.start();
-                    // Refresh ScrollTrigger after transition
-                    ScrollTrigger.refresh();
                 });
             });
         },
@@ -94,6 +101,14 @@ const initPixelTransition = () => {
                 }
             });
 
+            // Hide action hint
+            gsap.to(".action-hint", {
+                autoAlpha: 0,
+                y: '100%',
+                duration: 0.3,
+                ease: 'power2.in'
+            });
+
             overlay.show({
                 duration: 0.4,
                 ease: 'power3.inOut',
@@ -109,8 +124,6 @@ const initPixelTransition = () => {
                 }).then(() => {
                     isAnimating = false;
                     if (window.lenis) window.lenis.start();
-                    // Refresh ScrollTrigger after transition
-                    ScrollTrigger.refresh();
                 });
             });
         }
@@ -212,6 +225,12 @@ const openMenu = () => {
 
     isMenuOpen = true;
     menuToggle.classList.add('active-menu');
+    
+    // Disable scrolling
+    // Disable scrolling
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    if (window.lenis) window.lenis.stop();
 
     const activeLine = document.querySelector('.menu-link.active .menu-line');
     if (activeLine) {
@@ -264,6 +283,12 @@ const closeMenuFunc = () => {
             isMenuOpen = false;
             menuOverlay.classList.remove('menu-open');
             menuToggle.classList.remove('active-menu');
+            
+            // Enable scrolling
+            // Enable scrolling
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+            if (window.lenis) window.lenis.start();
 
             // Show logo and contact button when menu closes
             gsap.to("header .submit-btn, header .logo", {
@@ -534,10 +559,10 @@ const adjustProjectInfoPosition = () => {
 
     if (document.fullscreenElement) {
         // In fullscreen mode - adjust to maintain visual position
-        projectInfo.style.top = '21vh';
+        projectInfo.style.top = '22vh';
     } else {
         // Normal mode - reset to original
-        projectInfo.style.top = '15vh';
+        projectInfo.style.top = '16.5vh';
     }
 }
 
