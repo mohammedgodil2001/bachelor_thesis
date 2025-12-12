@@ -582,6 +582,11 @@ const handleFullscreenChange = () => {
 
     // Adjust project info position
     adjustProjectInfoPosition();
+
+    // Refresh ScrollTrigger to ensure pinned elements resize correctly
+    setTimeout(() => {
+        ScrollTrigger.refresh();
+    }, 100);
 }
 
 const handleFullscreenEscapeKey = (e) => {
