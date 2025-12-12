@@ -383,8 +383,8 @@ body {
 
 .reveal-square {
   position: absolute;
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   border: 2px solid rgba(255, 255, 255, 0.8);
   z-index: 3;
   pointer-events: none;
@@ -828,7 +828,8 @@ body {
   align-items: center;
   gap: 1rem;
   position: fixed;
-  bottom: 10%;
+  /* bottom: var(--spacing-lg); */
+  bottom: 5.5%;
   left: 50%;
   transform: translateX(-50%);
   color: var(--color-white);
@@ -1374,8 +1375,20 @@ html.custom-cursor-active * {
   transform: translateY(100%);
 }
 
+.action-hint svg {
+  position: absolute;
+}
+
+.scroll-text-svg {
+  font-family: 'Delight', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  letter-spacing: 3px;
+  transform: translate(var(--spacing-lg), 100px) rotate(-90deg);
+}
+
 .smart-invert-text {
-  width: 20px;
+  width: var(--spacing-lg);
   height: 100px;
   background: var(--color-white);
   clip-path: url(#scroll-text-clip);

@@ -163,7 +163,7 @@ const lines = {
 
 let mouseX = 0;
 let mouseY = 0;
-const squareSize = 100;
+const squareSize = 150;
 let ticking = false;
 
 const fullscreenBtn = document.getElementById('fullscreenBtn');
