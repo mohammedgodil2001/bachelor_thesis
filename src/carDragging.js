@@ -402,10 +402,19 @@ export const initCarDraggingScene = () => {
 
     // 2. Setup Listeners
     window.addEventListener('resize', onResize);
+    
+    // Custom Cursor Logic
+    const customCursor = document.querySelector('.custom-cursor');
+    const onTrackEnter = () => customCursor && customCursor.classList.add('hovered');
+    const onTrackLeave = () => customCursor && customCursor.classList.remove('hovered');
+
     if (track) {
         track.addEventListener('pointerdown', onPointerDown);
         track.addEventListener('pointermove', onPointerMove);
         track.addEventListener('pointerup', onPointerUp);
+        // Custom cursor interaction
+        track.addEventListener('mouseenter', onTrackEnter);
+        track.addEventListener('mouseleave', onTrackLeave);
     }
     if (mainVideo) {
         mainVideo.addEventListener('timeupdate', onTimeUpdate);
