@@ -1,6 +1,11 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+// Import Video Assets (Fixes 404s)
+import mainVideoUrl from './images/car_dragging.mp4';
+import sedanVideoUrl from './images/sedan_transition1371-1412.mp4';
+import suvVideoUrl from './images/SUV_transition1371-1411.mp4';
+
 // --- Configuration & State ---
 
 const CONFIG = {
@@ -13,9 +18,9 @@ const CONFIG = {
     START_ANGLE: 0,
     END_ANGLE: -Math.PI / 2,
     SOURCES: {
-        MAIN: './src/images/car_dragging.mp4',
-        SEDAN: './src/images/sedan_transition1371-1412.mp4',
-        SUV: './src/images/SUV_transition1371-1411.mp4'
+        MAIN: mainVideoUrl,
+        SEDAN: sedanVideoUrl,
+        SUV: suvVideoUrl
     }
 };
 
