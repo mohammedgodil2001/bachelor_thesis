@@ -446,6 +446,7 @@ export const initCarDraggingScene = () => {
                 end: "top top", 
                 scrub: true,
                 onEnter: () => {
+                    console.log('CarDragging: onEnter fired');
                     if (mainVideo) {
                         mainVideo.currentTime = 0;
                         mainVideo.play().catch(e => console.log("Auto-play failed", e));
@@ -455,12 +456,15 @@ export const initCarDraggingScene = () => {
                     updateActionHint('DRAG');
                 },
                 onLeave: () => {
+                    console.log('CarDragging: onLeave fired');
                     updateActionHint('SCROLL');
                 },
                 onEnterBack: () => {
+                    console.log('CarDragging: onEnterBack fired');
                     updateActionHint('DRAG');
                 },
                 onLeaveBack: () => {
+                     console.log('CarDragging: onLeaveBack fired');
                      if (mainVideo) {
                          mainVideo.pause();
                          mainVideo.currentTime = 0;

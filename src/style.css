@@ -951,9 +951,15 @@ body {
 
 .text-overlay .char {
   display: inline-block;
-  opacity: 0;
-  transform: translateY(8px);
+  opacity: 1;
+  /* Changed from 0 to ensure visibility by default */
+  transform: translateY(0);
+  /* Reset transform default */
   will-change: transform, opacity;
+  position: relative;
+  /* Ensure z-index works */
+  z-index: 5;
+  /* Sit above pseudo elements */
 }
 
 .text-overlay .word {

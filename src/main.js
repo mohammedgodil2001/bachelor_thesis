@@ -1,11 +1,13 @@
 import './style.css'
 import './carDragging.css'; // Import the new CSS
+import './booking.css';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Flip } from 'gsap/Flip';
 import SplitType from 'split-type';
 import Lenis from 'lenis';
 import { initCarDraggingScene } from './carDragging.js'; // Import the module
+import { initBookingScene } from './bookingScene.js';
 import { Overlay } from './overlay.js'; // Import Overlay class
 
 gsap.registerPlugin(ScrollTrigger);
@@ -775,8 +777,8 @@ const addVideoScrubbing = (timeline, video) => {
 };
 
 const addTextAnimations = (timeline) => {
-    // Pre-split text for performance
-    document.querySelectorAll(".text-overlay").forEach(element => {
+    // Pre-split text for performance (Scoped to Intro Section only)
+    document.querySelectorAll("#scroll-container .text-overlay").forEach(element => {
         const spanElement = element.querySelector("span");
         if (spanElement) {
             // Store the SplitType instance on the element to access it later
@@ -842,6 +844,7 @@ const init = () => {
     initPixelTransition(); 
     initCustomCursor();
     initCarDraggingScene();
+    initBookingScene();
 }
 
 
