@@ -659,7 +659,7 @@ const CONFIG = {
         text1: { show: 0.05, hide: 0.15 },
         text2: { show: 0.18, hide: 0.28 },
         text3: { show: 0.39, hide: 0.60 },
-        text4: { show: 0.67, hide: null }
+        text4: { show: 0.67, hide: 0.94 }
     },
     animation: {
         charDuration: 0.03,
