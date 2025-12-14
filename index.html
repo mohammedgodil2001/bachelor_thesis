@@ -385,6 +385,25 @@
         </section>
       </section>
 
+      <!-- Car Dragging Interactive Scene -->
+      <section id="car-dragging-scene" class="interactive-scene" style="opacity: 0; pointer-events: none;">
+        <div class="scene-visuals">
+          <video id="main-video" class="scene-video" src="./src/images/car_dragging.mp4" muted playsinline></video>
+
+          <!-- Popups -->
+          <article class="text-overlay" id="car-text-intro">
+            <img src="./src/images/communication.gif" alt="" class="overlay-video">
+            <span>Fundamental structural base rails are the adaptable backbone of any vehicle layout.</span>
+          </article>
+
+          <div class="figma-slider-container">
+            <div class="figma-track" id="figma-track"></div>
+            <div class="figma-thumb thumb-diamond" id="figma-thumb"></div>
+          </div>
+        </div>
+        <div id="drag-scroll-container"></div>
+      </section>
+
       <aside class="action-hint">
         <div class="smart-invert-text"></div>
         <svg width="0" height="0">

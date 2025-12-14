@@ -1,8 +1,11 @@
 import './style.css'
+import './carDragging.css'; // Import the new CSS
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Flip } from 'gsap/Flip';
 import SplitType from 'split-type';
 import Lenis from 'lenis';
+import { initCarDraggingScene } from './carDragging.js'; // Import the module
 import { Overlay } from './overlay.js'; // Import Overlay class
 
 gsap.registerPlugin(ScrollTrigger);
@@ -130,16 +133,7 @@ const initPixelTransition = () => {
     });
 };
 
-const init = () => {
-    setActivePage(currentPage);
-    initMenuListeners();
-    initImageComparisonListeners();
-    initFullscreenListeners();
-    animateProjectDescription();
-    initVideoScroll();
-    initPixelTransition(); 
-    initCustomCursor();
-}
+
 
 
 const menuToggle = document.getElementById('menuToggle');
@@ -834,7 +828,22 @@ const animateTypingEffect = (selector) => {
 };
 
 
+
+// Car Dragging Scene integrated via module
+// initCarDraggingScene(); called in init()
+
+const init = () => {
+    setActivePage(currentPage);
+    initMenuListeners();
+    initImageComparisonListeners();
+    initFullscreenListeners();
+    animateProjectDescription();
+    initVideoScroll();
+    initPixelTransition(); 
+    initCustomCursor();
+    initCarDraggingScene();
+}
+
+
+
 init();
-
-
-

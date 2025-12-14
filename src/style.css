@@ -1396,3 +1396,5 @@ html.custom-cursor-active * {
   -webkit-backdrop-filter: brightness(0.6) contrast(500%);
   mix-blend-mode: difference;
 }
+
+/* Car Dragging Scene Styles moved to carDragging.css */

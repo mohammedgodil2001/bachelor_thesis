@@ -1,0 +1,148 @@
+/* Car Dragging Interactive Scene */
+.interactive-scene {
+    position: relative;
+    /* WAS FIXED - Changed to relative to allow scrolling */
+    width: 100%;
+    min-height: 100vh;
+    z-index: 2;
+    /* Sits above previous content when active */
+    pointer-events: none;
+    /* Controlled by JS */
+}
+
+/* Fixed Visual Layer */
+.scene-visuals {
+    position: fixed;
+    /* Fixed to viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    /* Ensure it doesn't block clicks when opacity is 0 */
+}
+
+/* Video Element */
+.scene-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    will-change: transform;
+}
+
+#drag-scroll-container {
+    height: 200vh;
+    width: 100%;
+    position: relative;
+    z-index: -1;
+    pointer-events: none;
+    display: none;
+    /* Logic in JS toggles this */
+}
+
+/* Slider Container */
+.figma-slider-container {
+    position: fixed;
+    top: 80px;
+    right: 280px;
+    width: 275.3px;
+    height: 275.3px;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.hide-ui {
+    opacity: 0;
+    pointer-events: none !important;
+}
+
+.hide-ui * {
+    pointer-events: none !important;
+}
+
+/* Track */
+.figma-track {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 0 260.13px 0 0;
+    border-top: 6px solid #FFFFFF;
+    border-right: 1.5px solid #FFFFFF;
+    border-bottom: 0;
+    border-left: 0;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+/* Hit Area Expansion */
+.figma-track::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    bottom: -50px;
+    left: -50px;
+    z-index: 1;
+    /* Ensure it captures clicks */
+    /* background: rgba(255, 0, 0, 0.2); Debug visualization */
+}
+
+/* Thumb Base */
+.figma-thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.068);
+    background-blend-mode: plus-lighter;
+    mix-blend-mode: normal;
+    backdrop-filter: blur(9.3px);
+    -webkit-backdrop-filter: blur(9.3px);
+    transform-origin: center center;
+    box-sizing: content-box;
+    /* Fix for dimensions */
+}
+
+/* State: Diamond */
+.thumb-diamond {
+    width: 23.9px;
+    height: 23.9px;
+    border: 1.3px solid #FFFFFF;
+    box-shadow: -20px -19px 88px -22px rgba(0, 0, 0, 0.15),
+        -3.4px -3.2px 22px -15px rgba(0, 0, 0, 0.15),
+        inset 3.9px 3.7px 17px rgba(255, 255, 255, 0.126),
+        inset 2.2px 2.1px 8.5px rgba(255, 255, 255, 0.126);
+    transform: translate(-50%, -50%) matrix(-0.71, -0.71, -0.71, 0.71, 0, 0);
+}
+
+/* State: Square */
+.thumb-square {
+    width: 17px;
+    height: 17px;
+    border: 7.5px solid #FFFFFF;
+    box-shadow: -20px -19px 88px -22px rgba(0, 0, 0, 0.15),
+        -3.4px -3.2px 22px -15px rgba(0, 0, 0, 0.15),
+        inset 3.9px 3.7px 17px rgba(255, 255, 255, 0.126),
+        inset 2.2px 2.1px 8.5px rgba(255, 255, 255, 0.126);
+    transform: translate(-50%, -50%) matrix(0.03, -1, -1, -0.03, 0, 0);
+}
+
+/* State: Final */
+.thumb-final {
+    width: 11px;
+    height: 11px;
+    border: 13px solid #FFFFFF;
+    box-shadow: -20px -19px 88px -22px rgba(0, 0, 0, 0.15),
+        -3.4px -3.2px 22px -15px rgba(0, 0, 0, 0.15),
+        inset 3.9px 3.7px 17px rgba(255, 255, 255, 0.126),
+        inset 2.2px 2.1px 8.5px rgba(255, 255, 255, 0.126);
+    transform: translate(-50%, -50%) matrix(-0.71, -0.71, -0.71, 0.71, 0, 0);
+}
