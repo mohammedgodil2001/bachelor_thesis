@@ -416,14 +416,14 @@ body {
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.3s ease;
-  mix-blend-mode: difference;
+  mix-blend-mode: exclusion;
 }
 
 .line-text {
   position: absolute;
   color: var(--color-white);
   font-size: 1.2rem;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   left: 10px;
   top: 50%;
   transform: translateY(-100%);
