@@ -33,7 +33,8 @@ export const initBookingScene = () => {
     // Headset checkpoint state
     let isHeadsetUnlocked = false;
     let hasPopupAnimated = false;
-    const CHECKPOINT = 0.638;
+    // Dynamic checkpoint based on fullscreen state
+    const getCheckpoint = () => document.fullscreenElement ? 0.642 : 0.645;
     const BUFFER = 0.002;
 
     // --- Overlay Text Animations ---
@@ -105,14 +106,15 @@ export const initBookingScene = () => {
                 headsetPopup.style.pointerEvents = 'none';
                 
                 // Re-lock if scrolling back significantly
-                if (progress < CHECKPOINT - BUFFER) {
+                if (!ScrollTrigger.isRefreshing && progress < getCheckpoint() - BUFFER) {
                     isHeadsetUnlocked = false;
                     hasPopupAnimated = false;
                 }
             } else {
                 // LOCKED STATE LOGIC
                 // Show headset when at or near checkpoint
-                if (progress >= CHECKPOINT - BUFFER) {
+                // Show headset when at or near checkpoint
+                if (progress >= getCheckpoint() - BUFFER) {
                     // Show headset
                     headsetOverlay.style.opacity = '1';
                     headsetOverlay.style.visibility = 'visible';
@@ -124,8 +126,8 @@ export const initBookingScene = () => {
                     headsetPopup.style.pointerEvents = 'auto';
                     
                     // Block forward scroll at checkpoint
-                    if (progress > CHECKPOINT && !isHeadsetUnlocked) {
-                        const targetScroll = self.start + (self.end - self.start) * CHECKPOINT;
+                    if (progress > getCheckpoint() && !isHeadsetUnlocked) {
+                        const targetScroll = self.start + (self.end - self.start) * getCheckpoint();
                         if (window.lenis) {
                             window.lenis.scrollTo(targetScroll, { 
                                 immediate: true, 
@@ -193,7 +195,7 @@ export const initBookingScene = () => {
         // Force scroll past checkpoint
         const scrollTrigger = ScrollTrigger.getById('booking-scene-trigger');
         if (scrollTrigger) {
-            const targetProgress = CHECKPOINT + 0.01; // Just past checkpoint
+            const targetProgress = getCheckpoint() + 0.01; // Just past checkpoint
             const targetScroll = scrollTrigger.start + (scrollTrigger.end - scrollTrigger.start) * targetProgress;
             if (window.lenis) {
                 window.lenis.scrollTo(targetScroll, { immediate: false });
@@ -226,11 +228,12 @@ export const initBookingScene = () => {
             scrub: 1,
             id: 'booking-scene-trigger',
             onUpdate: function(self) {
+                if (ScrollTrigger.isRefreshing) return;
                 handleScrollUpdate(self);
                 
                 // Prevent scrolling past checkpoint if not unlocked
-                if (!isHeadsetUnlocked && self.progress > CHECKPOINT) {
-                    const checkpointPos = self.start + (self.end - self.start) * CHECKPOINT;
+                if (!isHeadsetUnlocked && self.progress > getCheckpoint()) {
+                    const checkpointPos = self.start + (self.end - self.start) * getCheckpoint();
                     // Only prevent if trying to scroll forward
                     const currentScroll = window.scrollY || window.pageYOffset;
                     if (currentScroll > checkpointPos - 5) {
@@ -260,9 +263,53 @@ export const initBookingScene = () => {
     });
     
     scrollTriggerInstance = ScrollTrigger.getById('booking-scene-trigger');
+    
+    // Smart State Preservation for Booking Scene Checkpoint
+    // This handles the shift between 0.645 (Normal) and 0.642 (Fullscreen)
+    // ensuring the user stays "locked" if they were at the checkpoint.
+    let savedState = {
+        wasLockedAtCheckpoint: false,
+        progress: null
+    };
 
-    // 1. Fade in video wrapper
-    timeline.to(videoWrapper, { opacity: 1, duration: 1, ease: "power2.inOut" });
+    ScrollTrigger.addEventListener("refreshInit", () => {
+        const st = ScrollTrigger.getById('booking-scene-trigger');
+        if (st && st.isActive) {
+            savedState.progress = st.progress;
+            
+            // Check if user was effectively "at the checkpoint" (locked)
+            // We use a broad range (0.63 - 0.66) to catch either 0.642 or 0.645
+            const isNearCheckpoint = st.progress > 0.63 && st.progress < 0.66;
+            savedState.wasLockedAtCheckpoint = !isHeadsetUnlocked && isNearCheckpoint;
+        } else {
+            savedState.progress = null;
+        }
+    });
+
+    ScrollTrigger.addEventListener("refresh", () => {
+        if (savedState.progress !== null) {
+            const st = ScrollTrigger.getById('booking-scene-trigger');
+            if (st) {
+                let targetProgress = savedState.progress;
+                
+                // If we were locked at the old checkpoint, SNAP to the new checkpoint
+                if (savedState.wasLockedAtCheckpoint) {
+                    targetProgress = getCheckpoint();
+                }
+
+                const newScroll = st.start + (st.end - st.start) * targetProgress;
+                
+                if (window.lenis) {
+                    window.lenis.scrollTo(newScroll, { immediate: true });
+                } else {
+                    window.scrollTo(0, newScroll);
+                }
+            }
+        }
+    });
+
+    // 1. Fade in video wrapper - Reduced duration to start video sooner
+    timeline.to(videoWrapper, { opacity: 1, duration: 0.1, ease: "power2.inOut" });
 
     // Label for the main sequence start
     timeline.add('sequenceStart');
@@ -337,15 +384,15 @@ export const initBookingScene = () => {
                 duration: 0.1,
                 onStart: () => animateTextIn('3')
             }, `${startLabel}+=7.5`)
-           .to(sortedOverlays[2], { opacity: 0, duration: 0.5 }, `${startLabel}+=10`);
+           .to(sortedOverlays[2], { opacity: 0, duration: 0.5 }, `${startLabel}+=10.8`);
 
          // Text 4
          tl.to(sortedOverlays[3], { 
                 opacity: 1, 
                 duration: 0.1,
                 onStart: () => animateTextIn('4')
-            }, `${startLabel}+=11`)
-           .to(sortedOverlays[3], { opacity: 0, duration: 0.5 }, `${startLabel}+=13.5`);
+            }, `${startLabel}+=11.2`)
+           .to(sortedOverlays[3], { opacity: 0, duration: 0.5 }, `${startLabel}+=13.7`);
     };
 
     addTextOverlaySequence(timeline, 'sequenceStart');
@@ -854,7 +901,7 @@ const initBookingForm = () => {
         document.body.style.overflow = 'hidden';
         document.querySelector('#video-wrapper')?.style.setProperty('display', 'none');
         // REMOVED: document.querySelector('#third-and-fourth-scene')?.style.setProperty('display', 'none');
-        ScrollTrigger.getAll().forEach(st => st.kill());
+        // ScrollTrigger.getAll().forEach(st => st.kill()); // REMOVED: This breaks the scene on reset
         const bookingSection = document.querySelector('.booking-section');
         if (bookingSection) {
             bookingSection.style.opacity = '1';
@@ -1050,6 +1097,7 @@ const initBookingForm = () => {
     initVideoPreview();
 
     // Global reset function for confirmation screen
+    // Global reset function for confirmation screen
     window.resetForm = function() {
         // Reset form fields
         if (form) form.reset();
@@ -1092,6 +1140,12 @@ const initBookingForm = () => {
         document.querySelector('#video-wrapper')?.style.setProperty('display', 'block');
         document.querySelector('#third-and-fourth-scene')?.style.setProperty('display', 'block');
 
+        // Force GSAP to recognize the layout change instantly prevents scroll lag
+        ScrollTrigger.refresh();
+
+        // Ensure Lenis is restarted if it was stopped
+        if (window.lenis) window.lenis.start();
+
         // Reset to step 1
         if (step2) step2.classList.remove('active');
         if (step1) step1.classList.add('active');
@@ -1106,7 +1160,12 @@ const initBookingForm = () => {
         renderCalendar();
 
         // Re-initialize animation if needed
-        // This would require re-initializing the booking scene, but for now just scroll to bottom
-        window.scrollTo(0, document.body.scrollHeight);
+        // Scroll to bottom (Using Lenis if available)
+        const targetScroll = document.body.scrollHeight;
+        if (window.lenis) {
+            window.lenis.scrollTo(targetScroll, { immediate: true });
+        } else {
+            window.scrollTo(0, targetScroll);
+        }
     };
 };

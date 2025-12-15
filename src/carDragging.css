@@ -146,3 +146,84 @@
         inset 2.2px 2.1px 8.5px rgba(255, 255, 255, 0.126);
     transform: translate(-50%, -50%) matrix(-0.71, -0.71, -0.71, 0.71, 0, 0);
 }
+
+/* Popup Styles for Car Dragging Scene */
+.car-drag-instruction {
+    /* Override position - Center it for the car scene interaction */
+    top: 35%;
+    left: 80%;
+    /* Ensure it's visible initially (controlled by JS) */
+    opacity: 0;
+    pointer-events: none;
+
+    /* Inherit base styles from headset-popup */
+    display: flex;
+    align-items: center;
+    gap: 0;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    color: #ffffff;
+    font-size: 1rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    text-align: left;
+    z-index: 10000;
+    background-color: rgba(187, 187, 188, 0.12);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1.5px dashed rgba(255, 255, 255, 1);
+    padding: 0;
+    width: auto;
+    max-width: 350px;
+    height: 80px;
+    transition: opacity 0.3s ease;
+}
+
+.car-drag-instruction .popup-part-icon {
+    position: relative;
+    width: 75px;
+    height: 100%;
+    flex-shrink: 0;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+}
+
+.car-drag-instruction .popup-part-icon svg {
+    z-index: 4;
+    position: relative;
+    width: 25px;
+    /* Matched SVG size */
+    height: 25px;
+}
+
+.car-drag-instruction .decorative-box {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    width: 30px;
+    height: 30px;
+    border-top: 1.5px solid #ffffff;
+    border-left: 1.5px solid #ffffff;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.car-drag-instruction .popup-part-text {
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    border-left: 1.5px dashed rgba(255, 255, 255, 0.5);
+}
+
+/* Ensure SplitType spans are visible block/inline-block if needed */
+.car-drag-instruction .word {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.car-drag-instruction .char {
+    display: inline-block;
+}

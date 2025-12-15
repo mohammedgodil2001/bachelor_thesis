@@ -42,12 +42,13 @@ const state = {
     currentThumbState: 1,
     currentPercent: 0,
     currentPopup: 'NONE', // Track active popup: 'INTRO' or 'NONE'
-    currentScrollProgress: 0
+    currentScrollProgress: 0,
+    isInstructionVisible: false // New flag to track instruction popup state
 };
 
 // --- DOM Elements (Populated in init) ---
 let container, mainVideo, track, thumb, scrollContainer, sliderContainer;
-let textIntro;
+let textIntro, instructionPopup;
 
 // --- Helper Functions ---
 
@@ -115,7 +116,27 @@ const updatePopups = (percent) => {
 
         state.currentPopup = targetPopup;
     }
+    
+    // Instruction Popup Logic (Independent)
+    if (instructionPopup) {
+        // Show instruction if interactive, NOT dragging, and near start (percent < 0.05)
+        const shouldShowInstruction = isInteractive && !state.isDragging && percent < 0.05;
+
+        if (shouldShowInstruction) {
+             if (!state.isInstructionVisible) {
+                 animateText(instructionPopup);
+                 state.isInstructionVisible = true;
+             }
+        } else {
+             if (state.isInstructionVisible) {
+                 hideText(instructionPopup);
+                 state.isInstructionVisible = false;
+             }
+        }
+    }
 };
+
+
 
 const updateThumbIcon = (percent) => {
     let newState = 1;
@@ -310,6 +331,9 @@ const onPointerDown = (e) => {
 
     state.isDragging = true;
     if (track) track.setPointerCapture(e.pointerId);
+    
+    // Hide instruction popup immediately
+    if (instructionPopup) hideText(instructionPopup);
 
     if (state.phasesUnlocked === 0) {
         state.currentDragLimit = CONFIG.STOP_POINT_PERCENT;
@@ -400,14 +424,27 @@ export const initCarDraggingScene = () => {
     scrollContainer = document.getElementById('drag-scroll-container');
     sliderContainer = document.querySelector('.figma-slider-container');
     textIntro = document.getElementById('car-text-intro');
+    instructionPopup = document.getElementById('car-drag-popup');
     
     // Initialize SplitType for text animations
-    if (textIntro) {
-        const span = textIntro.querySelector('span');
+    const initSplitType = (el) => {
+        if (!el) return;
+        const span = el.querySelector('span'); // Assuming standard structure
         if (span) {
             const split = new SplitType(span, { types: 'words, chars' });
             gsap.set(split.chars, { opacity: 0, y: 8 });
         }
+    };
+
+    if (textIntro) initSplitType(textIntro);
+    
+    // Init instruction popup specific structure (.popup-part-text span)
+    if (instructionPopup) {
+         const span = instructionPopup.querySelector('.popup-part-text span');
+         if (span) {
+             const split = new SplitType(span, { types: 'words, chars' });
+             gsap.set(split.chars, { opacity: 0, y: 8 });
+         }
     }
 
     // 2. Setup Listeners
@@ -440,6 +477,7 @@ export const initCarDraggingScene = () => {
         start: "top top",
         end: "bottom bottom",
         scrub: true,
+        id: 'car-dragging-trigger',
         onUpdate: handleScrollUpdate
     });
 
@@ -456,24 +494,28 @@ export const initCarDraggingScene = () => {
                 end: "top top", 
                 scrub: true,
                 onEnter: () => {
+                    if (ScrollTrigger.isRefreshing) return;
                     console.log('CarDragging: onEnter fired');
                     if (mainVideo) {
                         mainVideo.currentTime = 0;
                         mainVideo.play().catch(e => console.log("Auto-play failed", e));
                     }
-                    state.currentPopup = 'NONE'; // Force reset to trigger animation
-                    updatePopups(0); // Ensure intro text is visible on entry
+                    state.currentPopup = 'NONE';
+                    updatePopups(0); 
                     updateActionHint('DRAG');
                 },
                 onLeave: () => {
+                    if (ScrollTrigger.isRefreshing) return;
                     console.log('CarDragging: onLeave fired');
                     updateActionHint('SCROLL');
                 },
                 onEnterBack: () => {
+                    if (ScrollTrigger.isRefreshing) return;
                     console.log('CarDragging: onEnterBack fired');
                     updateActionHint('DRAG');
                 },
                 onLeaveBack: () => {
+                     if (ScrollTrigger.isRefreshing) return;
                      console.log('CarDragging: onLeaveBack fired');
                      if (mainVideo) {
                          mainVideo.pause();

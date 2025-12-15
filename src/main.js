@@ -577,13 +577,49 @@ const handleFullscreenChange = () => {
     }
 
     // Adjust project info position
+    // Adjust project info position
     adjustProjectInfoPosition();
-
-    // Refresh ScrollTrigger to ensure pinned elements resize correctly
-    setTimeout(() => {
-        ScrollTrigger.refresh();
-    }, 100);
+    
+    // NOTE: We rely on ScrollTrigger's automatic resize handling now, combined with the 
+    // global refresh listeners added below for state preservation.
 }
+
+// Global state preservation for ScrollTrigger refreshes (Handles resize, fullscreen, etc.)
+// Global state preservation for ScrollTrigger refreshes (Handles resize, fullscreen, etc.)
+let savedTriggerState = {
+    id: null,
+    progress: null
+};
+
+ScrollTrigger.addEventListener("refreshInit", () => {
+    // Check which main scene is active and save its state
+    const triggers = ['car-dragging-trigger'];
+    savedTriggerState.id = null;
+    savedTriggerState.progress = null;
+
+    for (const id of triggers) {
+        const st = ScrollTrigger.getById(id);
+        if (st && st.isActive) {
+            savedTriggerState.id = id;
+            savedTriggerState.progress = st.progress;
+            break; // Found the active one
+        }
+    }
+});
+
+ScrollTrigger.addEventListener("refresh", () => {
+    if (savedTriggerState.id && savedTriggerState.progress !== null) {
+        const st = ScrollTrigger.getById(savedTriggerState.id);
+        if (st) {
+            const newScroll = st.start + (st.end - st.start) * savedTriggerState.progress;
+            if (window.lenis) {
+                window.lenis.scrollTo(newScroll, { immediate: true });
+            } else {
+                window.scrollTo(0, newScroll);
+            }
+        }
+    }
+});
 
 const handleFullscreenEscapeKey = (e) => {
     if (e.key === 'Escape' && isFullscreen) {
