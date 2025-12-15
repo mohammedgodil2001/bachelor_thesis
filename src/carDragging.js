@@ -1,5 +1,6 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import SplitType from 'split-type';
 
 // Import Video Assets (Fixes 404s)
 import mainVideoUrl from './images/car_dragging.mp4';
@@ -399,6 +400,15 @@ export const initCarDraggingScene = () => {
     scrollContainer = document.getElementById('drag-scroll-container');
     sliderContainer = document.querySelector('.figma-slider-container');
     textIntro = document.getElementById('car-text-intro');
+    
+    // Initialize SplitType for text animations
+    if (textIntro) {
+        const span = textIntro.querySelector('span');
+        if (span) {
+            const split = new SplitType(span, { types: 'words, chars' });
+            gsap.set(split.chars, { opacity: 0, y: 8 });
+        }
+    }
 
     // 2. Setup Listeners
     window.addEventListener('resize', onResize);
