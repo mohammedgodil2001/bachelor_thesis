@@ -468,7 +468,14 @@
 
 
                 <div class="step-line first"></div>
-                <div class="step-number active">1</div>
+                <div class="step-number active" id="stepIndicator1">
+                  <span class="number">1</span>
+                  <span class="check-icon hidden">
+                    <svg width="8" height="6" viewBox="0 0 8 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M0.247437 2.25977L2.74744 4.75977L7.74744 0.259766" stroke="white" stroke-width="0.7" />
+                    </svg>
+                  </span>
+                </div>
                 <div class="step-line middle"></div>
                 <div class="step-number">2</div>
                 <div class="step-line last"></div>
@@ -724,7 +731,10 @@
           </div>
           <section id="confirmationScreen" class="screen">
             <div class="confirmation-wrapper">
-              <h1 class="confirmation-title">DIGIPHY CONSULT MEETING</h1>
+              <div class="confirmation-header">
+                <h1 class="confirmation-title">DIGIPHY CONSULT MEETING</h1>
+                <p class="confirmation-subtitle">We are looking forward to build a better future together with you.</p>
+              </div>
 
               <div class="customer_info">
                 <div class="booking-info">
@@ -800,11 +810,16 @@
                       </svg>
                     </span>
                   </button>
+                  <div class="email-section">
+                    <svg width="36" height="1" viewBox="0 0 36 1" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <line y1="0.5" x2="36" y2="0.5" stroke="white" />
+                    </svg>
+                    <p class="email-text confirmation-email">You can also email us at <a
+                        href="mailto:info@grandstudio.com">info@grandstudio.com</a></p>
+                  </div>
                 </div>
               </div>
 
-              <p class="email-text confirmation-email">You can also email us at <a
-                  href="mailto:info@grandstudio.com">info@grandstudio.com</a></p>
             </div>
             <!-- <div class="clients-section">
               <h2>WHO WE WORKED WITH?</h2>

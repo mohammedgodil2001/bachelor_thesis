@@ -399,7 +399,7 @@ const initBookingForm = () => {
     const step2 = document.getElementById('step2');
     const nextBtn = document.getElementById('nextBtn');
     const backBtn = document.getElementById('backBtn');
-    const stepIndicators = document.querySelectorAll('.step-indicator');
+    const stepIndicators = document.querySelectorAll('.step-number');
 
     const platformIcons = {
         'google_meet': '📹',
@@ -684,19 +684,33 @@ const initBookingForm = () => {
 
     function updateStepIndicators(step) {
         stepIndicators.forEach((indicator, index) => {
+            const stepNum = index + 1;
             indicator.classList.remove('active', 'completed');
-            if (index + 1 < step) {
+            
+            // Check for internal spans (added for Step 1)
+            const numSpan = indicator.querySelector('.number');
+            const iconSpan = indicator.querySelector('.check-icon');
+
+            if (stepNum < step) {
+                // Completed Step
                 indicator.classList.add('completed');
-                // Insert SVG checkmark
-                indicator.innerHTML = `
-                <svg width="8" height="6" viewBox="0 0 8 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0.247437 2.25977L2.74744 4.75977L7.74744 0.259766" stroke="white" stroke-width="0.7"/>
-                </svg>`;
-            } else if (index + 1 === step) {
+                if (numSpan && iconSpan) {
+                    numSpan.classList.add('hidden');
+                    iconSpan.classList.remove('hidden');
+                }
+            } else if (stepNum === step) {
+                // Current Active Step
                 indicator.classList.add('active');
-                indicator.textContent = index + 1;
+                if (numSpan && iconSpan) {
+                    numSpan.classList.remove('hidden');
+                    iconSpan.classList.add('hidden');
+                }
             } else {
-                indicator.textContent = index + 1;
+                // Future Step
+                if (numSpan && iconSpan) {
+                    numSpan.classList.remove('hidden');
+                    iconSpan.classList.add('hidden');
+                }
             }
         });
 
@@ -966,6 +980,7 @@ const initBookingForm = () => {
                 video.controls = true;
                 video.load();
                 video.play().catch(() => {});
+                previewContainer.style.cursor = 'default'; // Reset cursor
                 setTimeout(() => { isAnimating = false; }, 500);
             } else {
                 backdrop.classList.remove('active');
@@ -995,6 +1010,7 @@ const initBookingForm = () => {
                     video.loop = true;
                     video.play().catch(() => {});
                     isAnimating = false;
+                    previewContainer.style.cursor = 'pointer'; // Restore pointer
                     requestAnimationFrame(() => { previewContainer.style.transition = ''; });
                 }, 500);
             }
@@ -1004,7 +1020,20 @@ const initBookingForm = () => {
             if (previewContainer.classList.contains('expanded')) toggleExpand({ stopPropagation: () => {} });
         });
 
-        if (expandBtn) expandBtn.addEventListener('click', toggleExpand);
+        if (expandBtn) {
+            // Remove specific listener, let bubbling handle it via container
+            expandBtn.style.pointerEvents = 'none'; // distinct visual cue if needed
+        }
+        
+        // Add click listener to the entire container
+        previewContainer.style.cursor = 'pointer';
+        previewContainer.addEventListener('click', (e) => {
+             // Only allow opening interactions from the container click
+             if (!previewContainer.classList.contains('expanded')) {
+                 toggleExpand(e);
+             }
+        });
+
         if (closeBtn) closeBtn.addEventListener('click', (e) => {
             if (previewContainer.classList.contains('expanded')) {
                 e.stopPropagation();
@@ -1060,6 +1089,10 @@ const initBookingForm = () => {
         if (step2) step2.classList.remove('active');
         if (step1) step1.classList.add('active');
         updateStepIndicators(1);
+
+        // Reset step view classes
+        const navContainer = document.querySelector('.step-navigation-container');
+        if (navContainer) navContainer.classList.remove('step-2-view');
 
         // Reset calendar
         currentMonth = new Date();
