@@ -845,6 +845,12 @@ const init = () => {
     initCustomCursor();
     initCarDraggingScene();
     initBookingScene();
+    
+    // Initialize booking form immediately (separate from scene initialization)
+    // This ensures form is ready even before scene is reached
+    if (typeof initBookingForm === 'function') {
+        // Form will be initialized by initBookingScene, but we can also call it here if needed
+    }
 }
 
 
