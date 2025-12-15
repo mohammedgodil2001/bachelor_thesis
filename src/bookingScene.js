@@ -228,7 +228,7 @@ export const initBookingScene = () => {
             scrub: 1,
             id: 'booking-scene-trigger',
             onUpdate: function(self) {
-                if (ScrollTrigger.isRefreshing) return;
+                if (ScrollTrigger.isRefreshing || window.isNavigating) return;
                 handleScrollUpdate(self);
                 
                 // Prevent scrolling past checkpoint if not unlocked

@@ -181,6 +181,9 @@ const updateThumbPosition = (percent) => {
 };
 
 const enableScroll = (mode) => {
+    // Skip if programmatic navigation is active to avoid scroll conflicts
+    if (window.isNavigating) return;
+
     state.currentScrollMode = mode;
     if (mode === 'NONE') {
         document.body.style.overflowY = 'hidden';

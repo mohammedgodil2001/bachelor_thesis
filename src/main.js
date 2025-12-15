@@ -145,7 +145,7 @@ const menuTexts = document.querySelectorAll('.menu-text');
 
 let isMenuOpen = false;
 let menuTimeline;
-const currentPage = 'physical';
+const currentPage = null;
 
 const container = document.querySelector('.comparison-container');
 const topImage = document.querySelector('.top-image');
@@ -271,7 +271,7 @@ const openMenu = () => {
     }
 }
 
-const closeMenuFunc = () => {
+const closeMenuFunc = (onCompleteCallback) => {
     if (!isMenuOpen) return;
 
     const closeTimeline = gsap.timeline({
@@ -285,6 +285,11 @@ const closeMenuFunc = () => {
             document.body.style.overflow = '';
             document.documentElement.style.overflow = '';
             if (window.lenis) window.lenis.start();
+
+            // Run callback after scroll is unlocked
+            if (typeof onCompleteCallback === 'function') {
+                onCompleteCallback(); // Execute navigation scroll
+            }
 
             // Show logo and contact button when menu closes
             gsap.to("header .submit-btn, header .logo", {
@@ -344,14 +349,11 @@ const handleMenuToggleClick = (e) => {
     }
 }
 
-const handleMenuLinkClick = (link) => {
+const handleMenuLinkClick = (e, link) => {
+    e.preventDefault(); // Stop browser hash jump validation
     const page = link.getAttribute('data-page');
     
-    if (link.classList.contains('active')) {
-        closeMenuFunc();
-        return;
-    }
-    
+    // UI Update Logic
     const currentActiveLine = document.querySelector('.menu-link.active .menu-line');
     const newLink = link;
     const newLine = newLink.querySelector('.menu-line');
@@ -360,7 +362,75 @@ const handleMenuLinkClick = (link) => {
     newLink.classList.add('active');
     
     const lineTransition = gsap.timeline({
-        onComplete: closeMenuFunc
+        onComplete: () => {
+             // 1. Update URL Hash immediately
+             if (page) {
+                 history.pushState(null, null, '#' + page);
+             }
+
+             // 2. Define Scroll Action (to run AFTER menu closes)
+             const performNavigation = () => {
+                 requestAnimationFrame(() => {
+                     let targetScroll = 0;
+                     let trigger = null;
+                     let progress = 0;
+                     let found = false;
+
+                     // Robust Trigger Finding Helper
+                     const findTrigger = (id, selector) => {
+                         let t = ScrollTrigger.getById(id);
+                         if (!t || !t.isActive) {
+                             const all = ScrollTrigger.getAll();
+                             t = all.find(st => st.trigger && (st.vars.id === id || st.trigger.id === selector || st.trigger.matches?.(selector)));
+                         }
+                         return t;
+                     };
+
+                     if (page === 'physical') {
+                         trigger = findTrigger('intro-video-trigger', '#scroll-container');
+                         progress = 0;
+                         found = !!trigger;
+                     } else if (page === 'digital') {
+                         trigger = findTrigger('intro-video-trigger', '#scroll-container');
+                         progress = 0.67; 
+                         found = !!trigger;
+                     } else if (page === 'xr') {
+                         trigger = findTrigger('booking-scene-trigger', '#third-and-fourth-scene');
+                         progress = 0.266;
+                         found = !!trigger;
+                     }
+
+                     if (found && trigger) {
+                         targetScroll = trigger.start + (trigger.end - trigger.start) * progress;
+                         
+                         const scrollToPos = (pos) => {
+                             window.isNavigating = true; // Signal active navigation
+                             
+                             if (window.lenis) {
+                                 window.lenis.scrollTo(pos, { 
+                                     duration: 1.5, 
+                                     ease: 'power2.inOut', 
+                                     immediate: false,
+                                     onComplete: () => {
+                                         window.isNavigating = false;
+                                     }
+                                 });
+                             } else {
+                                 window.scrollTo({ top: pos, behavior: 'smooth' });
+                                 // Fallback reset
+                                 setTimeout(() => { window.isNavigating = false; }, 1500);
+                             }
+                         };
+                         scrollToPos(targetScroll);
+                     } else {
+                         console.warn('Navigation target not found for page:', page);
+                     }
+                 });
+             };
+
+             // 3. Close Menu AND Pass Callback
+             closeMenuFunc(performNavigation);
+        }
     });
     
     if (currentActiveLine && currentActiveLine !== newLine) {
@@ -634,7 +704,7 @@ const initMenuListeners = () => {
     }
 
     menuLinks.forEach(link => {
-        link.addEventListener('click', () => handleMenuLinkClick(link));
+        link.addEventListener('click', (e) => handleMenuLinkClick(e, link));
     });
 
     document.addEventListener('keydown', handleMenuEscapeKey);
@@ -769,8 +839,14 @@ const initScrollAnimation = (video) => {
 };
 
 const cleanupScrollTriggers = () => {
+    // Kill by ID first
+    const mainTrigger = ScrollTrigger.getById('intro-video-trigger');
+    if (mainTrigger) mainTrigger.kill();
+
+    // Fallback cleanup
     ScrollTrigger.getAll().forEach(trigger => {
-        if (trigger.trigger === "#scroll-container") {
+        const t = trigger.vars.trigger;
+        if (t === "#scroll-container" || trigger.trigger === document.querySelector("#scroll-container")) {
             trigger.kill();
         }
     });
@@ -783,7 +859,8 @@ const createMainTimeline = (video) => {
             start: "top top",
             end: "bottom bottom",
             scrub: CONFIG.scrollScrub,
-            onUpdate: updateScrollProgress
+            onUpdate: updateScrollProgress,
+            id: 'intro-video-trigger'
         }
     });
 };
