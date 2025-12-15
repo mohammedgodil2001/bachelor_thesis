@@ -511,12 +511,10 @@ fieldset {
 }
 
 .config-icon {
-    font-size: 20px;
-}
-
-.config-icon svg {
     width: 20px;
     height: 20px;
+    display: block;
+    object-fit: contain;
 }
 
 .config-item select {
@@ -1118,9 +1116,11 @@ fieldset {
 }
 
 .info-icon {
-    width: 32px;
-    height: 32px;
+    width: 35px;
+    height: 35px;
     flex-shrink: 0;
+    display: block;
+    object-fit: contain;
 }
 
 .divider-line {
@@ -1243,7 +1243,7 @@ fieldset {
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.confirmation-header{
+.confirmation-header {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;

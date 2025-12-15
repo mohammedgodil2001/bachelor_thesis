@@ -3,6 +3,9 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SplitType from 'split-type';
 import videoOptimizedSrc from './images/video_optimized.mp4';
+import googleMeetIcon from './images/google_meet.png';
+import teamsIcon from './images/teams.png';
+import zoomIcon from './images/zoom.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -402,9 +405,9 @@ const initBookingForm = () => {
     const stepIndicators = document.querySelectorAll('.step-number');
 
     const platformIcons = {
-        'google_meet': '📹',
-        'teams': '💼',
-        'zoom': '🎥'
+        'google_meet': googleMeetIcon,
+        'teams': teamsIcon,
+        'zoom': zoomIcon
     };
 
     const platformNames = {
@@ -841,7 +844,7 @@ const initBookingForm = () => {
         } else console.warn('durationEl not found');
 
         if (platformEl) platformEl.textContent = platformNames[data.meeting_platform];
-        if (platformIconEl) platformIconEl.textContent = platformIcons[data.meeting_platform];
+        if (platformIconEl) platformIconEl.src = platformIcons[data.meeting_platform];
         if (timezoneEl) timezoneEl.textContent = `( UTC+0 )${data.timezone}`;
     }
 
@@ -869,7 +872,7 @@ const initBookingForm = () => {
     function handlePlatformChange(e) {
         const selectedPlatform = e.target.value;
         const iconElement = document.getElementById('platformIcon');
-        if (iconElement) iconElement.textContent = platformIcons[selectedPlatform];
+        if (iconElement) iconElement.src = platformIcons[selectedPlatform];
     }
 
     // Initialize all
@@ -1075,6 +1078,10 @@ const initBookingForm = () => {
         if (btnText) btnText.textContent = 'Book meeting';
         if (btnLoader) btnLoader.classList.add('hidden');
         if (errorMessage) errorMessage.classList.add('hidden');
+
+        // Reset platform icon
+        const platformIcon = document.getElementById('platformIcon');
+        if (platformIcon) platformIcon.src = platformIcons['google_meet'];
 
         // Switch back to form screen
         if (confirmationScreen) confirmationScreen.classList.remove('active');
