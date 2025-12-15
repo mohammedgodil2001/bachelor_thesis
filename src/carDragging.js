@@ -43,7 +43,8 @@ const state = {
     currentPercent: 0,
     currentPopup: 'NONE', // Track active popup: 'INTRO' or 'NONE'
     currentScrollProgress: 0,
-    isInstructionVisible: false // New flag to track instruction popup state
+    isInstructionVisible: false, // New flag to track instruction popup state
+    sceneActive: false // Prevents premature animation during preload
 };
 
 // --- DOM Elements (Populated in init) ---
@@ -119,8 +120,8 @@ const updatePopups = (percent) => {
     
     // Instruction Popup Logic (Independent)
     if (instructionPopup) {
-        // Show instruction if interactive, NOT dragging, and near start (percent < 0.05)
-        const shouldShowInstruction = isInteractive && !state.isDragging && percent < 0.05;
+        // Show instruction if interactive, NOT dragging, near start, AND scene is active (entered)
+        const shouldShowInstruction = isInteractive && !state.isDragging && percent < 0.05 && state.sceneActive;
 
         if (shouldShowInstruction) {
              if (!state.isInstructionVisible) {
@@ -501,6 +502,11 @@ export const initCarDraggingScene = () => {
                         mainVideo.play().catch(e => console.log("Auto-play failed", e));
                     }
                     state.currentPopup = 'NONE';
+                    
+                    // Activates scene logic
+                    state.sceneActive = true; 
+                    state.isInstructionVisible = false; // Reset to ensure animation plays on entry
+                    
                     updatePopups(0); 
                     updateActionHint('DRAG');
                 },
@@ -513,6 +519,12 @@ export const initCarDraggingScene = () => {
                     if (ScrollTrigger.isRefreshing) return;
                     console.log('CarDragging: onEnterBack fired');
                     updateActionHint('DRAG');
+                    
+                    // Re-activate scene
+                    state.sceneActive = true;
+                    state.isInstructionVisible = false; // Reset to ensure animation plays on re-entry
+                    
+                    updatePopups(0);
                 },
                 onLeaveBack: () => {
                      if (ScrollTrigger.isRefreshing) return;
@@ -530,6 +542,9 @@ export const initCarDraggingScene = () => {
                      state.currentScrollMode = 'SEDAN';
                      state.isDragging = false;
                      state.currentPopup = 'NONE';
+                     
+                     state.sceneActive = false; // Deactivate scene
+                     state.isInstructionVisible = false;
                      
                      // Reset UI
                      updateThumbPosition(0);
