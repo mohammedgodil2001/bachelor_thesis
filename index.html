@@ -10,6 +10,63 @@
 </head>
 
 <body>
+  <!-- LOADING SCREEN -->
+  <div id="loader-screen">
+    <div class="loader-border-frame">
+      <div class="loader-corner tl"></div>
+      <div class="loader-corner tr"></div>
+      <div class="loader-corner bl"></div>
+      <div class="loader-corner br"></div>
+    </div>
+
+    <div class="loader-content">
+      <div class="loader-logo-group">
+        <div class="loader-logo">
+          <svg width="281" height="71" viewBox="0 0 281 71" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M16.4235 21.2099H32.7532V62.1279H8.16485V21.2099H16.3297H16.4235ZM0 29.4686V70.3866H32.7532V62.2218L40.9181 54.057V29.4686L32.7532 21.3037V13.1389H0V29.4686Z"
+              fill="white" />
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M45.918 29.4686V70.3866H54.0828V62.1279H45.918L54.0828 53.9631V21.2099H45.918V13.045H54.0828V21.2099L45.918 29.4686Z"
+              fill="white" />
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M59.1769 29.4686V54.057L67.3417 62.2219V70.3867H91.9301V62.2219L100.095 54.057V37.7273H75.5065V45.8922H91.8362V62.2219H67.2479V13.1389H91.8362V21.3038L100.001 29.4686H91.8362V21.3038H67.2479L59.083 29.4686H59.1769Z"
+              fill="white" />
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M105.095 29.4686V70.3866H113.26V62.1279H105.095L113.26 53.9631V21.2099H105.095V13.045H113.26V21.2099L105.095 29.4686Z"
+              fill="white" />
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M118.26 19.9949V70.3866H128.372V50.2761H158.826V40.2209H168.938V20.1104L158.826 10.0552V0H128.372V40.3364H158.826V10.0552H128.372L118.26 20.1104V19.9949Z"
+              fill="white" />
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M184.05 10.0388L173.938 20.0775V50.3091L184.05 60.3478H173.938V70.3866H184.05V40.1549H214.504V70.3866H224.616V60.3478H214.504L224.616 50.3091V20.0775L214.504 10.0388H224.616V0H214.504V30.2316H184.05V10.1541H173.938V0.11536H184.05V10.1541V10.0388Z"
+              fill="white" />
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M260.07 40.2045V30.1822H270.182V20.1598L280.295 10.0223V0H270.182V20.1598H260.07V30.1822H249.957V20.1598H239.729V0H229.616V10.0223L239.729 20.1598V30.1822H249.957V70.3866H260.07V40.2045Z"
+              fill="white" />
+          </svg>
+        </div>
+
+        <div class="loader-text-group">
+          <p>This is a sophisticated online scrolling experience. To fully appreciate it, we recommend a minimum of a
+            laptop and headphones</p>
+          <!-- <p>To fully appreciate it, we recommend a minimum of a laptop and headphones</p> -->
+        </div>
+      </div>
+
+      <div class="loader-progress-group">
+        <div class="loader-progress-container">
+          <div class="loader-progress-bar"></div>
+        </div>
+        <div class="loader-percentage">0%</div>
+      </div>
+
+      <div class="loader-enter-msg" style="opacity: 0; pointer-events: none;">
+        <div class="decorative-box"></div>
+        <span class="loader-msg-text">Click Anywhere to start</span>
+      </div>
+    </div>
+  </div>
   <span class="custom-cursor" aria-hidden="true">
     <span class="cursor-dot"></span>
     <span class="cursor-arrow">

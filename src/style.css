@@ -792,7 +792,260 @@ body {
   }
 }
 
-/* Video Scroll Section Styles */
+/* --- LOWEST PRIORITY BASE STYLES OR PREVIOUSLY END OF FILE --- */
+
+/* =========================================
+   msg: LOADING SCREEN STYLES
+   ========================================= */
+#loader-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  z-index: 100000;
+  /* Highest priority */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  transition: opacity 0.8s ease-in-out;
+  cursor: default;
+  /* Initial cursor */
+}
+
+.loader-progress-group {
+  width: 100%;
+  /* display: flex; */
+}
+
+#loader-screen.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Border Frame */
+.loader-border-frame {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+}
+
+/* Corner Accents */
+/* Corner Accents */
+.loader-corner {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: black;
+  border: 1px solid white;
+}
+
+.loader-corner.tl {
+  top: -5px;
+  left: -5px;
+}
+
+.loader-corner.tr {
+  top: -5px;
+  right: -5px;
+}
+
+.loader-corner.bl {
+  bottom: -5px;
+  left: -5px;
+}
+
+.loader-corner.br {
+  bottom: -5px;
+  right: -5px;
+}
+
+/* Content Layout */
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 600px;
+  width: 90%;
+  color: white;
+  gap: 2rem;
+}
+
+.loader-logo svg {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+}
+
+.loader-text-group {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+  width: 550px;
+}
+
+.loader-logo-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  /* Ensure centering */
+}
+
+/* Progress Bar */
+.loader-progress-container {
+  width: 100%;
+  /* max-width: 300px; */
+  height: 5px;
+  /* Reference: approx 4.92px -> 5px */
+  background: rgba(255, 255, 255, 0.35);
+  /* Reference: 0.35 opacity */
+  position: relative;
+  /* margin-bottom: 20px; */
+  overflow: hidden;
+  /* Ensure sharp corners like 'Rectangle' reference */
+  border-radius: 0;
+
+  /* "Tech" Chamfered Shape matching Vector 92/93 dims (~2.67px cut) */
+  /* Cuts Bottom-Left and Top-Right for symmetry */
+  clip-path: polygon(0 0,
+      /* Top Left */
+      calc(100% - 3px) 0,
+      /* Top Right start */
+      100% 3px,
+      /* Top Right end (chamfer) */
+      100% 100%,
+      /* Bottom Right */
+      3px 100%,
+      /* Bottom Left start */
+      0 calc(100% - 3px)
+      /* Bottom Left end (chamfer) */
+    );
+  -webkit-clip-path: polygon(0 0,
+      calc(100% - 3px) 0,
+      100% 3px,
+      100% 100%,
+      3px 100%,
+      0 calc(100% - 3px));
+}
+
+.loader-progress-bar {
+  width: 0%;
+  height: 100%;
+  background: #FFFFFF;
+  /* Reference: #FFFFFF */
+  transition: width 0.1s linear;
+  /* Child inherits skew, so the leading edge is also slanted /====/ */
+}
+
+.loader-percentage {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  color: white;
+  align-self: flex-end;
+  width: 100%;
+  text-align: right;
+  margin-top: 5px;
+}
+
+/* Enter Message */
+.loader-enter-msg {
+  margin-top: 30px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-size: 1rem;
+  color: white;
+  transition: opacity 0.5s ease;
+  cursor: pointer;
+  text-transform: uppercase;
+  position: relative;
+  background-color: rgba(187, 187, 188, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1.5px dashed rgba(255, 255, 255, 1);
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  width: auto;
+  max-width: 350px;
+
+  /* Fix Blurriness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transform: translateZ(0);
+  /* Force GPU to avoid sub-pixel blurring */
+  will-change: opacity;
+}
+
+/* Top Left Corner Bracket (matches .car-drag-instruction .decorative-box) */
+.loader-enter-msg .decorative-box {
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  width: 30px;
+  height: 30px;
+  border-top: 1.5px solid #ffffff;
+  border-left: 1.5px solid #ffffff;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Top Right Solid Box (matches .headset-popup::after) */
+.loader-enter-msg::after {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  top: -9px;
+  right: -7px;
+  background: #ffffff;
+  z-index: 2;
+}
+
+/* Text wrapper inside .loader-enter-msg (simulating .popup-part-text) */
+.loader-enter-msg .loader-msg-text {
+  position: relative;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  z-index: 3;
+}
+
+/* Bottom Left Solid Box (matches .popup-part-text::before) */
+.loader-enter-msg .loader-msg-text::before {
+  content: '';
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  bottom: -5px;
+  left: -5px;
+  background: #ffffff;
+  z-index: 2;
+}
+
+/* Bottom Right Solid Box (matches .popup-part-text::after) */
+.loader-enter-msg .loader-msg-text::after {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  bottom: -9px;
+  right: -7px;
+  background: #ffffff;
+  z-index: 2;
+}
+
 #scroll-container {
   position: relative;
   height: 800vh;

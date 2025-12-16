@@ -2,6 +2,7 @@ import './style.css'
 import './carDragging.css'; 
 import './booking.css';
 import './progressUI.css';
+import { initLoader } from './loader.js';
 import { initProgressUI, showGlobalUI, hideGlobalUI } from './progressUI.js';
 import gsap from 'gsap';
 
@@ -755,9 +756,11 @@ const animateProjectDescription = () => {
         `<span class="word" style="display:inline-block; will-change:transform; margin-right:0.25em;">${word}</span>`
     ).join('');
 
-    gsap.from('.project-description .word', {
-        y: 50,
-        opacity: 0,
+    gsap.set('.project-description .word', { y: 50, opacity: 0 }); // Ensure hidden start
+    
+    gsap.to('.project-description .word', { // changed from .from to .to since we set initial state
+        y: 0,
+        opacity: 1,
         duration: 0.8,
         stagger: 0.05,
         ease: "back.out(1.7)",
@@ -959,18 +962,31 @@ const animateTypingEffect = (selector) => {
 // initCarDraggingScene(); called in init()
 
 const init = () => {
+    // 0. Force Reset (Crucial for correct loading state)
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+
+    initVideoScroll(); // Initialize Lenis first so it exists
+    initLoader(); // Then loader can stop it
     setActivePage(currentPage);
     initMenuListeners();
     initImageComparisonListeners();
     initFullscreenListeners();
-    animateProjectDescription();
-    initVideoScroll();
+    // animateProjectDescription(); DEFERRED
     initPixelTransition(); 
     initCustomCursor();
     initCarDraggingScene();
     // Initialize Booking Scene
     initBookingScene(overlay);
     initProgressUI();
+    
+    // Defer animations until loader is dismissed
+    window.addEventListener('loader:dismissed', () => {
+        animateProjectDescription();
+        // Any other "play on load" animations can go here
+    });
     
     // Initialize booking form immediately (separate from scene initialization)
     // This ensures form is ready even before scene is reached
