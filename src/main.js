@@ -969,12 +969,25 @@ const init = () => {
     }
     window.scrollTo(0, 0);
 
-    // Init Particle Background
+    // Init Particle Background for Loader
     const particleCanvas = document.getElementById('loader-background');
     let particleSim = null;
     if (particleCanvas) {
         particleSim = new ParticleSimulation(particleCanvas);
         particleSim.start();
+    }
+
+    // Init Particle Background for Mobile View
+    const mobileCanvas = document.getElementById('mobile-background');
+    if (mobileCanvas) {
+        // We only really need this if we are visible, but for simplicity init now
+        // Or checking window width?
+        // Let's just init it. It's a second WebGL context.
+        const mobileSim = new ParticleSimulation(mobileCanvas);
+        mobileSim.start();
+        
+        // Optional: Stop it if not mobile?
+        // But user might resize.
     }
 
     initVideoScroll(); // Initialize Lenis first so it exists
