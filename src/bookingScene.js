@@ -22,6 +22,7 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
     const interestedScreen = document.getElementById('interestedScreen');
     const formScreen = document.getElementById('formScreen');
     const discoverBtn = document.getElementById('discoverBtn');
+    const videoPreview = document.querySelector('.form-video-preview');
 
     if (!section || !videoWrapper || !video) return;
 
@@ -30,6 +31,20 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
         interestedScreen.classList.add('active');
         formScreen.classList.remove('active');
         formScreen.style.display = 'none'; // Ensure it's hidden from layout
+
+        // Hide video preview initially
+        if (videoPreview) {
+            videoPreview.style.display = 'none';
+        }
+        
+        // Allow transition after a brief delay
+        setTimeout(() => { isTransitionEnabled = true; }, 100);
+
+        // Force pointer events enabled
+        if (bookingSection) bookingSection.style.pointerEvents = 'auto';
+
+        // Stop Lenis to prevent interference with custom scroll transitions
+        if (window.lenis) window.lenis.stop();
     }
 
     // --- Scroll Interception Logic ---
@@ -45,19 +60,17 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
         
         // Prevent accidental triggers
         if (!isTransitionEnabled) {
-            // Block events to stop momentum from scrolling parent if needed, 
-            // but usually we just ignore. 
-            // However, to be safe against momentum scrub bubbling:
+            // Block everything aggressively
             if (e.deltaY > 0) {
                  e.preventDefault();
-                 e.stopPropagation();
+                 e.stopImmediatePropagation();
             }
             return;
         }
 
         if (e.deltaY > 0) {
             e.preventDefault(); 
-            e.stopPropagation(); 
+            e.stopImmediatePropagation(); 
             triggerToForm();
         }
     };
@@ -136,6 +149,13 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
             formScreen.style.display = 'flex'; 
             formScreen.classList.add('active'); 
 
+            // Show video preview
+            if (videoPreview) {
+                videoPreview.style.display = 'block';
+                // Small delay or autoAlpha if you want animation, but block is sufficient for "visible"
+                // ensure it's on top if needed, typically it is by DOM order
+            }
+
             overlay.hide({
                 duration: 0.4,
                 ease: 'power2',
@@ -166,6 +186,11 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
         }).then(() => {
              formScreen.classList.remove('active');
              formScreen.style.display = 'none';
+
+             // Hide video preview
+            if (videoPreview) {
+                 videoPreview.style.display = 'none';
+            }
 
              interestedScreen.style.display = 'flex'; 
              interestedScreen.classList.add('active');
@@ -583,13 +608,12 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
                  bookingSection.style.pointerEvents = 'auto';
              } else {
                  bookingSection.style.pointerEvents = 'none';
-                 // Reset flag if we leave the "active" zone
-                 if (isTransitionEnabled) isTransitionEnabled = false; 
+                 // Don't disable transition here, let it be controlled by logic
              }
         },
         onComplete: () => {
              // Start Cooldown
-             setTimeout(() => { isTransitionEnabled = true; }, 800);
+             setTimeout(() => { isTransitionEnabled = true; }, 100);
         }
     }, 'sequenceStart+=15');
     
@@ -597,6 +621,68 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
     if (actionHint) {
         timeline.to(actionHint, { opacity: 0, duration: 0.5 }, "<");
     }
+
+
+    // --- Carousel Logic ---
+    const initCarousel = () => {
+        const track = document.getElementById('carouselTrack');
+        if (!track) return;
+
+        const slides = Array.from(track.children);
+        const nextButton = document.getElementById('carouselRight');
+        const prevButton = document.getElementById('carouselLeft');
+        const dotsNav = document.querySelector('.carousel-dots');
+        const dots = Array.from(dotsNav.children);
+
+        let currentIndex = 0;
+
+        const updateCarousel = (index) => {
+            // Update Slides
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+
+            // Update Dots
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[index].classList.add('active');
+
+            currentIndex = index;
+        };
+
+        const goToNextSlide = (e) => {
+             if(e) {
+                 e.preventDefault();
+                 e.stopPropagation();
+             }
+             const nextIndex = (currentIndex + 1) % slides.length;
+             updateCarousel(nextIndex);
+        };
+
+        const goToPrevSlide = (e) => {
+             if(e) {
+                 e.preventDefault();
+                 e.stopPropagation();
+             }
+             const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
+             updateCarousel(prevIndex);
+        };
+
+        // Event Listeners
+        if(nextButton) nextButton.addEventListener('click', goToNextSlide);
+        if(prevButton) prevButton.addEventListener('click', goToPrevSlide);
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                updateCarousel(index);
+            });
+        });
+
+        // Optional: Keyboard navigation if section is active (could be added later)
+    };
+
+    // Initialize the carousel
+    initCarousel();
 
     // Initialize Booking Form Functionality
     initBookingForm();
@@ -1151,6 +1237,7 @@ const initBookingForm = () => {
 
         const marker = previewContainer.cloneNode(false);
         marker.classList.add('ghost-marker');
+        marker.style.display = 'block'; // Ensure it has layout even if cloned from hidden element
         marker.style.visibility = 'hidden';
         marker.style.pointerEvents = 'none';
         marker.style.opacity = '0';
@@ -1313,8 +1400,18 @@ const initBookingForm = () => {
         if (platformIcon) platformIcon.src = platformIcons['google_meet'];
 
         // Switch back to form screen
-        if (confirmationScreen) confirmationScreen.classList.remove('active');
-        if (formScreen) formScreen.classList.add('active');
+        if (confirmationScreen) {
+            confirmationScreen.classList.remove('active');
+            confirmationScreen.style.display = 'none'; // Ensure confirmation is hidden
+        }
+        if (formScreen) {
+            formScreen.classList.add('active');
+            formScreen.style.display = 'flex'; // Explicitly restore display to override potential 'none'
+        }
+        if (interestedScreen) {
+            interestedScreen.classList.remove('active');
+            interestedScreen.style.display = 'none';
+        }
 
         // Restore scroll
         document.body.style.overflow = '';
