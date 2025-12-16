@@ -805,14 +805,26 @@ body {
   height: 100vh;
   background-color: #000;
   z-index: 100000;
-  /* Highest priority */
+  /* Top-level */
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: 1;
-  transition: opacity 0.8s ease-in-out;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+  /* overflow: hidden; */
+  /* Removing overflow hidden to allow background canvas full coverage if needed, though fixed handles it */
   cursor: default;
   /* Initial cursor */
+}
+
+#loader-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  /* Behind loader content */
+  pointer-events: none;
 }
 
 .loader-progress-group {

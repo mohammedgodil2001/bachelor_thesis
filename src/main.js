@@ -13,6 +13,7 @@ import Lenis from 'lenis';
 import { initCarDraggingScene } from './carDragging.js';
 import { initBookingScene } from './bookingScene.js';
 import { Overlay } from './overlay.js';
+import { ParticleSimulation } from './particle-simulation.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -968,6 +969,14 @@ const init = () => {
     }
     window.scrollTo(0, 0);
 
+    // Init Particle Background
+    const particleCanvas = document.getElementById('loader-background');
+    let particleSim = null;
+    if (particleCanvas) {
+        particleSim = new ParticleSimulation(particleCanvas);
+        particleSim.start();
+    }
+
     initVideoScroll(); // Initialize Lenis first so it exists
     initLoader(); // Then loader can stop it
     setActivePage(currentPage);
@@ -986,6 +995,15 @@ const init = () => {
     window.addEventListener('loader:dismissed', () => {
         animateProjectDescription();
         // Any other "play on load" animations can go here
+        
+        // Stop Particle Sim to save performance
+        if (particleSim) {
+            // Fade out canvas first? CSS handles fade out of #loader-screen
+            // Just stop logic
+            setTimeout(() => {
+                particleSim.stop();
+            }, 1000); // Wait for transition to finish
+        }
     });
     
     // Initialize booking form immediately (separate from scene initialization)
