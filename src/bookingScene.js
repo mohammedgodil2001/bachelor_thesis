@@ -37,14 +37,6 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
             videoPreview.style.display = 'none';
         }
         
-        // Allow transition after a brief delay
-        setTimeout(() => { isTransitionEnabled = true; }, 100);
-
-        // Force pointer events enabled
-        if (bookingSection) bookingSection.style.pointerEvents = 'auto';
-
-        // Stop Lenis to prevent interference with custom scroll transitions
-        if (window.lenis) window.lenis.stop();
     }
 
     // --- Scroll Interception Logic ---
@@ -57,6 +49,14 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
     // 1. Interested Screen Logic
     const handleInterestedWheel = (e) => {
         if (!interestedScreen.classList.contains('active')) return;
+        
+        // Handle Scrolling Back Up (Unlock)
+        if (e.deltaY < 0) {
+            // Re-enable Lenis so standard scrolling (and ScrollTrigger scrub) works
+            if (window.lenis) window.lenis.start();
+            // Allow event to propagate so Lenis/Browser handles it
+            return;
+        }
         
         // Prevent accidental triggers
         if (!isTransitionEnabled) {
@@ -612,6 +612,10 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
              }
         },
         onComplete: () => {
+             // Lock global scroll and enable custom transition
+             if (window.lenis) window.lenis.stop();
+             bookingSection.style.pointerEvents = 'auto';
+             
              // Start Cooldown
              setTimeout(() => { isTransitionEnabled = true; }, 100);
         }
