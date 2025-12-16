@@ -849,6 +849,142 @@ body {
   pointer-events: none;
 }
 
+/* Audio Control Styles */
+.audio-control {
+  position: fixed;
+  top: var(--spacing-lg);
+  right: 180px;
+  /* Position to left of fullscreen icon? or center? */
+  z-index: var(--z-fullscreen-btn);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  mix-blend-mode: difference;
+  color: var(--color-white);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.audio-label {
+  font-family: var(--font-primary);
+  font-weight: 500;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.audio-toggle {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  width: 70px;
+  height: 32px;
+  position: relative;
+  border-radius: 50px;
+  border: 2px solid var(--color-white);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.toggle-track {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8px;
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 500;
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.toggle-text-on {
+  opacity: 0;
+  /* Hidden by default */
+}
+
+.toggle-text-off {
+  margin-left: auto;
+}
+
+.toggle-knob {
+  width: 24px;
+  height: 24px;
+  background: var(--color-white);
+  border-radius: 50%;
+  position: absolute;
+  left: 2px;
+  /* Start at OFF/ON position? Based on image its ON first */
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  z-index: 2;
+}
+
+.knob-text-on,
+.knob-text-off {
+  font-family: var(--font-primary);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-black);
+  position: absolute;
+  opacity: 0;
+}
+
+/* Default state: ON (Knob on left) */
+.toggle-knob {
+  left: 3px;
+}
+
+.knob-text-on {
+  opacity: 1;
+}
+
+.toggle-text-off {
+  color: var(--color-white);
+  opacity: 1;
+}
+
+.audio-toggle[aria-pressed="true"] .toggle-text-on {
+  opacity: 1;
+}
+
+/* OFF State (Knob on right) */
+.audio-toggle.is-off .toggle-knob {
+  transform: translate(38px, -50%);
+}
+
+.audio-toggle.is-off .knob-text-on {
+  opacity: 0;
+}
+
+.audio-toggle.is-off .knob-text-off {
+  opacity: 1;
+}
+
+.audio-toggle.is-off .toggle-text-off {
+  opacity: 0;
+}
+
+.audio-toggle.is-off .toggle-text-on {
+  opacity: 1;
+  margin-right: auto;
+  color: var(--color-white);
+}
+
 /* Corner Accents */
 /* Corner Accents */
 .loader-corner {
