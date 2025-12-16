@@ -51,6 +51,8 @@ const initPixelTransition = () => {
             }).then(() => {
                 // Hide image comparison to reveal video
                 gsap.set(".image-comparison", { autoAlpha: 0 });
+                // Also hide the scroll indicator
+                gsap.set(".scroll-indicator", { autoAlpha: 0 });
                 
                 overlay.hide({
                     duration: 0.4,
@@ -128,8 +130,9 @@ const initPixelTransition = () => {
                 ease: 'power3.inOut',
                 stagger: index => 0.02 * (overlay.cells.flat()[index].row + gsap.utils.random(0, 5))
             }).then(() => {
-                // Show image comparison
+                // Show image comparison and scroll indicator
                 gsap.set(".image-comparison", { autoAlpha: 1 });
+                gsap.set(".scroll-indicator", { autoAlpha: 1 });
 
                 overlay.hide({
                     duration: 0.4,
@@ -655,7 +658,6 @@ const handleFullscreenChange = () => {
         updateFullscreenUI(true);
     }
 
-    // Adjust project info position
     // Adjust project info position
     adjustProjectInfoPosition();
     
