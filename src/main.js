@@ -1,14 +1,17 @@
 import './style.css'
-import './carDragging.css'; // Import the new CSS
+import './carDragging.css'; 
 import './booking.css';
+import './progressUI.css';
+import { initProgressUI, showGlobalUI, hideGlobalUI } from './progressUI.js';
 import gsap from 'gsap';
+
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Flip } from 'gsap/Flip';
 import SplitType from 'split-type';
 import Lenis from 'lenis';
-import { initCarDraggingScene } from './carDragging.js'; // Import the module
+import { initCarDraggingScene } from './carDragging.js';
 import { initBookingScene } from './bookingScene.js';
-import { Overlay } from './overlay.js'; // Import Overlay class
+import { Overlay } from './overlay.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -67,6 +70,9 @@ const initPixelTransition = () => {
                         }
                     });
 
+                    // Show Global UI (Progress Bar + Labels)
+                    showGlobalUI();
+
                     // Show action hint
                     gsap.to(".action-hint", {
                         autoAlpha: 1,
@@ -93,6 +99,9 @@ const initPixelTransition = () => {
 
             // Deactivate custom cursor when going back
             deactivateCustomCursor();
+
+            // Hide Global UI immediately
+            hideGlobalUI();
 
             // Hide header elements first
             gsap.to("header .submit-btn, header .logo, header .hamburger", {
@@ -958,6 +967,7 @@ const init = () => {
     initCustomCursor();
     initCarDraggingScene();
     initBookingScene();
+    initProgressUI();
     
     // Initialize booking form immediately (separate from scene initialization)
     // This ensures form is ready even before scene is reached
