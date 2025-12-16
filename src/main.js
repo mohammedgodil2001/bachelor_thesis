@@ -968,7 +968,8 @@ const init = () => {
     initPixelTransition(); 
     initCustomCursor();
     initCarDraggingScene();
-    initBookingScene();
+    // Initialize Booking Scene
+    initBookingScene(overlay);
     initProgressUI();
     
     // Initialize booking form immediately (separate from scene initialization)

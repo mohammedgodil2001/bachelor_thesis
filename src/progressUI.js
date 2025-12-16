@@ -29,7 +29,11 @@ const animateText = (element, newText) => {
     let block = "";
     let fixed = "";
     
-    if (animationInterval) clearInterval(animationInterval);
+    // Explicitly clear any existing interval
+    if (animationInterval) {
+        clearInterval(animationInterval);
+        animationInterval = null;
+    }
     
     animationInterval = setInterval(() => {
         block = "";
@@ -44,7 +48,9 @@ const animateText = (element, newText) => {
         }
         
         if (si === increment) {
-            fixed += newText.charAt(stri - 1);
+            if (stri > 0 && stri <= newText.length) {
+                fixed += newText.charAt(stri - 1);
+            }
             si = 0;
         }
         
@@ -54,7 +60,10 @@ const animateText = (element, newText) => {
         
         if (stri >= clen) {
             element.textContent = newText;
-            clearInterval(animationInterval);
+            if (animationInterval) {
+                clearInterval(animationInterval);
+                animationInterval = null;
+            }
         }
         
     }, speed);

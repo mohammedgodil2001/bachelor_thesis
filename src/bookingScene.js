@@ -9,7 +9,7 @@ import zoomIcon from './images/zoom.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export const initBookingScene = () => {
+export const initBookingScene = (overlay) => { // Accept overlay instance
     const section = document.querySelector('#third-and-fourth-scene');
     const videoWrapper = document.querySelector('#video-wrapper');
     const video = videoWrapper.querySelector('video');
@@ -18,7 +18,174 @@ export const initBookingScene = () => {
     const headsetImage = document.getElementById('headset-image');
     const headsetPopup = document.getElementById('headset-popup');
 
+    // New element references
+    const interestedScreen = document.getElementById('interestedScreen');
+    const formScreen = document.getElementById('formScreen');
+    const discoverBtn = document.getElementById('discoverBtn');
+
     if (!section || !videoWrapper || !video) return;
+
+    // Handle initial visibility
+    if (interestedScreen && formScreen) {
+        interestedScreen.classList.add('active');
+        formScreen.classList.remove('active');
+        formScreen.style.display = 'none'; // Ensure it's hidden from layout
+    }
+
+    // --- Scroll Interception Logic ---
+    let isTransitionEnabled = false; // Debounce flag
+
+    // Helper to determine if we should block scroll
+    const isAtTop = (el) => el.scrollTop <= 5;
+    const isAtBottom = (el) => el.scrollHeight - el.scrollTop - el.clientHeight <= 5;
+
+    // 1. Interested Screen Logic
+    const handleInterestedWheel = (e) => {
+        if (!interestedScreen.classList.contains('active')) return;
+        
+        // Prevent accidental triggers
+        if (!isTransitionEnabled) {
+            // Block events to stop momentum from scrolling parent if needed, 
+            // but usually we just ignore. 
+            // However, to be safe against momentum scrub bubbling:
+            if (e.deltaY > 0) {
+                 e.preventDefault();
+                 e.stopPropagation();
+            }
+            return;
+        }
+
+        if (e.deltaY > 0) {
+            e.preventDefault(); 
+            e.stopPropagation(); 
+            triggerToForm();
+        }
+    };
+
+    const handleInterestedTouch = (e) => {
+         if (!interestedScreen.classList.contains('active')) return;
+         
+         const touch = e.touches[0];
+         if (!interestedScreen.touchStartY) interestedScreen.touchStartY = touch.clientY;
+         
+         const diff = interestedScreen.touchStartY - touch.clientY;
+         
+         if (diff > 50) { 
+             if (!isTransitionEnabled) return; // Ignore if cooling down
+             
+             if (e.cancelable) e.preventDefault();
+             e.stopPropagation();
+             triggerToForm();
+             interestedScreen.touchStartY = null; 
+         }
+    };
+    
+    // 2. Form Screen Logic
+    const handleFormWheel = (e) => {
+        if (!formScreen.classList.contains('active')) return;
+
+        // Detect Up AND At Top
+        if (e.deltaY < 0 && isAtTop(formScreen)) {
+             e.preventDefault(); 
+             e.stopPropagation(); 
+             triggerToInterested();
+        }
+    };
+
+    const handleFormTouch = (e) => {
+        if (!formScreen.classList.contains('active')) return;
+         const touch = e.touches[0];
+         if (!formScreen.touchStartY) formScreen.touchStartY = touch.clientY;
+         
+         const diff = formScreen.touchStartY - touch.clientY;
+         
+         if (diff < -50 && isAtTop(formScreen)) { 
+             if (e.cancelable) e.preventDefault();
+             e.stopPropagation();
+             triggerToInterested();
+             formScreen.touchStartY = null;
+         }
+    };
+
+    // Attach Listeners with { passive: false }
+    interestedScreen.addEventListener('wheel', handleInterestedWheel, { passive: false });
+    interestedScreen.addEventListener('touchstart', (e) => interestedScreen.touchStartY = e.touches[0].clientY, { passive: true });
+    interestedScreen.addEventListener('touchmove', handleInterestedTouch, { passive: false });
+
+    formScreen.addEventListener('wheel', handleFormWheel, { passive: false });
+    formScreen.addEventListener('touchstart', (e) => formScreen.touchStartY = e.touches[0].clientY, { passive: true });
+    formScreen.addEventListener('touchmove', handleFormTouch, { passive: false });
+
+
+    const triggerToForm = () => {
+        if (overlay.isAnimating) return;
+        overlay.isAnimating = true;
+
+        if (window.lenis) window.lenis.stop();
+
+        overlay.DOM.el.classList.add('white-mode');
+
+        overlay.show({
+            duration: 0.4,
+            ease: 'power3.inOut',
+            stagger: index => 0.02 * (overlay.cells.flat()[index].row + gsap.utils.random(0, 5))
+        }).then(() => {
+            interestedScreen.classList.remove('active');
+            interestedScreen.style.display = 'none';
+            
+            formScreen.style.display = 'flex'; 
+            formScreen.classList.add('active'); 
+
+            overlay.hide({
+                duration: 0.4,
+                ease: 'power2',
+                stagger: index => 0.02 * (overlay.cells.flat()[index].row + gsap.utils.random(0, 5))
+            }).then(() => {
+                overlay.DOM.el.classList.remove('white-mode'); 
+                overlay.isAnimating = false;
+                if (window.lenis) window.lenis.start();
+
+                // Ensure form can scroll if needed
+                formScreen.scrollTop = 0;
+            });
+        });
+    };
+
+    const triggerToInterested = () => {
+         if (overlay.isAnimating) return;
+        overlay.isAnimating = true;
+
+        if (window.lenis) window.lenis.stop();
+        
+        overlay.DOM.el.classList.add('white-mode');
+
+        overlay.show({
+             duration: 0.4,
+             ease: 'power3.inOut',
+             stagger: index => 0.02 * (overlay.cells.flat()[index].row + gsap.utils.random(0, 5))
+        }).then(() => {
+             formScreen.classList.remove('active');
+             formScreen.style.display = 'none';
+
+             interestedScreen.style.display = 'flex'; 
+             interestedScreen.classList.add('active');
+             
+             // IMPORTANT: Give a small delay before enabling forward transition again
+             // to prevent accidental bounces if scrolling fast up
+             isTransitionEnabled = false;
+             setTimeout(() => { isTransitionEnabled = true; }, 800);
+
+             overlay.hide({
+                 duration: 0.4,
+                 ease: 'power2',
+                 stagger: index => 0.02 * (overlay.cells.flat()[index].row + gsap.utils.random(0, 5))
+             }).then(() => {
+                 overlay.DOM.el.classList.remove('white-mode'); 
+                 overlay.isAnimating = false;
+                 if (window.lenis) window.lenis.start();
+             });
+        });
+    };
 
     // Set video source
     video.src = videoOptimizedSrc;
@@ -408,8 +575,22 @@ export const initBookingScene = () => {
     // Use the timeline position 'sequenceStart+=15' directly since we removed the previous tween
     timeline.to(bookingSection, { 
         opacity: 1, 
-        pointerEvents: 'auto', 
-        duration: 1 
+        duration: 1,
+        // Manage pointerEvents dynamically to handle scrub vs interaction
+        onUpdate: function() {
+             const p = this.progress(); 
+             if (p > 0.99) {
+                 bookingSection.style.pointerEvents = 'auto';
+             } else {
+                 bookingSection.style.pointerEvents = 'none';
+                 // Reset flag if we leave the "active" zone
+                 if (isTransitionEnabled) isTransitionEnabled = false; 
+             }
+        },
+        onComplete: () => {
+             // Start Cooldown
+             setTimeout(() => { isTransitionEnabled = true; }, 800);
+        }
     }, 'sequenceStart+=15');
     
     

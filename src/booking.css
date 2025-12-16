@@ -97,6 +97,9 @@ fieldset {
     flex-direction: column;
     justify-content: center;
     gap: 1rem;
+    overflow-y: auto;
+    /* Enable internal scrolling */
+    -webkit-overflow-scrolling: touch;
 }
 
 @keyframes fadeIn {
@@ -154,6 +157,64 @@ fieldset {
 
 .title-separator::after {
     right: 0;
+}
+
+/* Interested Screen Styles */
+#interestedScreen {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.large-center {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    max-width: 800px;
+}
+
+.big-title {
+    font-size: 5rem;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+.big-subtitle {
+    font-size: 1.2rem;
+    text-align: center;
+    max-width: 600px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.centered-separator {
+    width: 200px;
+    /* Shorter separator for this screen */
+    margin: 1rem auto;
+}
+
+.large-btn {
+    margin-top: 2rem;
+    padding: 12px 30px;
+    font-size: 16px;
+    background: #fff;
+    color: #000;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.large-btn:hover {
+    transform: translateY(-2px);
+    background-color: rgba(255, 255, 255, 0.9);
 }
 
 /* Pill Step Indicators New */
