@@ -73,7 +73,7 @@
     /* Fill the container width */
     height: 100%;
     background: rgba(145, 145, 145, 0.5);
-    border-radius: 3px;
+    /* border-radius: 3px; */
     /* Slightly more rounded */
     z-index: 1;
 }
@@ -88,7 +88,7 @@
     /* Thinner than track */
     height: 0%;
     background: #fff;
-    border-radius: 2px;
+    /* border-radius: 2px; */
     /* box-shadow: 0 0 8px rgba(255, 255, 255, 0.6); */
     /* Glow */
     z-index: 2;
