@@ -15,8 +15,13 @@ import { initBookingScene } from './bookingScene.js';
 import { Overlay } from './overlay.js';
 import { ParticleSimulation } from './particle-simulation.js';
 import revealSoundSrc from '../soundaffects/ui-alert-menu-modern-interface-deny-small-230476.mp3';
+import bgMusicSrc from '../soundaffects/background_music.mp3';
 
 const revealAudio = new Audio(revealSoundSrc);
+const bgAudio = new Audio(bgMusicSrc);
+bgAudio.loop = true;
+bgAudio.volume = 0.5;
+
 let isSoundEnabled = true; // Default state (matches HTML aria-pressed="true")
 
 gsap.registerPlugin(ScrollTrigger);
@@ -30,12 +35,15 @@ const overlay = new Overlay(overlayEl, {
 const initPixelTransition = () => {
     let isAnimating = false;
 
-    // Ensure image comparison is visible initially and header is hidden
+    // Ensure image comparison is visible initially
+    // Header elements and audio-control are now visible by default (CSS or previous state)
+    // We explicitly set them to visible just in case, or simply don't hide them.
     gsap.set(".image-comparison", { autoAlpha: 1 });
-    gsap.set(".image-comparison", { autoAlpha: 1 });
+    
+    // Explicitly show header elements and audio control because CSS hides them by default
     gsap.set("header .contact-us-btn, header .logo, header .hamburger, .audio-control", {
-        autoAlpha: 0,
-        pointerEvents: 'none'
+        autoAlpha: 1,
+        pointerEvents: 'auto'
     });
 
     ScrollTrigger.create({
@@ -72,19 +80,8 @@ const initPixelTransition = () => {
                     ease: 'power2',
                     stagger: index => 0.02 * (overlay.cells.flat()[index].row + gsap.utils.random(0, 5))
                 }).then(() => {
-                    // Show header elements after transition
-                    gsap.to("header .contact-us-btn, header .logo, header .hamburger, .audio-control", {
-                        autoAlpha: 1,
-                        duration: 0.6,
-                        ease: 'power2.out',
-                        stagger: 0.1,
-                        onStart: () => {
-                            gsap.set("header .contact-us-btn, header .logo, header .hamburger, .audio-control", {
-                                pointerEvents: 'auto'
-                            });
-                        }
-                    });
-
+                    // Header elements are already visible, no need to animate them in.
+                    
                     // Show Global UI (Progress Bar + Labels)
                     showGlobalUI();
 
@@ -118,17 +115,7 @@ const initPixelTransition = () => {
             // Hide Global UI immediately
             hideGlobalUI();
 
-            // Hide header elements first
-            gsap.to("header .contact-us-btn, header .logo, header .hamburger, .audio-control", {
-                autoAlpha: 0,
-                duration: 0.3,
-                ease: 'power2.in',
-                onStart: () => {
-                    gsap.set("header .contact-us-btn, header .logo, header .hamburger, .audio-control", {
-                        pointerEvents: 'none'
-                    });
-                }
-            });
+            // Do NOT hide header elements here.
 
             // Hide action hint
             gsap.to(".action-hint", {
@@ -760,8 +747,17 @@ const initAudioToggle = () => {
 
     audioToggle.addEventListener('click', () => {
         const isPressed = audioToggle.getAttribute('aria-pressed') === 'true';
-        audioToggle.setAttribute('aria-pressed', !isPressed);
-        isSoundEnabled = !isPressed; // Sync state
+        // if isPressed was true, we are turning it OFF
+        const newState = !isPressed;
+        
+        audioToggle.setAttribute('aria-pressed', newState);
+        isSoundEnabled = newState; // Sync global state
+
+        if (isSoundEnabled) {
+            bgAudio.play().catch(e => console.warn("Audio play blocked:", e));
+        } else {
+            bgAudio.pause();
+        }
     });
 };
 
@@ -1052,6 +1048,13 @@ const init = () => {
     // Defer animations until loader is dismissed
     window.addEventListener('loader:dismissed', () => {
         window.isLoading = false; // Release lock
+        
+        // Start Background Music
+        if (isSoundEnabled) {
+             bgAudio.currentTime = 0;
+             bgAudio.play().catch(e => console.warn("Autoplay blocked:", e));
+        }
+
         animateProjectDescription();
         // Any other "play on load" animations can go here
         

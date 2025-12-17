@@ -677,11 +677,7 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
         }
     }, 'sequenceStart+=15');
 
-    // Hide Audio Control synchronously with booking section reveal
-    timeline.to('.audio-control', { 
-        autoAlpha: 0, 
-        duration: 1 
-    }, 'sequenceStart+=15');
+    // Audio Control visibility logic removed - keeps it visible
     
     
     if (actionHint) {
