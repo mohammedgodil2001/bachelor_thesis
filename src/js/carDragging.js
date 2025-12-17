@@ -85,7 +85,7 @@ const animateText = (element) => {
                     // Check if loading is active
                     if (window.isLoading) return;
 
-                    if (audioToggle && audioToggle.getAttribute('aria-pressed') === 'true') {
+                    if (audioToggle && audioToggle.getAttribute('aria-pressed') === 'true' && !window.isNavigating) {
                         revealAudio.currentTime = 0;
                         revealAudio.play().catch(() => {});
                     }

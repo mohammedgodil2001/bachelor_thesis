@@ -283,7 +283,7 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
                 overwrite: true,
                 onStart: () => {
                     const audioToggle = document.querySelector('.audio-toggle');
-                    if (audioToggle && audioToggle.getAttribute('aria-pressed') === 'true') {
+                    if (audioToggle && audioToggle.getAttribute('aria-pressed') === 'true' && !window.isNavigating) {
                         revealAudio.currentTime = 0;
                         revealAudio.play().catch(() => {});
                     }
@@ -569,7 +569,7 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
                      overwrite: true,
                      onStart: () => {
                          const audioToggle = document.querySelector('.audio-toggle');
-                         if (audioToggle && audioToggle.getAttribute('aria-pressed') === 'true') {
+                         if (audioToggle && audioToggle.getAttribute('aria-pressed') === 'true' && !window.isNavigating) {
                              revealAudio.currentTime = 0;
                              revealAudio.play().catch(() => {});
                          }

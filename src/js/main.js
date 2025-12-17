@@ -394,68 +394,72 @@ const handleMenuLinkClick = (e, link) => {
                  history.pushState(null, null, '#' + page);
              }
 
-             // 2. Define Scroll Action (to run AFTER menu closes)
-             const performNavigation = () => {
-                 requestAnimationFrame(() => {
-                     let targetScroll = 0;
-                     let trigger = null;
-                     let progress = 0;
-                     let found = false;
+             // 2. Perform Scroll Navigation (While Menu is OPEN)
+             requestAnimationFrame(() => {
+                 let targetScroll = 0;
+                 let trigger = null;
+                 let progress = 0;
+                 let found = false;
 
-                     // Robust Trigger Finding Helper
-                     const findTrigger = (id, selector) => {
-                         let t = ScrollTrigger.getById(id);
-                         if (!t || !t.isActive) {
-                             const all = ScrollTrigger.getAll();
-                             t = all.find(st => st.trigger && (st.vars.id === id || st.trigger.id === selector || st.trigger.matches?.(selector)));
-                         }
-                         return t;
-                     };
-
-                     if (page === 'physical') {
-                         trigger = findTrigger('intro-video-trigger', '#scroll-container');
-                         progress = 0;
-                         found = !!trigger;
-                     } else if (page === 'digital') {
-                         trigger = findTrigger('intro-video-trigger', '#scroll-container');
-                         progress = 0.67; 
-                         found = !!trigger;
-                     } else if (page === 'xr') {
-                         trigger = findTrigger('booking-scene-trigger', '#third-and-fourth-scene');
-                         progress = 0.266;
-                         found = !!trigger;
+                 // Robust Trigger Finding Helper
+                 const findTrigger = (id, selector) => {
+                     let t = ScrollTrigger.getById(id);
+                     if (!t || !t.isActive) {
+                         const all = ScrollTrigger.getAll();
+                         t = all.find(st => st.trigger && (st.vars.id === id || st.trigger.id === selector || st.trigger.matches?.(selector)));
                      }
+                     return t;
+                 };
 
-                     if (found && trigger) {
-                         targetScroll = trigger.start + (trigger.end - trigger.start) * progress;
-                         
-                         const scrollToPos = (pos) => {
-                             window.isNavigating = true; // Signal active navigation
-                             
-                             if (window.lenis) {
-                                 window.lenis.scrollTo(pos, { 
-                                     duration: 1.5, 
-                                     ease: 'power2.inOut', 
-                                     immediate: false,
-                                     onComplete: () => {
-                                         window.isNavigating = false;
-                                     }
+                 if (page === 'physical') {
+                     trigger = findTrigger('intro-video-trigger', '#scroll-container');
+                     progress = 0;
+                     found = !!trigger;
+                 } else if (page === 'digital') {
+                     trigger = findTrigger('intro-video-trigger', '#scroll-container');
+                     progress = 0.67; 
+                     found = !!trigger;
+                 } else if (page === 'xr') {
+                     trigger = findTrigger('booking-scene-trigger', '#third-and-fourth-scene');
+                     progress = 0.266;
+                     found = !!trigger;
+                 }
+
+                 if (found && trigger) {
+                     targetScroll = trigger.start + (trigger.end - trigger.start) * progress;
+                     
+                     window.isNavigating = true; // Signal active navigation (suppresses sound)
+                     
+                     // Temporarily enable Lenis for the programmatic scroll
+                     if (window.lenis) window.lenis.start();
+
+                     if (window.lenis) {
+                         window.lenis.scrollTo(targetScroll, { 
+                             duration: 1.5, 
+                             ease: 'power2.inOut', 
+                             immediate: false,
+                             onComplete: () => {
+                                 // 3. Scroll Complete -> Close Menu
+                                 closeMenuFunc(() => {
+                                     window.isNavigating = false;
                                  });
-                             } else {
-                                 window.scrollTo({ top: pos, behavior: 'smooth' });
-                                 // Fallback reset
-                                 setTimeout(() => { window.isNavigating = false; }, 1500);
                              }
-                         };
-                         scrollToPos(targetScroll);
+                         });
                      } else {
-                         console.warn('Navigation target not found for page:', page);
+                         window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+                         // Fallback reset
+                         setTimeout(() => {
+                             closeMenuFunc(() => {
+                                 window.isNavigating = false;
+                             });
+                         }, 1500);
                      }
-                 });
-             };
-
-             // 3. Close Menu AND Pass Callback
-             closeMenuFunc(performNavigation);
+                 } else {
+                     console.warn('Navigation target not found for page:', page);
+                     // If no target found, just close the menu normally
+                     closeMenuFunc();
+                 }
+             });
         }
     });
     
@@ -984,7 +988,7 @@ const animateTypingEffect = (selector) => {
             ease: "power1.out",
             stagger: CONFIG.animation.charStagger,
             onStart: () => {
-                 if (isSoundEnabled) {
+                 if (isSoundEnabled && !window.isNavigating) {
                     revealAudio.currentTime = 0;
                     revealAudio.play().catch(() => { /* Auto-play blocked */ });
                 }
