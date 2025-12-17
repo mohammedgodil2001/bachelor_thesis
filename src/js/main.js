@@ -597,14 +597,16 @@ const hideFullscreenHint = () => {
     }
 }
 
-const adjustProjectInfoPosition = () => {
+const adjustFullscreenLayout = () => {
     const projectInfo = document.querySelector('.project-info');
-    if (!projectInfo) return;
+    const svgTextContainer = document.querySelector('.svg-text-container');
 
     if (document.fullscreenElement) {
-        projectInfo.style.top = '22vh';
+        if (projectInfo) projectInfo.style.top = '22vh';
+        if (svgTextContainer) svgTextContainer.style.top = '74%';
     } else {
-        projectInfo.style.top = '16.5vh';
+        if (projectInfo) projectInfo.style.top = '16.5vh';
+        if (svgTextContainer) svgTextContainer.style.top = '59%';
     }
 }
 
@@ -622,7 +624,7 @@ const handleFullscreenChange = () => {
         updateFullscreenUI(true);
     }
 
-    adjustProjectInfoPosition();
+    adjustFullscreenLayout();
 }
 
 let savedTriggerState = {
