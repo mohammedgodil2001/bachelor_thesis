@@ -1,14 +1,14 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SplitType from 'split-type';
-import revealSoundSrc from './soundaffects/ui-alert-menu-modern-interface-deny-small-230476.mp3';
+import revealSoundSrc from '../soundaffects/ui-alert-menu-modern-interface-deny-small-230476.mp3';
 
 const revealAudio = new Audio(revealSoundSrc);
 
 // Import Video Assets (Fixes 404s)
-import mainVideoUrl from './images/car_dragging.mp4';
-import sedanVideoUrl from './images/sedan_transition1371-1412.mp4';
-import suvVideoUrl from './images/SUV_transition1371-1411.mp4';
+import mainVideoUrl from '../images/car_dragging.mp4';
+import sedanVideoUrl from '../images/sedan_transition1371-1412.mp4';
+import suvVideoUrl from '../images/SUV_transition1371-1411.mp4';
 
 // --- Configuration & State ---
 

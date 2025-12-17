@@ -1,7 +1,7 @@
-import './style.css'
-import './carDragging.css'; 
-import './booking.css';
-import './progressUI.css';
+import '../css/style.css'
+import '../css/carDragging.css'; 
+import '../css/booking.css';
+import '../css/progressUI.css';
 import { initLoader } from './loader.js';
 import { initProgressUI, showGlobalUI, hideGlobalUI } from './progressUI.js';
 import gsap from 'gsap';
@@ -14,7 +14,7 @@ import { initCarDraggingScene } from './carDragging.js';
 import { initBookingScene } from './bookingScene.js';
 import { Overlay } from './overlay.js';
 import { ParticleSimulation } from './particle-simulation.js';
-import revealSoundSrc from './soundaffects/ui-alert-menu-modern-interface-deny-small-230476.mp3';
+import revealSoundSrc from '../soundaffects/ui-alert-menu-modern-interface-deny-small-230476.mp3';
 
 const revealAudio = new Audio(revealSoundSrc);
 let isSoundEnabled = true; // Default state (matches HTML aria-pressed="true")

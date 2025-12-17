@@ -2,11 +2,11 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SplitType from 'split-type';
-import videoOptimizedSrc from './images/video_optimized.mp4';
-import googleMeetIcon from './images/google_meet.png';
-import teamsIcon from './images/teams.png';
-import zoomIcon from './images/zoom.png';
-import revealSoundSrc from './soundaffects/ui-alert-menu-modern-interface-deny-small-230476.mp3';
+import videoOptimizedSrc from '../images/video_optimized.mp4';
+import googleMeetIcon from '../images/google_meet.png';
+import teamsIcon from '../images/teams.png';
+import zoomIcon from '../images/zoom.png';
+import revealSoundSrc from '../soundaffects/ui-alert-menu-modern-interface-deny-small-230476.mp3';
 
 const revealAudio = new Audio(revealSoundSrc);
 
