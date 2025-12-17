@@ -853,136 +853,141 @@ body {
 .audio-control {
   position: fixed;
   top: var(--spacing-lg);
-  right: 180px;
+  right: 100px;
   /* Position to left of fullscreen icon? or center? */
   z-index: var(--z-fullscreen-btn);
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 0.8rem;
   mix-blend-mode: difference;
   color: var(--color-white);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transition: opacity 0.3s ease, visibility 0.3s ease;
+  margin-top: -0.5rem;
 }
 
 .audio-label {
   font-family: var(--font-primary);
-  font-weight: 500;
+  font-weight: 400;
   font-size: 1rem;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .audio-toggle {
   appearance: none;
-  background: none;
+  background: transparent;
   border: none;
   padding: 0;
   cursor: pointer;
-  width: 70px;
-  height: 32px;
+  width: 72px;
+  /* 90 * 0.8 */
+  height: 36px;
+  /* 44 * 0.8 */
   position: relative;
   border-radius: 50px;
-  border: 2px solid var(--color-white);
+  border: 1.5px solid var(--color-white);
+  /* Scaled border slightly */
   overflow: hidden;
-  display: flex;
-  align-items: center;
   transition: all 0.3s ease;
+  scale: 0.9;
 }
 
-.toggle-track {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 8px;
-  font-family: var(--font-primary);
-  font-size: 12px;
-  font-weight: 500;
+.track-labels {
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 11px;
+  /* Scaled padding */
 }
 
-.toggle-text-on {
-  opacity: 0;
-  /* Hidden by default */
-}
-
-.toggle-text-off {
-  margin-left: auto;
+.track-label {
+  font-family: var(--font-primary);
+  font-size: 13px;
+  /* 16 * 0.8 */
+  font-weight: 400;
+  color: var(--color-white);
+  transition: opacity 0.3s ease;
 }
 
 .toggle-knob {
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  /* 38 * 0.8 */
+  height: 30px;
+  /* 38 * 0.8 */
   background: var(--color-white);
   border-radius: 50%;
   position: absolute;
-  left: 2px;
-  /* Start at OFF/ON position? Based on image its ON first */
   top: 50%;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transition: left 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
   z-index: 2;
 }
 
-.knob-text-on,
-.knob-text-off {
+.knob-label {
   font-family: var(--font-primary);
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 11px;
+  /* 14 * 0.8 */
+  font-weight: 500;
   color: var(--color-black);
   position: absolute;
   opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
-/* Default state: ON (Knob on left) */
-.toggle-knob {
-  left: 3px;
+/* --- STATE: ON (Default) --- */
+/* Knob Position: Left */
+.audio-toggle[aria-pressed="true"] .toggle-knob {
+  left: 2px;
+  /* Scaled narrow margin */
 }
 
-.knob-text-on {
+/* Knob Text: "ON" visible */
+.audio-toggle[aria-pressed="true"] .knob-label.label-on {
   opacity: 1;
 }
 
-.toggle-text-off {
-  color: var(--color-white);
+/* Track Text: "OFF" visible (Right side) */
+.audio-toggle[aria-pressed="true"] .track-label.label-off {
   opacity: 1;
 }
 
-.audio-toggle[aria-pressed="true"] .toggle-text-on {
-  opacity: 1;
-}
-
-/* OFF State (Knob on right) */
-.audio-toggle.is-off .toggle-knob {
-  transform: translate(38px, -50%);
-}
-
-.audio-toggle.is-off .knob-text-on {
+/* Track Text: "ON" hidden */
+.audio-toggle[aria-pressed="true"] .track-label.label-on {
   opacity: 0;
 }
 
-.audio-toggle.is-off .knob-text-off {
+
+/* --- STATE: OFF --- */
+/* Knob Position: Right */
+.audio-toggle[aria-pressed="false"] .toggle-knob {
+  left: calc(100% - 32px);
+  /* Width (72) - Knob (30) - Margin (2) = 40 left? No: right aligned. 100% - 30 - 2 = 100% - 32 */
+}
+
+/* Knob Text: "OFF" visible */
+.audio-toggle[aria-pressed="false"] .knob-label.label-off {
   opacity: 1;
 }
 
-.audio-toggle.is-off .toggle-text-off {
+/* Track Text: "ON" visible (Left side) */
+.audio-toggle[aria-pressed="false"] .track-label.label-on {
+  opacity: 1;
+}
+
+/* Track Text: "OFF" hidden */
+.audio-toggle[aria-pressed="false"] .track-label.label-off {
   opacity: 0;
-}
-
-.audio-toggle.is-off .toggle-text-on {
-  opacity: 1;
-  margin-right: auto;
-  color: var(--color-white);
 }
 
 /* Corner Accents */
@@ -1536,8 +1541,8 @@ html.custom-cursor-active * {
   border: 2px solid var(--color-white);
   border-radius: var(--radius-full);
   pointer-events: none;
-  z-index: var(--z-cursor);
-  /* Above everything */
+  z-index: 200000;
+  /* Above everything including loader (100000) */
   transform: translate(-50%, -50%);
   /* Separate transitions for different properties */
   transition: background-color 0.2s ease;

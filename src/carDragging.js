@@ -1,6 +1,9 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SplitType from 'split-type';
+import revealSoundSrc from './soundaffects/ui-alert-menu-modern-interface-deny-small-230476.mp3';
+
+const revealAudio = new Audio(revealSoundSrc);
 
 // Import Video Assets (Fixes 404s)
 import mainVideoUrl from './images/car_dragging.mp4';
@@ -76,7 +79,14 @@ const animateText = (element) => {
                 duration: 0.03, // Matched to main.js CONFIG.animation.charDuration
                 stagger: 0.015, // Matched to main.js CONFIG.animation.charStagger
                 ease: "power1.out",
-                overwrite: 'auto'
+                overwrite: 'auto',
+                onStart: () => {
+                    const audioToggle = document.querySelector('.audio-toggle');
+                    if (audioToggle && audioToggle.getAttribute('aria-pressed') === 'true') {
+                        revealAudio.currentTime = 0;
+                        revealAudio.play().catch(() => {});
+                    }
+                }
             }
         );
     }

@@ -14,6 +14,10 @@ import { initCarDraggingScene } from './carDragging.js';
 import { initBookingScene } from './bookingScene.js';
 import { Overlay } from './overlay.js';
 import { ParticleSimulation } from './particle-simulation.js';
+import revealSoundSrc from './soundaffects/ui-alert-menu-modern-interface-deny-small-230476.mp3';
+
+const revealAudio = new Audio(revealSoundSrc);
+let isSoundEnabled = true; // Default state (matches HTML aria-pressed="true")
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -41,6 +45,12 @@ const initPixelTransition = () => {
         scrub: false,
         // When scrolling down past the pin
         onLeave: () => {
+             // Guard clause: If loading, force reset and abort
+             if (window.isLoading) {
+                window.scrollTo(0, 0);
+                return;
+            }
+
             if (isAnimating) return;
             isAnimating = true;
             
@@ -743,9 +753,9 @@ const initAudioToggle = () => {
     if (!audioToggle) return;
 
     audioToggle.addEventListener('click', () => {
-        audioToggle.classList.toggle('is-off');
-        const isOff = audioToggle.classList.contains('is-off');
-        audioToggle.setAttribute('aria-pressed', !isOff);
+        const isPressed = audioToggle.getAttribute('aria-pressed') === 'true';
+        audioToggle.setAttribute('aria-pressed', !isPressed);
+        isSoundEnabled = !isPressed; // Sync state
     });
 };
 
@@ -943,7 +953,14 @@ const addTextOverlay = (timeline, selector, showAt, hideAt) => {
     if (hideAt !== null) {
         timeline.to(selector, {
             opacity: 0,
-            duration: CONFIG.animation.fadeOutDuration
+            duration: CONFIG.animation.fadeOutDuration,
+            onReverseStart: () => {
+                const element = document.querySelector(selector);
+                if (element && element.splitInstance && element.splitInstance.chars) {
+                     gsap.set(element.splitInstance.chars, { opacity: 0, y: 8 });
+                }
+            },
+            onReverseComplete: () => animateTypingEffect(selector)
         }, hideAt);
     }
 };
@@ -963,7 +980,13 @@ const animateTypingEffect = (selector) => {
             y: 0,
             duration: CONFIG.animation.charDuration,
             ease: "power1.out",
-            stagger: CONFIG.animation.charStagger
+            stagger: CONFIG.animation.charStagger,
+            onStart: () => {
+                 if (isSoundEnabled) {
+                    revealAudio.currentTime = 0;
+                    revealAudio.play().catch(() => { /* Auto-play blocked */ });
+                }
+            }
         }
     );
 };
@@ -975,6 +998,9 @@ const animateTypingEffect = (selector) => {
 
 const init = () => {
     // 0. Force Reset (Crucial for correct loading state)
+    // Initialize loading state global flag
+    window.isLoading = true;
+
     if ('scrollRestoration' in history) {
         history.scrollRestoration = 'manual';
     }
@@ -1017,7 +1043,9 @@ const init = () => {
     initProgressUI();
     
     // Defer animations until loader is dismissed
+    // Defer animations until loader is dismissed
     window.addEventListener('loader:dismissed', () => {
+        window.isLoading = false; // Release lock
         animateProjectDescription();
         // Any other "play on load" animations can go here
         

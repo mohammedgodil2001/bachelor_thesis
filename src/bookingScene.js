@@ -6,6 +6,9 @@ import videoOptimizedSrc from './images/video_optimized.mp4';
 import googleMeetIcon from './images/google_meet.png';
 import teamsIcon from './images/teams.png';
 import zoomIcon from './images/zoom.png';
+import revealSoundSrc from './soundaffects/ui-alert-menu-modern-interface-deny-small-230476.mp3';
+
+const revealAudio = new Audio(revealSoundSrc);
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -270,7 +273,14 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
                 duration: 0.03,
                 stagger: 0.015, 
                 ease: 'power1.out',
-                overwrite: true
+                overwrite: true,
+                onStart: () => {
+                    const audioToggle = document.querySelector('.audio-toggle');
+                    if (audioToggle && audioToggle.getAttribute('aria-pressed') === 'true') {
+                        revealAudio.currentTime = 0;
+                        revealAudio.play().catch(() => {});
+                    }
+                }
             }
         );
         hasPopupAnimated = true;
@@ -549,7 +559,14 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
                      duration: 0.03,
                      stagger: 0.015, 
                      ease: 'power1.out',
-                     overwrite: true
+                     overwrite: true,
+                     onStart: () => {
+                         const audioToggle = document.querySelector('.audio-toggle');
+                         if (audioToggle && audioToggle.getAttribute('aria-pressed') === 'true') {
+                             revealAudio.currentTime = 0;
+                             revealAudio.play().catch(() => {});
+                         }
+                     }
                  }
              );
          };
@@ -560,7 +577,15 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
                 duration: 0.1, 
                 onStart: () => animateTextIn('1')
             }, `${startLabel}+=0.5`)
-           .to(sortedOverlays[0], { opacity: 0, duration: 0.5 }, `${startLabel}+=3`);
+           .to(sortedOverlays[0], { 
+               opacity: 0, 
+               duration: 0.5,
+               onReverseStart: () => {
+                   const split = overlayTexts['1'];
+                   if(split && split.chars) gsap.set(split.chars, { opacity: 0, y: 8 });
+               },
+               onReverseComplete: () => animateTextIn('1')
+           }, `${startLabel}+=3`);
 
          // Text 2
          tl.to(sortedOverlays[1], { 
@@ -568,7 +593,15 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
                 duration: 0.1,
                 onStart: () => animateTextIn('2')
             }, `${startLabel}+=4`)
-           .to(sortedOverlays[1], { opacity: 0, duration: 0.5 }, `${startLabel}+=6.5`);
+           .to(sortedOverlays[1], { 
+               opacity: 0, 
+               duration: 0.5,
+               onReverseStart: () => {
+                   const split = overlayTexts['2'];
+                   if(split && split.chars) gsap.set(split.chars, { opacity: 0, y: 8 });
+               },
+               onReverseComplete: () => animateTextIn('2')
+           }, `${startLabel}+=6.5`);
 
          // Text 3
          tl.to(sortedOverlays[2], { 
@@ -576,7 +609,15 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
                 duration: 0.1,
                 onStart: () => animateTextIn('3')
             }, `${startLabel}+=7.5`)
-           .to(sortedOverlays[2], { opacity: 0, duration: 0.5 }, `${startLabel}+=10.8`);
+           .to(sortedOverlays[2], { 
+               opacity: 0, 
+               duration: 0.5,
+               onReverseStart: () => {
+                   const split = overlayTexts['3'];
+                   if(split && split.chars) gsap.set(split.chars, { opacity: 0, y: 8 });
+               },
+               onReverseComplete: () => animateTextIn('3')
+           }, `${startLabel}+=10.8`);
 
          // Text 4
          tl.to(sortedOverlays[3], { 
@@ -584,7 +625,15 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
                 duration: 0.1,
                 onStart: () => animateTextIn('4')
             }, `${startLabel}+=11.2`)
-           .to(sortedOverlays[3], { opacity: 0, duration: 0.5 }, `${startLabel}+=13.7`);
+           .to(sortedOverlays[3], { 
+               opacity: 0, 
+               duration: 0.5,
+               onReverseStart: () => {
+                   const split = overlayTexts['4'];
+                   if(split && split.chars) gsap.set(split.chars, { opacity: 0, y: 8 });
+               },
+               onReverseComplete: () => animateTextIn('4')
+           }, `${startLabel}+=13.7`);
     };
 
     addTextOverlaySequence(timeline, 'sequenceStart');
@@ -619,6 +668,12 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
              // Start Cooldown
              setTimeout(() => { isTransitionEnabled = true; }, 100);
         }
+    }, 'sequenceStart+=15');
+
+    // Hide Audio Control synchronously with booking section reveal
+    timeline.to('.audio-control', { 
+        autoAlpha: 0, 
+        duration: 1 
     }, 'sequenceStart+=15');
     
     
