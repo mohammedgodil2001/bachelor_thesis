@@ -99,6 +99,9 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
     // 2. Form Screen Logic
     const handleFormWheel = (e) => {
         if (!formScreen.classList.contains('active')) return;
+        
+        // Prevent scroll to interested if in step 2
+        if (document.getElementById('step2')?.classList.contains('active')) return;
 
         // Detect Up AND At Top
         if (e.deltaY < 0 && isAtTop(formScreen)) {
@@ -110,6 +113,10 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
 
     const handleFormTouch = (e) => {
         if (!formScreen.classList.contains('active')) return;
+        
+        // Prevent scroll to interested if in step 2
+        if (document.getElementById('step2')?.classList.contains('active')) return;
+
          const touch = e.touches[0];
          if (!formScreen.touchStartY) formScreen.touchStartY = touch.clientY;
          
@@ -1114,6 +1121,11 @@ const initBookingForm = () => {
         if (navContainer) navContainer.classList.add('step-2-view');
         
         validateStep2();
+
+        // Lock Scroll
+        if (window.lenis) window.lenis.stop();
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
     }
 
     function goToPrevStep() {
@@ -1127,6 +1139,11 @@ const initBookingForm = () => {
         if (navContainer) navContainer.classList.remove('step-2-view');
         
         validateStep1();
+
+        // Unlock Scroll
+        if (window.lenis) window.lenis.start();
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
     }
 
     // Form submission

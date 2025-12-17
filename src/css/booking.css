@@ -1452,7 +1452,7 @@ fieldset {
 
 /* Step 2 view: Remove top spacing */
 .step-navigation-container.step-2-view {
-    top: 10px !important;
+    top: 30px !important;
     margin-top: 0 !important;
     padding-top: 0 !important;
 }
@@ -1877,6 +1877,11 @@ fieldset {
 :fullscreen #step1 {
     scale: 1 !important;
     margin-top: 2rem !important;
+}
+
+:fullscreen .step-navigation-container.step-2-view {
+    margin-top: 0;
+    padding-top: 0;
 }
 
 /* Ensure video preview stays fixed and visible */
