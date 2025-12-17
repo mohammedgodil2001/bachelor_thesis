@@ -5,12 +5,11 @@ import revealSoundSrc from '../soundaffects/ui-alert-menu-modern-interface-deny-
 
 const revealAudio = new Audio(revealSoundSrc);
 
-// Import Video Assets (Fixes 404s)
+
 import mainVideoUrl from '../images/car_dragging.mp4';
 import sedanVideoUrl from '../images/sedan_transition1371-1412.mp4';
 import suvVideoUrl from '../images/SUV_transition1371-1411.mp4';
 
-// --- Configuration & State ---
 
 const CONFIG = {
     START_TIME: 2,
@@ -44,17 +43,15 @@ const state = {
     currentThumbState: 1,
     currentThumbState: 1,
     currentPercent: 0,
-    currentPopup: 'NONE', // Track active popup: 'INTRO' or 'NONE'
+    currentPopup: 'NONE', 
     currentScrollProgress: 0,
-    isInstructionVisible: false, // New flag to track instruction popup state
-    sceneActive: false // Prevents premature animation during preload
+    isInstructionVisible: false, 
+    sceneActive: false 
 };
 
-// --- DOM Elements (Populated in init) ---
 let container, mainVideo, track, thumb, scrollContainer, sliderContainer;
 let textIntro, instructionPopup;
 
-// --- Helper Functions ---
 
 const updateDimensions = () => {
     if (!track) return;
@@ -65,10 +62,8 @@ const updateDimensions = () => {
 const animateText = (element) => {
     if (!element) return;
     
-    // Reset container opacity
     gsap.set(element, { autoAlpha: 1 });
     
-    // Find chars (created by SplitType in main.js)
     const chars = element.querySelectorAll('.char');
     if (chars.length > 0) {
         gsap.fromTo(chars, 
@@ -76,13 +71,12 @@ const animateText = (element) => {
             { 
                 opacity: 1, 
                 y: 0, 
-                duration: 0.03, // Matched to main.js CONFIG.animation.charDuration
-                stagger: 0.015, // Matched to main.js CONFIG.animation.charStagger
+                duration: 0.03, 
+                stagger: 0.015, 
                 ease: "power1.out",
                 overwrite: 'auto',
                 onStart: () => {
                     const audioToggle = document.querySelector('.audio-toggle');
-                    // Check if loading is active
                     if (window.isLoading) return;
 
                     if (audioToggle && audioToggle.getAttribute('aria-pressed') === 'true' && !window.isNavigating) {
@@ -111,8 +105,6 @@ const updateActionHint = (text) => {
 
 const updatePopups = (percent) => {
     let targetPopup = 'NONE';
-
-    // Show popup if on MAIN dragging scene (but not scrolling out) OR if scrolling is in early stage (< 50%)
     const isInteractive = state.activeSourceKey === 'MAIN' && state.currentScrollMode !== 'MAIN_END';
     const isVisible = isInteractive || state.currentScrollProgress < 0.5;
 
@@ -120,20 +112,15 @@ const updatePopups = (percent) => {
         targetPopup = 'INTRO';
     }
 
-    // Only update if changed
     if (targetPopup !== state.currentPopup) {
-        // Hide previous
         if (state.currentPopup === 'INTRO') hideText(textIntro);
 
-        // Show new
         if (targetPopup === 'INTRO') animateText(textIntro);
 
         state.currentPopup = targetPopup;
     }
     
-    // Instruction Popup Logic (Independent)
     if (instructionPopup) {
-        // Show instruction if interactive, NOT dragging, near start, AND scene is active (entered)
         const shouldShowInstruction = isInteractive && !state.isDragging && percent < 0.05 && state.sceneActive;
 
         if (shouldShowInstruction) {
@@ -179,12 +166,11 @@ const updateThumbPosition = (percent) => {
     const x = cx + r * Math.cos(angle);
     const y = cy + r * Math.sin(angle);
 
-    // USE GSAP for smooth movement
     if (thumb) {
         gsap.to(thumb, {
             left: x,
             top: y,
-            duration: 0.1, // Slight delay for smoothness
+            duration: 0.1, 
             ease: "power2.out",
             overwrite: "auto"
         });
@@ -194,7 +180,6 @@ const updateThumbPosition = (percent) => {
 };
 
 const enableScroll = (mode) => {
-    // Skip if programmatic navigation is active to avoid scroll conflicts
     if (window.isNavigating) return;
 
     state.currentScrollMode = mode;
@@ -205,7 +190,6 @@ const enableScroll = (mode) => {
         document.body.style.overflowY = 'auto';
         if (scrollContainer) scrollContainer.style.display = 'block';
         
-        // Refresh ScrollTrigger when availability changes
         ScrollTrigger.refresh();
     }
 };
@@ -220,14 +204,12 @@ const switchToVideo = (key) => {
         state.activeSourceKey = key;
         mainVideo.pause(); 
     }
-    
-    // Update popups whenever video source changes (e.g. scrolling hides text)
     updatePopups(state.currentPercent);
 };
 
 const updateUI = (percent) => {
     updateThumbPosition(percent);
-    updatePopups(percent); // Update popups
+    updatePopups(percent); 
 
     let targetTime;
     if (percent <= CONFIG.STOP_POINT_PERCENT) {
@@ -266,7 +248,6 @@ const getPercentFromXY = (clientX, clientY) => {
 };
 
 const checkScrollUnlock = () => {
-    // Adjust unlocking logic based on progress
     if (Math.abs(state.currentPercent - CONFIG.STOP_POINT_PERCENT) < 0.01) {
         enableScroll('SUV'); 
     } else if (state.currentPercent >= 0.99) {
@@ -297,7 +278,7 @@ const preloadVideos = async () => {
         if (mainVideo) mainVideo.play().catch(() => {});
         enableScroll('SEDAN');
         updateThumbPosition(0);
-        updatePopups(0); // Ensure intro text is visible
+        updatePopups(0); 
 
     } catch (e) {
         console.error("Error loading videos:", e);
@@ -307,7 +288,7 @@ const preloadVideos = async () => {
     }
 };
 
-// --- Event Handlers ---
+
 
 const handleDrag = (e) => {
     let percent = getPercentFromXY(e.clientX, e.clientY);
@@ -349,7 +330,6 @@ const onPointerDown = (e) => {
     state.isDragging = true;
     if (track) track.setPointerCapture(e.pointerId);
     
-    // Hide instruction popup immediately
     if (instructionPopup) hideText(instructionPopup);
 
     if (state.phasesUnlocked === 0) {
@@ -394,23 +374,20 @@ const onResize = () => {
 
 const handleScrollUpdate = (self) => {
     const progress = self.progress;
-    state.currentScrollProgress = progress; // Update state
+    state.currentScrollProgress = progress; 
 
-    // UI Visibility Logic
     if (progress > 0.05) {
         if (sliderContainer) sliderContainer.classList.add('hide-ui');
     } else {
         if (sliderContainer) sliderContainer.classList.remove('hide-ui');
     }
     
-    // If scrolled back to start, restore MAIN dragging state
     if (progress < 0.001) {
         switchToVideo('MAIN');
         updateUI(state.currentPercent);
         return;
     }
     
-    // Force popup update to handle 50% fade out logic
     updatePopups(state.currentPercent);
     
     if (state.currentScrollMode === 'SEDAN') {
@@ -430,10 +407,8 @@ const handleScrollUpdate = (self) => {
     }
 };
 
-// --- Main Init Function ---
 
 export const initCarDraggingScene = () => {
-    // 1. DOM Selection
     container = document.querySelector('#car-dragging-scene');
     mainVideo = document.getElementById('main-video'); 
     track = document.getElementById('figma-track');
@@ -443,10 +418,9 @@ export const initCarDraggingScene = () => {
     textIntro = document.getElementById('car-text-intro');
     instructionPopup = document.getElementById('car-drag-popup');
     
-    // Initialize SplitType for text animations
     const initSplitType = (el) => {
         if (!el) return;
-        const span = el.querySelector('span'); // Assuming standard structure
+        const span = el.querySelector('span'); 
         if (span) {
             const split = new SplitType(span, { types: 'words, chars' });
             gsap.set(split.chars, { opacity: 0, y: 8 });
@@ -455,7 +429,6 @@ export const initCarDraggingScene = () => {
 
     if (textIntro) initSplitType(textIntro);
     
-    // Init instruction popup specific structure (.popup-part-text span)
     if (instructionPopup) {
          const span = instructionPopup.querySelector('.popup-part-text span');
          if (span) {
@@ -464,10 +437,8 @@ export const initCarDraggingScene = () => {
          }
     }
 
-    // 2. Setup Listeners
     window.addEventListener('resize', onResize);
     
-    // Custom Cursor Logic
     const customCursor = document.querySelector('.custom-cursor');
     const onTrackEnter = () => customCursor && customCursor.classList.add('hovered');
     const onTrackLeave = () => customCursor && customCursor.classList.remove('hovered');
@@ -476,7 +447,6 @@ export const initCarDraggingScene = () => {
         track.addEventListener('pointerdown', onPointerDown);
         track.addEventListener('pointermove', onPointerMove);
         track.addEventListener('pointerup', onPointerUp);
-        // Custom cursor interaction
         track.addEventListener('mouseenter', onTrackEnter);
         track.addEventListener('mouseleave', onTrackLeave);
     }
@@ -484,11 +454,9 @@ export const initCarDraggingScene = () => {
         mainVideo.addEventListener('timeupdate', onTimeUpdate);
     }
 
-    // 3. Initial Calls
     updateDimensions();
     preloadVideos();
     
-    // 4. GSAP Setup
     ScrollTrigger.create({
         trigger: "#drag-scroll-container",
         start: "top top",
@@ -519,9 +487,8 @@ export const initCarDraggingScene = () => {
                     }
                     state.currentPopup = 'NONE';
                     
-                    // Activates scene logic
                     state.sceneActive = true; 
-                    state.isInstructionVisible = false; // Reset to ensure animation plays on entry
+                    state.isInstructionVisible = false; 
                     
                     updatePopups(0); 
                     updateActionHint('DRAG');
@@ -536,9 +503,8 @@ export const initCarDraggingScene = () => {
                     console.log('CarDragging: onEnterBack fired');
                     updateActionHint('DRAG');
                     
-                    // Re-activate scene
                     state.sceneActive = true;
-                    state.isInstructionVisible = false; // Reset to ensure animation plays on re-entry
+                    state.isInstructionVisible = false; 
                     
                     updatePopups(0);
                 },
@@ -551,7 +517,6 @@ export const initCarDraggingScene = () => {
                          switchToVideo('MAIN');
                      }
                      
-                     // Reset State
                      state.phasesUnlocked = 0;
                      state.currentPercent = 0;
                      state.activeSourceKey = 'MAIN';
@@ -559,12 +524,11 @@ export const initCarDraggingScene = () => {
                      state.isDragging = false;
                      state.currentPopup = 'NONE';
                      
-                     state.sceneActive = false; // Deactivate scene
+                     state.sceneActive = false; 
                      state.isInstructionVisible = false;
                      
-                     // Reset UI
                      updateThumbPosition(0);
-                     updatePopups(0); // Reset popups
+                     updatePopups(0); 
                      updateActionHint('SCROLL');
                      if (sliderContainer) sliderContainer.classList.remove('hide-ui');
                      enableScroll('SEDAN');

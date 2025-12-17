@@ -1,6 +1,5 @@
 import gsap from 'gsap';
 
-// Cell class definition
 class Cell {
     DOM = {
         el: null
@@ -11,44 +10,33 @@ class Cell {
     constructor(row, column) {
         this.DOM.el = document.createElement('div');
         this.DOM.el.className = 'cell';
-        // gsap.set(this.DOM.el, {willChange: 'opacity, transform'}); // Optimization
         this.row = row;
         this.column = column;
     }
 }
 
-// Overlay class definition
 export class Overlay {
     DOM = {
         el: null
     };
-    // cells array
     cells = [];
-    // options
     options = {
-        // Number of cell rows
         rows: 10,
-        // Number of cell columns
         columns: 10,
     };
-
-    // Constructor accepts a DOM element representing the overlay
+  
     constructor(DOM_el, customOptions) {    
         this.DOM.el = DOM_el;
         
-        // Merge default options with provided options
         this.options = Object.assign({}, this.options, customOptions);
         
-        // Set the value of the CSS variable
         this.DOM.el.style.setProperty('--columns', this.options.columns);
         
-        // Create an array of all cells
         this.cells = new Array(this.options.rows);
         for (let i = 0; i < this.options.rows; ++i) {
             this.cells[i] = new Array(this.options.columns);
         }
 
-        // Fill the array with values
         for (let i = 0; i < this.options.rows; ++i) {
             for (let j = 0; j < this.options.columns; ++j) {
                 const cell = new Cell(i,j);
@@ -58,18 +46,12 @@ export class Overlay {
         }
     }
 
-    // Show the overlay and animate the cells in
     show(customConfig = {}) {
         return new Promise((resolve) => {
-            // Default animation configuration
             const defaultConfig = {
-                // Specify the cell's transform origin
                 transformOrigin: '50% 50%',
-                // Duration for each cell animation
                 duration: 0.5,
-                // Ease for each cell animation
                 ease: 'none',
-                // Stagger object
                 stagger: {
                     grid: [this.options.rows, this.options.columns],
                     from: 0,
@@ -94,17 +76,12 @@ export class Overlay {
             });
         });
     }
-    // Hide the overlay and animate the cells out
     hide(customConfig = {}) {
         return new Promise((resolve) => {
-            // Default animation configuration
             const defaultConfig = {
                 transformOrigin: '50% 50%',
-                // Duration for each cell animation
                 duration: 0.5,
-                // Ease for each cell animation
                 ease: 'none',
-                // Stagger object
                 stagger: {
                     grid: [this.options.rows, this.options.columns],
                     from: 0,

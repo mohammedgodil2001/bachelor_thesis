@@ -6,14 +6,13 @@ export class ParticleSimulation {
         this.width = window.innerWidth;
         this.height = window.innerHeight;
         this.frame = 0;
-        this.animationId = null; // Track animation frame
+        this.animationId = null; 
         
         this.init();
         this.setupEventListeners();
     }
 
     getShaders = () => {
-        // Shader code - Common definitions
         const commonShader = `
 #define N 10.
 #define TAU 6.28318530718
@@ -72,7 +71,7 @@ vec3 getPaletteColor(float v, vec2 uv) {
 }
 `;
 
-        // Buffer A - Physics simulation
+        
         const bufferAShader = `
 ${commonShader}
 
@@ -150,7 +149,6 @@ void main() {
 }
 `;
 
-        // Buffer B - Voronoi tracking
         const bufferBShader = `
 ${commonShader}
 
@@ -228,7 +226,6 @@ void main() {
 }
 `;
 
-        // Buffer C - Rendering with motion blur
         const bufferCShader = `
 ${commonShader}
 
@@ -273,7 +270,6 @@ void main() {
 }
 `;
 
-        // Final display shader
         const displayShader = `
 uniform sampler2D tRender;
 uniform vec2 iResolution;
@@ -287,15 +283,12 @@ void main() {
     }
     
     init = () => {
-        // Renderer
         this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, alpha: true }); // Alpha true for safe mixing
         this.renderer.setSize(this.width, this.height);
         
-        // Scene and camera
         this.scene = new THREE.Scene();
         this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
         
-        // Create render targets
         this.rtParticlesA = new THREE.WebGLRenderTarget(this.width, this.height, {
             minFilter: THREE.NearestFilter,
             magFilter: THREE.NearestFilter,
@@ -313,22 +306,18 @@ void main() {
             format: THREE.RGBAFormat
         });
         this.rtRenderB = this.rtRenderA.clone();
-        
-        // Fullscreen quad
         this.quad = new THREE.Mesh(
             new THREE.PlaneGeometry(2, 2),
             null
         );
         this.scene.add(this.quad);
         
-        // Create materials
         this.createMaterials();
     }
     
     createMaterials = () => {
         const { bufferAShader, bufferBShader, bufferCShader, displayShader } = this.getShaders();
 
-        // Buffer A - Particles physics
         this.materialParticles = new THREE.ShaderMaterial({
             vertexShader: `
                 varying vec2 vUv;
@@ -347,7 +336,6 @@ void main() {
             }
         });
         
-        // Buffer B - Voronoi
         this.materialVoronoi = new THREE.ShaderMaterial({
             vertexShader: `
                 varying vec2 vUv;
@@ -365,7 +353,6 @@ void main() {
             }
         });
         
-        // Buffer C - Render
         this.materialRender = new THREE.ShaderMaterial({
             vertexShader: `
                 varying vec2 vUv;
@@ -383,7 +370,6 @@ void main() {
             }
         });
         
-        // Display
         this.materialDisplay = new THREE.ShaderMaterial({
             vertexShader: `
                 varying vec2 vUv;
@@ -409,7 +395,6 @@ void main() {
         this.height = window.innerHeight;
         this.renderer.setSize(this.width, this.height);
         
-        // Recreate render targets
         this.rtParticlesA.setSize(this.width, this.height);
         this.rtParticlesB.setSize(this.width, this.height);
         this.rtVoronoiA.setSize(this.width, this.height);
@@ -417,38 +402,33 @@ void main() {
         this.rtRenderA.setSize(this.width, this.height);
         this.rtRenderB.setSize(this.width, this.height);
         
-        // Update uniforms
         const res = new THREE.Vector2(this.width, this.height);
         this.materialParticles.uniforms.iResolution.value = res;
         this.materialVoronoi.uniforms.iResolution.value = res;
         this.materialRender.uniforms.iResolution.value = res;
         this.materialDisplay.uniforms.iResolution.value = res;
         
-        this.frame = 0; // Reset to reinitialize particles
+        this.frame = 0; 
     }
     
     update = (time) => {
-        // Update uniforms
         this.materialParticles.uniforms.iFrame.value = this.frame;
         this.materialParticles.uniforms.iTime.value = time;
         
         this.materialVoronoi.uniforms.iFrame.value = this.frame;
         
-        // Buffer A - Update particles
         this.materialParticles.uniforms.tPrevious.value = this.rtParticlesB.texture;
         this.materialParticles.uniforms.tVoronoi.value = this.rtVoronoiB.texture;
         this.quad.material = this.materialParticles;
         this.renderer.setRenderTarget(this.rtParticlesA);
         this.renderer.render(this.scene, this.camera);
         
-        // Buffer B - Update Voronoi
         this.materialVoronoi.uniforms.tPrevious.value = this.rtVoronoiB.texture;
         this.materialVoronoi.uniforms.tParticles.value = this.rtParticlesA.texture;
         this.quad.material = this.materialVoronoi;
         this.renderer.setRenderTarget(this.rtVoronoiA);
         this.renderer.render(this.scene, this.camera);
         
-        // Buffer C - Render with motion blur
         this.materialRender.uniforms.tVoronoi.value = this.rtVoronoiA.texture;
         this.materialRender.uniforms.tParticles.value = this.rtParticlesA.texture;
         this.materialRender.uniforms.tPrevious.value = this.rtRenderB.texture;
@@ -456,13 +436,11 @@ void main() {
         this.renderer.setRenderTarget(this.rtRenderA);
         this.renderer.render(this.scene, this.camera);
         
-        // Display to screen
         this.materialDisplay.uniforms.tRender.value = this.rtRenderA.texture;
         this.quad.material = this.materialDisplay;
         this.renderer.setRenderTarget(null);
         this.renderer.render(this.scene, this.camera);
         
-        // Swap buffers
         [this.rtParticlesA, this.rtParticlesB] = [this.rtParticlesB, this.rtParticlesA];
         [this.rtVoronoiA, this.rtVoronoiB] = [this.rtVoronoiB, this.rtVoronoiA];
         [this.rtRenderA, this.rtRenderB] = [this.rtRenderB, this.rtRenderA];
@@ -489,7 +467,6 @@ void main() {
         if (this.renderer) {
             this.renderer.dispose();
             
-            // Dispose Render Targets
             this.rtParticlesA.dispose();
             this.rtParticlesB.dispose();
             this.rtVoronoiA.dispose();
@@ -497,11 +474,9 @@ void main() {
             this.rtRenderA.dispose();
             this.rtRenderB.dispose();
 
-            // Clear Scene
             this.scene.clear();
         }
 
-        // Optional: clear frame
         this.frame = 0;
     }
 }

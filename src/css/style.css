@@ -59,32 +59,51 @@
   --color-white: #ffffff;
   --color-black: #000000;
 
+  /* Transparent Colors */
+  --color-white-06: rgba(255, 255, 255, 0.068);
+  --color-white-10: rgba(255, 255, 255, 0.1);
+  --color-white-12: rgba(255, 255, 255, 0.126);
+  --color-white-20: rgba(255, 255, 255, 0.2);
+  --color-white-30: rgba(255, 255, 255, 0.3);
+  --color-white-35: rgba(255, 255, 255, 0.35);
+  --color-white-40: rgba(255, 255, 255, 0.4);
+  --color-white-50: rgba(255, 255, 255, 0.5);
+  --color-white-70: rgba(255, 255, 255, 0.7);
+  --color-white-80: rgba(255, 255, 255, 0.8);
+
   /* Fonts */
   --font-primary: 'Delight', sans-serif;
   --font-secondary: 'Montserrat', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --font-system: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
   /* Spacing */
-  --spacing-sm: 10px;
-  --spacing-md: 20px;
   --spacing-lg: 30px;
   --spacing-xl: 50px;
 
   /* Border Radius */
-  --radius-sm: 4px;
   --radius-md: 8px;
   --radius-full: 50%;
   --radius-pill: 50px;
 
   /* Transitions */
-  --transition-fast: 0.1s ease-out;
   --transition-default: 0.3s ease;
 
   /* Z-Indices */
-  --z-content: 1;
-  --z-overlay: 999;
+  --z-background: 0;
+  --z-video: 1;
+  --z-scene: 2;
+  --z-video-wrapper: 5;
+  --z-booking: 10;
+  --z-slider: 100;
+  --z-ui-overlay: 1000;
+  --z-progress: 1001;
   --z-menu: 10001;
   --z-fullscreen-btn: 10000;
   --z-cursor: 10002;
+  --z-popup: 10000;
+  /* Reusing z-index for car drag instruction */
+  --z-loader: 100000;
   --z-mobile: 99999;
 }
 
@@ -101,15 +120,6 @@ body {
   clip: rect(1px, 1px, 1px, 1px);
   white-space: nowrap;
 }
-
-/* .content-wrapper {
-  width: 95%;
-  height: 90vh;
-  margin: 5vh auto;
-  position: relative;
-  overflow: hidden;
-} */
-
 
 .image-comparison {
   position: relative;
@@ -159,7 +169,6 @@ body {
 
 .menu-nav {
   width: 100%;
-  /* max-width: 1200px; */
   padding: 0 var(--spacing-xl);
 }
 
@@ -177,7 +186,6 @@ body {
   display: inline-block;
   text-decoration: none;
   color: var(--color-black);
-  /* font-size: clamp(3rem, 8vw, 7rem); */
   font-size: 9.3rem;
   font-weight: 100;
   transition: var(--transition-default);
@@ -275,15 +283,8 @@ body {
     right: var(--spacing-lg);
   }
 
-  .menu-nav {
-    /* padding: 0 var(--spacing-lg); */
-  }
+  .menu-nav {}
 }
-
-
-
-
-
 
 .hamburger {
   position: fixed;
@@ -338,27 +339,7 @@ body {
 .main-nav-toggle.active-menu:before,
 .main-nav-toggle.active-menu:after {
   background-color: var(--color-black);
-  /* width: 50%;
-  left: 25%;
-  top: 50%; */
 }
-
-/* can be implemnetd to have a round circle */
-/* .main-nav-toggle.active-menu {
-  width: 60px;
-  height: 60px;
-  border: 2px solid #000;
-  border-radius: 50%;
-  background-color: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform: translate(13px, -23.5px);
-} */
-
-
-
-
 
 .comparison-image {
   position: absolute;
@@ -423,7 +404,6 @@ body {
   position: absolute;
   color: var(--color-white);
   font-size: 1.2rem;
-  /* text-transform: uppercase; */
   left: 10px;
   top: 50%;
   transform: translateY(-100%);
@@ -475,9 +455,6 @@ body {
   border-right: 2px dashed var(--color-white);
 }
 
-
-
-
 .reveal-square::before,
 .reveal-square::after {
   content: '';
@@ -512,12 +489,10 @@ body {
   right: -5px;
 }
 
-/* Bottom corners */
 .corner {
   position: absolute;
   background: var(--color-white);
   border-radius: 0;
-  /* Sharp corners, not rounded */
 }
 
 .corner-bl {
@@ -534,24 +509,15 @@ body {
   height: 10px;
 }
 
-
-
-
-
 .fullscreen-btn {
   position: fixed;
   bottom: var(--spacing-lg);
   left: var(--spacing-lg);
   z-index: var(--z-fullscreen-btn);
-  /* width: 50px;
-    height: 50px; */
   background: transparent;
   border: none;
   cursor: pointer;
   padding: 0;
-  /* opacity: 0;
-  visibility: hidden;
-  pointer-events: none; */
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
@@ -574,7 +540,6 @@ body {
   display: block;
 }
 
-/* Fullscreen hint message */
 .fullscreen-hint {
   position: fixed;
   top: var(--spacing-lg);
@@ -651,8 +616,6 @@ body {
   font-style: italic;
 }
 
-
-
 .project-info {
   position: fixed;
   top: 16.5vh;
@@ -724,10 +687,7 @@ body {
   margin: 0;
 }
 
-/* Scroll Indicator */
 .scroll-indicator {
-  /* position: fixed;
-  bottom: 0rem; */
   position: fixed;
   bottom: var(--spacing-lg);
   left: 50%;
@@ -794,11 +754,6 @@ body {
   }
 }
 
-/* --- LOWEST PRIORITY BASE STYLES OR PREVIOUSLY END OF FILE --- */
-
-/* =========================================
-   msg: LOADING SCREEN STYLES
-   ========================================= */
 #loader-screen {
   position: fixed;
   top: 0;
@@ -807,15 +762,11 @@ body {
   height: 100vh;
   background-color: #000;
   z-index: 100000;
-  /* Top-level */
   display: flex;
   justify-content: center;
   align-items: center;
   transition: opacity 0.8s ease, visibility 0.8s ease;
-  /* overflow: hidden; */
-  /* Removing overflow hidden to allow background canvas full coverage if needed, though fixed handles it */
   cursor: default;
-  /* Initial cursor */
 }
 
 #loader-background,
@@ -826,13 +777,11 @@ body {
   width: 100%;
   height: 100%;
   z-index: -1;
-  /* Behind loader content */
   pointer-events: none;
 }
 
 .loader-progress-group {
   width: 100%;
-  /* display: flex; */
 }
 
 #loader-screen.fade-out {
@@ -840,7 +789,6 @@ body {
   pointer-events: none;
 }
 
-/* Border Frame */
 .loader-border-frame {
   position: absolute;
   top: 20px;
@@ -851,12 +799,10 @@ body {
   pointer-events: none;
 }
 
-/* Audio Control Styles */
 .audio-control {
   position: fixed;
   top: var(--spacing-lg);
   right: 100px;
-  /* Position to left of fullscreen icon? or center? */
   z-index: var(--z-fullscreen-btn);
   display: flex;
   align-items: center;
@@ -884,13 +830,10 @@ body {
   padding: 0;
   cursor: pointer;
   width: 72px;
-  /* 90 * 0.8 */
   height: 36px;
-  /* 44 * 0.8 */
   position: relative;
   border-radius: 50px;
   border: 1.5px solid var(--color-white);
-  /* Scaled border slightly */
   overflow: hidden;
   transition: all 0.3s ease;
   scale: 0.9;
@@ -907,13 +850,11 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0 11px;
-  /* Scaled padding */
 }
 
 .track-label {
   font-family: var(--font-primary);
   font-size: 13px;
-  /* 16 * 0.8 */
   font-weight: 400;
   color: var(--color-white);
   transition: opacity 0.3s ease;
@@ -921,9 +862,7 @@ body {
 
 .toggle-knob {
   width: 30px;
-  /* 38 * 0.8 */
   height: 30px;
-  /* 38 * 0.8 */
   background: var(--color-white);
   border-radius: 50%;
   position: absolute;
@@ -939,7 +878,6 @@ body {
 .knob-label {
   font-family: var(--font-primary);
   font-size: 11px;
-  /* 14 * 0.8 */
   font-weight: 500;
   color: var(--color-black);
   position: absolute;
@@ -947,53 +885,39 @@ body {
   transition: opacity 0.2s ease;
 }
 
-/* --- STATE: ON (Default) --- */
-/* Knob Position: Left */
 .audio-toggle[aria-pressed="true"] .toggle-knob {
   left: 2px;
-  /* Scaled narrow margin */
 }
 
-/* Knob Text: "ON" visible */
 .audio-toggle[aria-pressed="true"] .knob-label.label-on {
   opacity: 1;
 }
 
-/* Track Text: "OFF" visible (Right side) */
 .audio-toggle[aria-pressed="true"] .track-label.label-off {
   opacity: 1;
 }
 
-/* Track Text: "ON" hidden */
 .audio-toggle[aria-pressed="true"] .track-label.label-on {
   opacity: 0;
 }
 
 
-/* --- STATE: OFF --- */
-/* Knob Position: Right */
 .audio-toggle[aria-pressed="false"] .toggle-knob {
   left: calc(100% - 32px);
-  /* Width (72) - Knob (30) - Margin (2) = 40 left? No: right aligned. 100% - 30 - 2 = 100% - 32 */
 }
 
-/* Knob Text: "OFF" visible */
 .audio-toggle[aria-pressed="false"] .knob-label.label-off {
   opacity: 1;
 }
 
-/* Track Text: "ON" visible (Left side) */
 .audio-toggle[aria-pressed="false"] .track-label.label-on {
   opacity: 1;
 }
 
-/* Track Text: "OFF" hidden */
 .audio-toggle[aria-pressed="false"] .track-label.label-off {
   opacity: 0;
 }
 
-/* Corner Accents */
-/* Corner Accents */
 .loader-corner {
   position: absolute;
   width: 10px;
@@ -1022,7 +946,6 @@ body {
   right: -5px;
 }
 
-/* Content Layout */
 .loader-content {
   display: flex;
   flex-direction: column;
@@ -1043,7 +966,6 @@ body {
 }
 
 .loader-text-group {
-  /* font-family: var(--font-secondary); */
   font-size: 1rem;
   line-height: 1.5;
   color: rgba(255, 255, 255);
@@ -1060,38 +982,22 @@ body {
   flex-direction: column;
   gap: 1rem;
   align-items: center;
-  /* Ensure centering */
 }
 
-/* Progress Bar */
 .loader-progress-container {
   width: 100%;
-  /* max-width: 300px; */
   height: 5px;
-  /* Reference: approx 4.92px -> 5px */
   background: rgba(255, 255, 255, 0.35);
-  /* Reference: 0.35 opacity */
   position: relative;
-  /* margin-bottom: 20px; */
   overflow: hidden;
-  /* Ensure sharp corners like 'Rectangle' reference */
   border-radius: 0;
 
-  /* "Tech" Chamfered Shape matching Vector 92/93 dims (~2.67px cut) */
-  /* Cuts Bottom-Left and Top-Right for symmetry */
   clip-path: polygon(0 0,
-      /* Top Left */
       calc(100% - 3px) 0,
-      /* Top Right start */
       100% 3px,
-      /* Top Right end (chamfer) */
       100% 100%,
-      /* Bottom Right */
       3px 100%,
-      /* Bottom Left start */
-      0 calc(100% - 3px)
-      /* Bottom Left end (chamfer) */
-    );
+      0 calc(100% - 3px));
   -webkit-clip-path: polygon(0 0,
       calc(100% - 3px) 0,
       100% 3px,
@@ -1104,9 +1010,7 @@ body {
   width: 0%;
   height: 100%;
   background: #FFFFFF;
-  /* Reference: #FFFFFF */
   transition: width 0.1s linear;
-  /* Child inherits skew, so the leading edge is also slanted /====/ */
 }
 
 .loader-percentage {
@@ -1121,7 +1025,6 @@ body {
   font-style: italic;
 }
 
-/* Enter Message */
 .loader-enter-msg {
   margin-top: 30px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
@@ -1143,15 +1046,12 @@ body {
   width: auto;
   max-width: 350px;
 
-  /* Fix Blurriness */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transform: translateZ(0);
-  /* Force GPU to avoid sub-pixel blurring */
   will-change: opacity;
 }
 
-/* Top Left Corner Bracket (matches .car-drag-instruction .decorative-box) */
 .loader-enter-msg .decorative-box {
   position: absolute;
   top: -15px;
@@ -1164,7 +1064,6 @@ body {
   z-index: 5;
 }
 
-/* Top Right Solid Box (matches .headset-popup::after) */
 .loader-enter-msg::after {
   content: '';
   position: absolute;
@@ -1176,7 +1075,6 @@ body {
   z-index: 2;
 }
 
-/* Text wrapper inside .loader-enter-msg (simulating .popup-part-text) */
 .loader-enter-msg .loader-msg-text {
   position: relative;
   padding: 0 1.5rem;
@@ -1186,7 +1084,6 @@ body {
   z-index: 3;
 }
 
-/* Bottom Left Solid Box (matches .popup-part-text::before) */
 .loader-enter-msg .loader-msg-text::before {
   content: '';
   position: absolute;
@@ -1198,7 +1095,6 @@ body {
   z-index: 2;
 }
 
-/* Bottom Right Solid Box (matches .popup-part-text::after) */
 .loader-enter-msg .loader-msg-text::after {
   content: '';
   position: absolute;
@@ -1215,8 +1111,6 @@ body {
   height: 800vh;
   margin-top: -100vh;
   z-index: 1;
-  /* Sits above video to capture scroll, but transparent */
-  /* background: #000; Removed to allow video to show through */
 }
 
 .video-background {
@@ -1231,15 +1125,12 @@ body {
   object-fit: cover;
   will-change: transform;
   z-index: 0;
-  /* Behind content but in front of body background */
 }
 
 .image-comparison {
   position: relative;
   z-index: 2;
-  /* Ensure this sits ON TOP of the fixed video */
   background: var(--color-white);
-  /* Ensure it's opaque so video is hidden initially */
 }
 
 .text-overlay {
@@ -1247,7 +1138,6 @@ body {
   align-items: center;
   gap: 1rem;
   position: fixed;
-  /* bottom: var(--spacing-lg); */
   bottom: 5.5%;
   left: 50%;
   transform: translateX(-50%);
@@ -1371,14 +1261,10 @@ body {
 .text-overlay .char {
   display: inline-block;
   opacity: 1;
-  /* Changed from 0 to ensure visibility by default */
   transform: translateY(0);
-  /* Reset transform default */
   will-change: transform, opacity;
   position: relative;
-  /* Ensure z-index works */
   z-index: 5;
-  /* Sit above pseudo elements */
 }
 
 .text-overlay .word {
@@ -1393,7 +1279,6 @@ body {
   flex-shrink: 0;
 }
 
-/* Overlay Transition Styles */
 .overlay {
   position: fixed;
   top: 0;
@@ -1403,10 +1288,8 @@ body {
   display: grid;
   grid-template-columns: repeat(var(--columns), 1fr);
   z-index: 9999;
-  /* Very high z-index to cover everything */
   pointer-events: none;
   opacity: 0;
-  /* Hide initially */
 }
 
 .cell {
@@ -1496,7 +1379,6 @@ header .logo {
   pointer-events: none;
   transition: opacity 0.3s ease, visibility 0.3s ease;
 
-  /* Smart Inversion Logic */
   width: 116px;
   height: 29px;
   background: var(--color-white);
@@ -1516,14 +1398,11 @@ header .logo svg {
   display: none;
 }
 
-/* Custom Cursor */
-/* Default cursor behavior */
 html,
 body {
   cursor: auto;
 }
 
-/* Ensure pointer cursor for interactive elements when custom cursor is inactive */
 a,
 button,
 .submit-btn,
@@ -1539,7 +1418,6 @@ html.custom-cursor-active,
 html.custom-cursor-active body,
 html.custom-cursor-active * {
   cursor: none !important;
-  /* Hide default cursor only when custom cursor is active */
 }
 
 .custom-cursor {
@@ -1552,9 +1430,7 @@ html.custom-cursor-active * {
   border-radius: var(--radius-full);
   pointer-events: none;
   z-index: 200000;
-  /* Above everything including loader (100000) */
   transform: translate(-50%, -50%);
-  /* Separate transitions for different properties */
   transition: background-color 0.2s ease;
   display: flex;
   align-items: center;
@@ -1566,7 +1442,6 @@ html.custom-cursor-active * {
 
 .cursor-dot {
   width: 8px;
-  /* Slightly larger dot */
   height: 8px;
   background: var(--color-white);
   border-radius: var(--radius-full);
@@ -1577,7 +1452,6 @@ html.custom-cursor-active * {
   position: absolute;
   opacity: 0;
   transform: scale(0.5);
-  /* Start slightly smaller */
   transition: transform 0.2s ease, opacity 0.2s ease;
   display: flex;
   align-items: center;
@@ -1586,13 +1460,10 @@ html.custom-cursor-active * {
 
 .cursor-arrow svg {
   width: 24px;
-  /* Larger arrow */
   height: 24px;
 }
 
-/* Hover State */
 .custom-cursor.hovered {
-  /* Size remains the same */
   background-color: transparent;
 }
 
@@ -1606,13 +1477,11 @@ html.custom-cursor-active * {
   transform: scale(1);
 }
 
-/* Active state when visible */
 .custom-cursor.active {
   opacity: 1;
   visibility: visible;
 }
 
-/* Mobile View Styles */
 .mobile-view {
   display: none;
   position: fixed;
@@ -1621,7 +1490,6 @@ html.custom-cursor-active * {
   width: 100%;
   height: 100vh;
   background-color: #000;
-  /* Match loader background */
   z-index: var(--z-mobile);
   padding: 20px;
 }
@@ -1631,7 +1499,6 @@ html.custom-cursor-active * {
   width: 100%;
   height: 100%;
   border: 1px solid rgba(255, 255, 255, 0.45);
-  /* White border */
   border-radius: 0;
   display: flex;
   flex-direction: column;
@@ -1643,7 +1510,6 @@ html.custom-cursor-active * {
   position: absolute;
   width: clamp(6px, 1.5vw, 10px);
   height: clamp(6px, 1.5vw, 10px);
-  /* background-color: var(--color-white); */
   border: 1px solid rgb(255, 255, 255);
   background-color: black;
 }
@@ -1694,7 +1560,6 @@ html.custom-cursor-active * {
   height: auto;
 }
 
-/* Ensure SVG paths inside use white fill */
 .mobile-view__logo svg path {
   fill: white !important;
 }
@@ -1724,7 +1589,6 @@ html.custom-cursor-active * {
 
 .mobile-view__divider svg line {
   stroke: white !important;
-  /* White lines */
 }
 
 .mobile-view__description {
@@ -1733,8 +1597,6 @@ html.custom-cursor-active * {
   font-size: clamp(0.875rem, 3.5vw, 1.125rem);
   line-height: 1.4;
   color: var(--color-white);
-  /* White description */
-  /* max-width: 80%; */
 }
 
 .mobile-view__footer {
@@ -1743,12 +1605,9 @@ html.custom-cursor-active * {
   font-family: var(--font-secondary);
   font-weight: 300;
   font-size: clamp(0.875rem, 3.5vw, 1.125rem);
-  /* letter-spacing: 1px; */
   color: var(--color-white);
-  /* White footer */
 }
 
-/* Toggle footer text based on device */
 .tablet-text {
   display: none;
 }
@@ -1757,10 +1616,9 @@ html.custom-cursor-active * {
   display: flex;
   gap: 1rem;
   justify-content: center;
-  font-size: clamp(0.625rem, 2vw, 0.9375rem); /* 10px to 15px */
+  font-size: clamp(0.625rem, 2vw, 0.9375rem);
 }
 
-/* Tablet Breakpoint (768px - 1024px) */
 @media (min-width: 768px) and (max-width: 1024px) {
   .mobile-text {
     display: none;
@@ -1842,7 +1700,6 @@ html.custom-cursor-active * {
   mix-blend-mode: difference;
 }
 
-/* Overlay Cell Styles */
 .cell {
   background-color: var(--color-black);
   width: 100%;
@@ -1854,7 +1711,6 @@ html.custom-cursor-active * {
   background-color: var(--color-white);
 }
 
-/* Contact Us Button - Header (Matches Booking Next Button) */
 .contact-us-btn {
   display: flex;
   align-items: center;
@@ -1869,7 +1725,6 @@ html.custom-cursor-active * {
   transition: all 0.3s ease;
   padding: 1px 18px;
 
-  /* Layout & Visibility */
   position: fixed;
   top: var(--spacing-lg);
   left: var(--spacing-lg);
@@ -1885,7 +1740,6 @@ html.custom-cursor-active * {
   font-weight: 200;
 }
 
-/* Icon Container */
 .contact-icon {
   display: flex;
   align-items: center;
@@ -1898,7 +1752,6 @@ html.custom-cursor-active * {
   margin-right: -15px;
 }
 
-/* SVG Styling */
 .contact-icon svg {
   width: 15px;
   height: 15px;
@@ -1907,7 +1760,6 @@ html.custom-cursor-active * {
   transform: rotate(135deg);
 }
 
-/* Hover Effects */
 .contact-us-btn:hover .contact-icon {
   transform: translateY(0);
 }
@@ -1915,5 +1767,3 @@ html.custom-cursor-active * {
 .contact-us-btn:hover .contact-icon svg {
   transform: rotate(90deg);
 }
-
-/* Car Dragging Scene Styles moved to carDragging.css */

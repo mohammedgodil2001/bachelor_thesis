@@ -22,7 +22,7 @@ const bgAudio = new Audio(bgMusicSrc);
 bgAudio.loop = true;
 bgAudio.volume = 0.5;
 
-let isSoundEnabled = true; // Default state (matches HTML aria-pressed="true")
+let isSoundEnabled = true; 
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -34,13 +34,7 @@ const overlay = new Overlay(overlayEl, {
 
 const initPixelTransition = () => {
     let isAnimating = false;
-
-    // Ensure image comparison is visible initially
-    // Header elements and audio-control are now visible by default (CSS or previous state)
-    // We explicitly set them to visible just in case, or simply don't hide them.
     gsap.set(".image-comparison", { autoAlpha: 1 });
-    
-    // Explicitly show header elements and audio control because CSS hides them by default
     gsap.set("header .contact-us-btn, header .logo, header .hamburger, .audio-control", {
         autoAlpha: 1,
         pointerEvents: 'auto'
@@ -49,22 +43,17 @@ const initPixelTransition = () => {
     ScrollTrigger.create({
         trigger: ".image-comparison",
         start: "top top",
-        end: "+=100vh", // Pin distance before transition
+        end: "+=100vh", 
         pin: true,
         scrub: false,
-        // When scrolling down past the pin
         onLeave: () => {
-             // Guard clause: If loading, force reset and abort
              if (window.isLoading) {
                 window.scrollTo(0, 0);
                 return;
             }
-
-            // Bypass animation if navigating via menu
             if (window.isNavigating) {
                 gsap.set(".image-comparison", { autoAlpha: 0 });
                 gsap.set(".scroll-indicator", { autoAlpha: 0 });
-                // Also ensure global UI shows if skipping animation
                 showGlobalUI();
                 activateCustomCursor();
                 return;
@@ -80,9 +69,7 @@ const initPixelTransition = () => {
                 ease: 'power3.inOut',
                 stagger: index => 0.02 * (overlay.cells.flat()[index].row + gsap.utils.random(0, 5))
             }).then(() => {
-                // Hide image comparison to reveal video
                 gsap.set(".image-comparison", { autoAlpha: 0 });
-                // Also hide the scroll indicator
                 gsap.set(".scroll-indicator", { autoAlpha: 0 });
                 
                 overlay.hide({
@@ -90,12 +77,7 @@ const initPixelTransition = () => {
                     ease: 'power2',
                     stagger: index => 0.02 * (overlay.cells.flat()[index].row + gsap.utils.random(0, 5))
                 }).then(() => {
-                    // Header elements are already visible, no need to animate them in.
-                    
-                    // Show Global UI (Progress Bar + Labels)
                     showGlobalUI();
-
-                    // Show action hint
                     gsap.to(".action-hint", {
                         autoAlpha: 1,
                         y: 0,
@@ -104,7 +86,6 @@ const initPixelTransition = () => {
                         delay: 0.2
                     });
 
-                    // Activate custom cursor
                     activateCustomCursor();
 
                     isAnimating = false;
@@ -112,9 +93,7 @@ const initPixelTransition = () => {
                 });
             });
         },
-        // When scrolling back up into the pin
         onEnterBack: () => {
-            // Bypass animation if navigating via menu
             if (window.isNavigating) {
                 gsap.set(".image-comparison", { autoAlpha: 1 });
                 gsap.set(".scroll-indicator", { autoAlpha: 1 });
@@ -127,16 +106,9 @@ const initPixelTransition = () => {
             isAnimating = true;
             
             if (window.lenis) window.lenis.stop();
-
-            // Deactivate custom cursor when going back
             deactivateCustomCursor();
 
-            // Hide Global UI immediately
             hideGlobalUI();
-
-            // Do NOT hide header elements here.
-
-            // Hide action hint
             gsap.to(".action-hint", {
                 autoAlpha: 0,
                 y: '100%',
@@ -149,7 +121,6 @@ const initPixelTransition = () => {
                 ease: 'power3.inOut',
                 stagger: index => 0.02 * (overlay.cells.flat()[index].row + gsap.utils.random(0, 5))
             }).then(() => {
-                // Show image comparison and scroll indicator
                 gsap.set(".image-comparison", { autoAlpha: 1 });
                 gsap.set(".scroll-indicator", { autoAlpha: 1 });
 
@@ -198,23 +169,18 @@ const fullscreenHint = document.getElementById('fullscreenHint');
 let isFullscreen = false;
 let hintTimeout = null;
 
-// Custom Cursor Logic
 const initCustomCursor = () => {
     const cursor = document.querySelector('.custom-cursor');
 
     if (!cursor) return;
-
-    // Use quickTo for high performance mouse movement
     const xTo = gsap.quickTo(cursor, "x", { duration: 0.1, ease: "power3" });
     const yTo = gsap.quickTo(cursor, "y", { duration: 0.1, ease: "power3" });
 
-    // Move cursor
     window.addEventListener('mousemove', (e) => {
         xTo(e.clientX);
         yTo(e.clientY);
     });
 
-    // Hover effect
     const interactiveElements = document.querySelectorAll('a, button, .submit-btn, .menu-link, .system-settings');
 
     interactiveElements.forEach(el => {
@@ -228,7 +194,6 @@ const initCustomCursor = () => {
     });
 };
 
-// Function to activate custom cursor
 const activateCustomCursor = () => {
     const cursor = document.querySelector('.custom-cursor');
     if (cursor) {
@@ -237,7 +202,6 @@ const activateCustomCursor = () => {
     }
 };
 
-// Function to deactivate custom cursor
 const deactivateCustomCursor = () => {
     const cursor = document.querySelector('.custom-cursor');
     if (cursor) {
@@ -252,9 +216,6 @@ const openMenu = () => {
 
     isMenuOpen = true;
     menuToggle.classList.add('active-menu');
-    
-    // Disable scrolling
-    // Disable scrolling
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
     if (window.lenis) window.lenis.stop();
@@ -270,7 +231,6 @@ const openMenu = () => {
 
     menuTimeline = gsap.timeline();
 
-    // Hide logo and contact button when menu opens
     menuTimeline.to("header .contact-us-btn, header .logo, .audio-control", {
         autoAlpha: 0,
         duration: 0.3,
@@ -310,19 +270,14 @@ const closeMenuFunc = (onCompleteCallback) => {
             isMenuOpen = false;
             menuOverlay.classList.remove('menu-open');
             menuToggle.classList.remove('active-menu');
-            
-            // Enable scrolling
-            // Enable scrolling
             document.body.style.overflow = '';
             document.documentElement.style.overflow = '';
             if (window.lenis) window.lenis.start();
 
-            // Run callback after scroll is unlocked
             if (typeof onCompleteCallback === 'function') {
-                onCompleteCallback(); // Execute navigation scroll
+                onCompleteCallback(); 
             }
 
-            // Show logo and contact button when menu closes
             gsap.to("header .contact-us-btn, header .logo, .audio-control", {
                 autoAlpha: 1,
                 duration: 0.3,
@@ -382,10 +337,9 @@ const handleMenuToggleClick = (e) => {
 }
 
 const handleMenuLinkClick = (e, link) => {
-    e.preventDefault(); // Stop browser hash jump validation
+    e.preventDefault(); 
     const page = link.getAttribute('data-page');
     
-    // UI Update Logic
     const currentActiveLine = document.querySelector('.menu-link.active .menu-line');
     const newLink = link;
     const newLine = newLink.querySelector('.menu-line');
@@ -395,19 +349,15 @@ const handleMenuLinkClick = (e, link) => {
     
     const lineTransition = gsap.timeline({
         onComplete: () => {
-             // 1. Update URL Hash immediately
              if (page) {
                  history.pushState(null, null, '#' + page);
              }
-
-             // 2. Perform Scroll Navigation (While Menu is OPEN)
              requestAnimationFrame(() => {
                  let targetScroll = 0;
                  let trigger = null;
                  let progress = 0;
                  let found = false;
 
-                 // Robust Trigger Finding Helper
                  const findTrigger = (id, selector) => {
                      let t = ScrollTrigger.getById(id);
                      if (!t || !t.isActive) {
@@ -434,9 +384,8 @@ const handleMenuLinkClick = (e, link) => {
                  if (found && trigger) {
                      targetScroll = trigger.start + (trigger.end - trigger.start) * progress;
                      
-                     window.isNavigating = true; // Signal active navigation (suppresses sound)
+                     window.isNavigating = true; 
                      
-                     // Temporarily enable Lenis for the programmatic scroll
                      if (window.lenis) window.lenis.start();
 
                      if (window.lenis) {
@@ -445,7 +394,6 @@ const handleMenuLinkClick = (e, link) => {
                              ease: 'power2.inOut', 
                              immediate: false,
                              onComplete: () => {
-                                 // 3. Scroll Complete -> Close Menu
                                  closeMenuFunc(() => {
                                      window.isNavigating = false;
                                  });
@@ -453,7 +401,6 @@ const handleMenuLinkClick = (e, link) => {
                          });
                      } else {
                          window.scrollTo({ top: targetScroll, behavior: 'smooth' });
-                         // Fallback reset
                          setTimeout(() => {
                              closeMenuFunc(() => {
                                  window.isNavigating = false;
@@ -462,7 +409,6 @@ const handleMenuLinkClick = (e, link) => {
                      }
                  } else {
                      console.warn('Navigation target not found for page:', page);
-                     // If no target found, just close the menu normally
                      closeMenuFunc();
                  }
              });
@@ -492,7 +438,6 @@ const handleMenuEscapeKey = (e) => {
     }
 }
 
-// Robust Reveal Effect Logic
 let revealState = {
     mouseX: 0,
     mouseY: 0,
@@ -510,7 +455,6 @@ const updateRevealEffect = () => {
     const width = container.offsetWidth;
     const height = container.offsetHeight;
 
-    // Clamp coordinates to stay within container
     const safeX = Math.max(halfSize, Math.min(width - halfSize, x));
     const safeY = Math.max(halfSize, Math.min(height - halfSize, y));
 
@@ -519,7 +463,6 @@ const updateRevealEffect = () => {
     const top = Math.round(safeY - halfSize);
     const bottom = Math.round(safeY + halfSize);
 
-    // Update positions using left/top as per original implementation
     revealSquare.style.left = `${left}px`;
     revealSquare.style.top = `${top}px`;
 
@@ -541,8 +484,7 @@ const handleGlobalMouseMove = (e) => {
     
     const rect = container.getBoundingClientRect();
     
-    // Check if mouse is near the container (with some buffer) or inside
-    const buffer = 100; // Larger buffer for robustness
+    const buffer = 100; 
     const isInside = (
         e.clientX >= rect.left - buffer && 
         e.clientX <= rect.right + buffer && 
@@ -553,14 +495,14 @@ const handleGlobalMouseMove = (e) => {
     if (isInside) {
         if (!revealState.isActive) {
             revealState.isActive = true;
-            topImage.style.clipPath = 'none'; // Prepare for updates
+            topImage.style.clipPath = 'none'; 
         }
     } else {
         if (revealState.isActive) {
             revealState.isActive = false;
-            // Reset to full cover when leaving
+            
             topImage.style.clipPath = 'inset(100% 100% 100% 100%)';
-             // Hide lines
+             
             if (lines.top) lines.top.style.width = '0px';
             if (lines.left) lines.left.style.height = '0px';
             if (lines.bottom) lines.bottom.style.width = '0px';
@@ -660,10 +602,8 @@ const adjustProjectInfoPosition = () => {
     if (!projectInfo) return;
 
     if (document.fullscreenElement) {
-        // In fullscreen mode - adjust to maintain visual position
         projectInfo.style.top = '22vh';
     } else {
-        // Normal mode - reset to original
         projectInfo.style.top = '16.5vh';
     }
 }
@@ -682,22 +622,15 @@ const handleFullscreenChange = () => {
         updateFullscreenUI(true);
     }
 
-    // Adjust project info position
     adjustProjectInfoPosition();
-    
-    // NOTE: We rely on ScrollTrigger's automatic resize handling now, combined with the 
-    // global refresh listeners added below for state preservation.
 }
 
-// Global state preservation for ScrollTrigger refreshes (Handles resize, fullscreen, etc.)
-// Global state preservation for ScrollTrigger refreshes (Handles resize, fullscreen, etc.)
 let savedTriggerState = {
     id: null,
     progress: null
 };
 
 ScrollTrigger.addEventListener("refreshInit", () => {
-    // Check which main scene is active and save its state
     const triggers = ['car-dragging-trigger'];
     savedTriggerState.id = null;
     savedTriggerState.progress = null;
@@ -747,15 +680,10 @@ const initMenuListeners = () => {
 
 const initImageComparisonListeners = () => {
     if (container && topImage && revealSquare) {
-        // Disable transitions that interfere with JS tracking to prevent desync
         topImage.style.transition = 'none';
-        // Ensure revealSquare only transitions opacity, not movement (left/top)
         revealSquare.style.transition = 'opacity 0.3s ease';
-
-        // Use global window listener for robustness
         window.addEventListener('mousemove', handleGlobalMouseMove);
         
-        // Use GSAP ticker for smooth updates
         gsap.ticker.add(updateRevealEffect);
     }
 }
@@ -766,11 +694,10 @@ const initAudioToggle = () => {
 
     audioToggle.addEventListener('click', () => {
         const isPressed = audioToggle.getAttribute('aria-pressed') === 'true';
-        // if isPressed was true, we are turning it OFF
         const newState = !isPressed;
         
         audioToggle.setAttribute('aria-pressed', newState);
-        isSoundEnabled = newState; // Sync global state
+        isSoundEnabled = newState; 
 
         if (isSoundEnabled) {
             bgAudio.play().catch(e => console.warn("Audio play blocked:", e));
@@ -799,9 +726,9 @@ const animateProjectDescription = () => {
         `<span class="word" style="display:inline-block; will-change:transform; margin-right:0.25em;">${word}</span>`
     ).join('');
 
-    gsap.set('.project-description .word', { y: 50, opacity: 0 }); // Ensure hidden start
+    gsap.set('.project-description .word', { y: 50, opacity: 0 }); 
     
-    gsap.to('.project-description .word', { // changed from .from to .to since we set initial state
+    gsap.to('.project-description .word', { 
         y: 0,
         opacity: 1,
         duration: 0.8,
@@ -811,9 +738,8 @@ const animateProjectDescription = () => {
     });
 }
 
-// Video Scroll Configuration and Logic
 const CONFIG = {
-    scrollScrub: 1.5, // Reduced from 1.5 for more immediate response
+    scrollScrub: 1.5, 
     textTimings: {
         text1: { show: 0.05, hide: 0.15 },
         text2: { show: 0.18, hide: 0.28 },
@@ -828,7 +754,6 @@ const CONFIG = {
     }
 };
 
-// ... (rest of the file)
 
 const initVideoScroll = () => {
     const video = document.querySelector(".video-background");
@@ -852,7 +777,7 @@ const setupIOSVideoActivation = (video) => {
 
 const setupSmoothScroll = () => {
     const lenis = new Lenis();
-    window.lenis = lenis; // Expose globally
+    window.lenis = lenis; 
 
     lenis.on('scroll', ScrollTrigger.update);
 
@@ -861,7 +786,6 @@ const setupSmoothScroll = () => {
     });
 
     gsap.ticker.lagSmoothing(0);
-    // ScrollTrigger already registered at the top
 };
 
 const loadVideoOptimized = (video, src) => {
@@ -896,11 +820,9 @@ const initScrollAnimation = (video) => {
 };
 
 const cleanupScrollTriggers = () => {
-    // Kill by ID first
     const mainTrigger = ScrollTrigger.getById('intro-video-trigger');
     if (mainTrigger) mainTrigger.kill();
 
-    // Fallback cleanup
     ScrollTrigger.getAll().forEach(trigger => {
         const t = trigger.vars.trigger;
         if (t === "#scroll-container" || trigger.trigger === document.querySelector("#scroll-container")) {
@@ -947,11 +869,9 @@ const addVideoScrubbing = (timeline, video) => {
 };
 
 const addTextAnimations = (timeline) => {
-    // Pre-split text for performance (Scoped to Intro Section only)
     document.querySelectorAll("#scroll-container .text-overlay").forEach(element => {
         const spanElement = element.querySelector("span");
         if (spanElement) {
-            // Store the SplitType instance on the element to access it later
             element.splitInstance = new SplitType(spanElement, { types: "words, chars" });
         }
     });
@@ -1014,12 +934,9 @@ const animateTypingEffect = (selector) => {
 
 
 
-// Car Dragging Scene integrated via module
-// initCarDraggingScene(); called in init()
+
 
 const init = () => {
-    // 0. Force Reset (Crucial for correct loading state)
-    // Initialize loading state global flag
     window.isLoading = true;
 
     if ('scrollRestoration' in history) {
@@ -1027,7 +944,6 @@ const init = () => {
     }
     window.scrollTo(0, 0);
 
-    // Init Particle Background for Loader
     const particleCanvas = document.getElementById('loader-background');
     let particleSim = null;
     if (particleCanvas) {
@@ -1035,62 +951,43 @@ const init = () => {
         particleSim.start();
     }
 
-    // Init Particle Background for Mobile View
     const mobileCanvas = document.getElementById('mobile-background');
     if (mobileCanvas) {
-        // We only really need this if we are visible, but for simplicity init now
-        // Or checking window width?
-        // Let's just init it. It's a second WebGL context.
         const mobileSim = new ParticleSimulation(mobileCanvas);
         mobileSim.start();
-        
-        // Optional: Stop it if not mobile?
-        // But user might resize.
     }
 
-    initVideoScroll(); // Initialize Lenis first so it exists
-    initLoader(); // Then loader can stop it
+    initVideoScroll(); 
+    initLoader(); 
     setActivePage(currentPage);
     initMenuListeners();
     initImageComparisonListeners();
     initFullscreenListeners();
     initAudioToggle();
-    // animateProjectDescription(); DEFERRED
     initPixelTransition(); 
     initCustomCursor();
     initCarDraggingScene();
-    // Initialize Booking Scene
     initBookingScene(overlay);
     initProgressUI();
     
-    // Defer animations until loader is dismissed
-    // Defer animations until loader is dismissed
     window.addEventListener('loader:dismissed', () => {
-        window.isLoading = false; // Release lock
+        window.isLoading = false; 
         
-        // Start Background Music
         if (isSoundEnabled) {
              bgAudio.currentTime = 0;
              bgAudio.play().catch(e => console.warn("Autoplay blocked:", e));
         }
 
         animateProjectDescription();
-        // Any other "play on load" animations can go here
         
-        // Stop Particle Sim to save performance
         if (particleSim) {
-            // Fade out canvas first? CSS handles fade out of #loader-screen
-            // Just stop logic
             setTimeout(() => {
                 particleSim.stop();
-            }, 1000); // Wait for transition to finish
+            }, 1000); 
         }
     });
     
-    // Initialize booking form immediately (separate from scene initialization)
-    // This ensures form is ready even before scene is reached
     if (typeof initBookingForm === 'function') {
-        // Form will be initialized by initBookingScene, but we can also call it here if needed
     }
 }
 

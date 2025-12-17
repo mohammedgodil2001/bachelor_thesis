@@ -1,11 +1,9 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-// HTML Elements (cached lazily or queried)
 let currentLabelTarget = '';
 let animationInterval = null;
 
-// Define the Text Map based on percentages
 const getTextForProgress = (progress) => {
     const p = progress * 100;
     if (p < 25) return 'INTRO';
@@ -20,8 +18,8 @@ const getTextForProgress = (progress) => {
 
 const animateText = (element, newText) => {
     const theLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&^+=-";
-    const speed = 30; // ms per frame
-    const increment = 4; // frames per step
+    const speed = 30; 
+    const increment = 4; 
     
     let clen = newText.length;
     let si = 0;
@@ -29,7 +27,6 @@ const animateText = (element, newText) => {
     let block = "";
     let fixed = "";
     
-    // Explicitly clear any existing interval
     if (animationInterval) {
         clearInterval(animationInterval);
         animationInterval = null;
@@ -69,10 +66,9 @@ const animateText = (element, newText) => {
     }, speed);
 };
 
-// EXPORTED CONTROLS for Main.js
+
 export const showGlobalUI = () => {
     gsap.to('.global-ui-overlay', { opacity: 1, duration: 0.5 });
-    // Trigger animation on show
     const label = document.getElementById('section-label');
     if (label && currentLabelTarget) {
         animateText(label, currentLabelTarget);
@@ -90,41 +86,22 @@ export const initProgressUI = () => {
 
     gsap.registerPlugin(ScrollTrigger);
 
-    // Initial state: Hidden
     gsap.set('.global-ui-overlay', { opacity: 0 });
     
-    // Clear initial text to ensure animation effect if it runs early
     label.textContent = ''; 
 
-    // 1. Global Progress Bar Logic - SYNCED WITH PERCENTAGE
-    // We update this in the scroll listener to ensure it matches the text exactly.
-    
-    // 1. Unified Progress Logic (Bar, Text, Label) using GSAP
-    // This replaces the raw scroll listener to fix video glitches and syncing issues.
-    
-    // Define the Text Map based on percentages
-    
-
-    // calculate Trigger End:
-    // The user wants it to finish "before entering the form".
-    // The form is inside #third-and-fourth-scene. 
-    // The booking scene ends when the form is fully visible.
-    
-
-    // Animation State
     
 
     ScrollTrigger.create({
-        trigger: 'body', // Track the whole page flow
+        trigger: 'body', 
         start: 'top top',
         endTrigger: '#third-and-fourth-scene', 
-        end: 'bottom bottom', // Ends when the booking scene scrolling is done (form matches)
-        scrub: 0, // Instant scrub for immediate feedback, or small value for smooth
+        end: 'bottom bottom', 
+        scrub: 0, 
         onUpdate: (self) => {
             const rawProgress = self.progress;
             const cutoff = 0.96;
             
-            // 1. Manage Visibility (Hide after 96%)
             const overlay = document.querySelector('.global-ui-overlay');
             if (overlay) {
                 if (rawProgress > cutoff) {
@@ -134,22 +111,16 @@ export const initProgressUI = () => {
                 }
             }
 
-            // 2. Scale Progress: 0 -> 0.96 becomes 0% -> 100%
-            // We clamp it to max 1 (100%) so it doesn't go over 100 before hiding
             const scaledProgress = Math.min(1, rawProgress / cutoff);
             const percentage = Math.round(scaledProgress * 100);
             
-            // 3. Update Percentage Text
             const percentageEl = document.querySelector('.progress-percentage');
             if (percentageEl) percentageEl.textContent = `${percentage}%`;
 
-            // 4. Update Progress Bar Height
             if (progressBar) progressBar.style.height = `${percentage}%`;
 
-            // 5. Update Section Label SCRAMBLE ANIMATION
             const newText = getTextForProgress(scaledProgress);
             
-            // Only trigger animation if the TARGET text changes
             if (newText !== currentLabelTarget) {
                 currentLabelTarget = newText;
                 animateText(label, newText);
@@ -157,7 +128,7 @@ export const initProgressUI = () => {
         }
     });
 
-    // 3. Click Navigation (Updated to use GSAP scroll)
+
     const progressContainer = document.querySelector('.progress-container');
     if (progressContainer) {
         progressContainer.style.pointerEvents = 'auto';
@@ -168,8 +139,6 @@ export const initProgressUI = () => {
             const clickY = e.clientY - rect.top;
             const percentage = clickY / rect.height;
 
-            // Find the total scroll distance managed by our main trigger
-            // We need to resolve the 'end' point value to scroll correctly
             const bodySt = ScrollTrigger.getAll().find(st => st.trigger === document.body || (st.trigger && st.trigger.tagName === 'BODY'));
             
             if (bodySt) {

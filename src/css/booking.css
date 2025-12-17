@@ -20,8 +20,7 @@ fieldset {
 #third-and-fourth-scene {
     position: relative;
     height: 1000vh;
-    z-index: 5;
-    /* Ensure it sits above car dragging scene when active */
+    z-index: var(--z-video-wrapper);
     background-color: transparent;
 }
 
@@ -31,13 +30,11 @@ fieldset {
     left: 0;
     width: 100%;
     height: 100vh;
-    z-index: 5;
-    /* Matches parent */
+    z-index: var(--z-video-wrapper);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.5s ease;
     overflow: hidden;
-    /* Ensure no scrollbars from video */
 }
 
 #video-wrapper video.video-background {
@@ -46,14 +43,10 @@ fieldset {
     left: 0;
     width: 100%;
     height: 100%;
-    /* Removed min-width and min-height as object-fit: cover handles scaling */
     transform: none;
-    /* Reset style.css transform */
     object-fit: cover;
     z-index: 0;
 }
-
-/* Inherit or Reuse existing classes where possible, but using provided definitions for safety */
 
 .booking-section {
     position: fixed;
@@ -61,8 +54,8 @@ fieldset {
     left: 0;
     width: 100%;
     height: 100vh;
-    z-index: 10;
-    background-color: #000;
+    z-index: var(--z-booking);
+    background-color: var(--color-black);
     opacity: 0;
     pointer-events: none;
     overflow: hidden;
@@ -90,7 +83,6 @@ fieldset {
     animation: fadeIn 0.5s ease;
 }
 
-/* Main Form Screen Container - Flexbox Refactor */
 #formScreen {
     height: 100vh;
     display: flex;
@@ -98,7 +90,6 @@ fieldset {
     justify-content: center;
     gap: 1rem;
     overflow-y: auto;
-    /* Enable internal scrolling */
     -webkit-overflow-scrolling: touch;
 }
 
@@ -117,16 +108,15 @@ fieldset {
 .main-title {
     font-size: 1.7rem;
     font-weight: 300;
-    font-family: 'Delight', sans-serif;
+    font-family: var(--font-primary);
     text-align: left;
-    color: #fff;
+    color: var(--color-white);
     margin: 0;
-    /* Remove default margins */
 }
 
 .main-subtitle {
     font-size: 1rem;
-    color: rgba(255, 255, 255);
+    color: var(--color-white);
     text-align: left;
     font-family: var(--font-secondary);
     font-weight: 400;
@@ -149,7 +139,7 @@ fieldset {
     width: 6px;
     height: 6px;
     background: transparent;
-    border: 1px solid white;
+    border: 1px solid var(--color-white);
 }
 
 .title-separator::before {
@@ -160,7 +150,6 @@ fieldset {
     right: 0;
 }
 
-/* Interested Screen Styles */
 #interestedScreen {
     height: 100vh;
     display: flex;
@@ -179,7 +168,6 @@ fieldset {
     height: 100%;
 }
 
-/* Header Styles - Matched to Confirmation Screen */
 .booking-header.large-center {
     text-align: center;
     display: flex;
@@ -193,31 +181,26 @@ fieldset {
 
 .big-title {
     font-size: 1.7rem;
-    /* Matched confirmation-title */
     text-align: center;
     letter-spacing: 2px;
     margin-top: 5rem;
     margin-bottom: 0;
     font-family: inherit;
     font-weight: 300;
-    color: #fff;
+    color: var(--color-white);
     text-transform: uppercase;
-    /* Usually headers are uppercase */
 }
 
 .big-subtitle {
     font-size: 1rem;
-    /* Matched confirmation-subtitle */
     text-align: center;
     max-width: 400px;
     line-height: 1.5;
-    color: white;
+    color: var(--color-white);
     font-weight: 300;
     margin: 0;
 }
 
-
-/* Carousel Main Area */
 .carousel-content {
     flex-grow: 1;
     width: 100%;
@@ -235,7 +218,7 @@ fieldset {
     cursor: pointer;
     padding: 20px;
     transition: transform 0.2s ease, opacity 0.2s ease;
-    z-index: 10;
+    z-index: var(--z-booking);
 }
 
 .carousel-arrow:hover {
@@ -247,7 +230,6 @@ fieldset {
     flex-grow: 1;
     height: 100%;
     position: relative;
-    /* overflow: hidden; */
     margin: 0 40px;
 }
 
@@ -269,7 +251,6 @@ fieldset {
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
 .carousel-slide.active {
@@ -292,7 +273,6 @@ fieldset {
     justify-content: center;
     align-items: center;
     opacity: 0.6;
-    /* Slight dim for text effect */
 }
 
 .svg-before svg,
@@ -301,7 +281,6 @@ fieldset {
     height: auto;
 }
 
-/* Align text to center image */
 .svg-before {
     justify-content: flex-end;
 }
@@ -309,7 +288,6 @@ fieldset {
 .svg-after {
     justify-content: flex-start;
 }
-
 
 .slide-image {
     flex: 0 0 auto;
@@ -326,7 +304,6 @@ fieldset {
     object-fit: contain;
 }
 
-/* Connecting line logic */
 .slide-line-decoration {
     position: absolute;
     bottom: 20%;
@@ -365,7 +342,7 @@ fieldset {
     margin: 0;
     max-width: 325px;
     font-size: 0.8rem;
-    color: rgba(255, 255, 255);
+    color: var(--color-white);
     font-family: var(--font-secondary);
 }
 
@@ -373,7 +350,6 @@ fieldset {
     max-width: 380px;
 }
 
-/* Footer Controls */
 .carousel-controls {
     display: flex;
     flex-direction: column;
@@ -382,7 +358,6 @@ fieldset {
     margin-bottom: 4vh;
 }
 
-/* Dots Styling - Matched to Screenshots */
 .carousel-dots {
     display: flex;
     gap: 8px;
@@ -391,9 +366,8 @@ fieldset {
 
 .carousel-dot {
     width: 12px;
-    /* Square */
     height: 10px;
-    border: 1px solid white;
+    border: 1px solid var(--color-white);
     background: transparent;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -405,7 +379,6 @@ fieldset {
     background: white;
 }
 
-/* Learn More Button - Matched to Next Button (next-step-btn) */
 .learn-more-container {
     display: flex;
     flex-direction: column;
@@ -418,11 +391,11 @@ fieldset {
     align-items: center;
     gap: 16px;
     background: transparent;
-    color: white;
-    border: 1px solid white;
-    border-radius: 50px;
+    color: var(--color-white);
+    border: 1px solid var(--color-white);
+    border-radius: var(--radius-pill);
     font-size: 0.9rem;
-    font-family: 'Delight', sans-serif;
+    font-family: var(--font-primary);
     font-weight: 300;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -432,13 +405,8 @@ fieldset {
 
 .learn-more-btn span {
     font-family: inherit;
-    /* Inherit global font or 'Delight' if available */
     font-weight: 200;
 }
-
-/* Reusing .btn-arrowing class structure but scoped if needed or relying on global if it matches */
-/* Since we used .btn-arrowing in HTML, and it's styled globally for next-step-btn, we might rely on it or duplicate for safety if scoped */
-/* Global .btn-arrowing is: 30x30 white circle, svg 15x15 black rotate 135deg */
 
 .learn-more-btn .btn-arrowing {
     display: flex;
@@ -452,27 +420,22 @@ fieldset {
     transition: transform 0.3s ease;
 }
 
-
-/* Pill Step Indicators New */
 .step-indicators {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* Margins removed in favor of parent gap */
 }
-
-/* Replaced old .step-indicators .back-btn logic */
 
 .step-pill {
     display: flex;
     align-items: center;
     gap: 8px;
     padding: 6px 14px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    border: 1px solid var(--color-white-40);
     border-radius: 20px;
     background: transparent;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--color-white-70);
     font-size: 11px;
     letter-spacing: 0.5px;
     text-transform: uppercase;
@@ -483,8 +446,8 @@ fieldset {
 }
 
 .step-pill.active {
-    border-color: #fff;
-    color: #fff;
+    border-color: var(--color-white);
+    color: var(--color-white);
 }
 
 .step-arrow svg {
@@ -493,22 +456,20 @@ fieldset {
 
 .rotate-arrow svg {
     transform: rotate(180deg);
-    /* If the arrow points SE, 180 makes it NW. Or maybe rotate(90)? User said "match design". Design has 2nd arrow pointing left-down or similar? The SVG is diagonal. Let's assume symmetric rotation. Reference 2nd arrow points SW usually.*/
     transform: scaleX(-1);
-    /* Mirror it horizontally if it points right? Original SVG points SE. Mirror X makes it SW. */
 }
 
 .step-number {
     width: 32px;
     height: 32px;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-white-40);
     background: transparent;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--color-white-70);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Delight', sans-serif;
+    font-family: var(--font-primary);
     font-weight: 400;
     font-size: 14px;
     z-index: 2;
@@ -517,7 +478,7 @@ fieldset {
 .step-number.active {
     background: #fff;
     color: #000;
-    border-color: #fff;
+    border-color: var(--color-white);
 }
 
 .step-line {
@@ -535,11 +496,7 @@ fieldset {
     height: 1px;
 }
 
-/* Hide old .step-indicator class styles if they conflict, but we changed class names in HTML */
-
-/* Checkbox Styles */
 .checkbox-row {
-    /* Removed negative margins, gap handles it */
     max-width: 400px;
     margin-left: auto;
     margin-right: auto;
@@ -554,7 +511,7 @@ fieldset {
     gap: 10px;
     cursor: pointer;
     font-size: 14px;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--color-white-70);
     user-select: none;
 }
 
@@ -575,7 +532,7 @@ fieldset {
 
 .custom-checkbox input:checked+.checkmark {
     background: #fff;
-    border-color: #fff;
+    border-color: var(--color-white);
 }
 
 .checkmark::after {
@@ -584,7 +541,6 @@ fieldset {
     width: 10px;
     height: 10px;
     background: #000;
-    /* Inner check */
     mask: url("data:image/svg+xml,%3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4L3.5 6.5L9 1' stroke='black' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat center;
     mask-size: contain;
     -webkit-mask: url("data:image/svg+xml,%3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4L3.5 6.5L9 1' stroke='black' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat center;
@@ -597,7 +553,7 @@ fieldset {
 }
 
 .custom-checkbox a {
-    color: #fff;
+    color: var(--color-white);
     text-decoration: underline;
 }
 
@@ -624,7 +580,7 @@ fieldset {
     gap: 1rem;
     background: transparent;
     border: none;
-    color: #fff;
+    color: var(--color-white);
     font-size: 14px;
     cursor: pointer;
     padding: 0;
@@ -648,7 +604,6 @@ fieldset {
     width: 100%;
     max-width: 360px;
     margin: 0 auto;
-    /* Centering */
 }
 
 .form-group {
@@ -659,7 +614,7 @@ fieldset {
     width: 100%;
 }
 
-.label-text{
+.label-text {
     font-family: var(--font-secondary);
     font-size: 0.8rem;
 }
@@ -672,15 +627,15 @@ fieldset {
     display: block;
     margin-bottom: 8px;
     display: inline-block;
-    color: white;
+    color: var(--color-white);
     margin-left: 2px;
     font-size: 1.1rem;
-    font-family: 'Delight', sans-serif;
+    font-family: var(--font-primary);
     font-weight: 200;
 }
 
 .required {
-    color: #fff;
+    color: var(--color-white);
     margin-left: 4px;
     font-size: 14px;
     display: inline-block;
@@ -692,23 +647,15 @@ fieldset {
     align-items: center;
 }
 
-.label-row input{
-    
-}
-
 .form-group input,
 .form-group textarea {
     width: 100%;
     background: transparent;
     border: 1px solid rgba(255, 255, 255, 0.7);
-    /* Thinner/More subtle border */
-    border-radius: 8px;
-    /* Slightly smaller radius */
+    border-radius: var(--radius-md);
     padding: 10px 14px;
-    /* Reduced padding further */
-    color: white;
+    color: var(--color-white);
     font-size: 13px;
-    /* Smaller font */
     transition: border-color 0.3s ease;
     font-family: var(--font-secondary);
 }
@@ -720,16 +667,15 @@ fieldset {
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-    color: white;
+    color: var(--color-white);
     font-style: italic;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #fff;
+    border-color: var(--color-white);
 }
-
 
 .meeting-config {
     display: grid;
@@ -757,7 +703,7 @@ fieldset {
     font-size: 30px;
     margin-bottom: 10px;
     letter-spacing: 1px;
-    color: #fff;
+    color: var(--color-white);
     font-family: var(--font-primary);
     font-weight: 100;
 }
@@ -765,7 +711,7 @@ fieldset {
 .section-description {
     font-size: 14px;
     line-height: 1.4;
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--color-white-80);
     margin-bottom: 15px;
     max-width: 95%;
     font-family: var(--font-secondary);
@@ -785,13 +731,13 @@ fieldset {
     border-radius: 30px;
     width: 100%;
     justify-content: center;
-    border: 1px solid white;
+    border: 1px solid var(--color-white);
 }
 
 .duration-btn {
     background: transparent;
     border: none;
-    color: #fff;
+    color: var(--color-white);
     padding: 6px 14px;
     border-radius: 16px;
     cursor: pointer;
@@ -800,16 +746,13 @@ fieldset {
 }
 
 .duration-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--color-white-10);
 }
 
 .duration-btn.active {
     background: #fff;
     color: #000;
 }
-
-/* .form-video-preview removed from here (duplicate) */
-
 
 .config-item {
     display: flex;
@@ -828,10 +771,10 @@ fieldset {
 .config-item select {
     flex: 1;
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid var(--color-white-30);
     border-radius: 25px;
     padding: 8px 16px;
-    color: #fff;
+    color: var(--color-white);
     font-size: 14px;
     cursor: pointer;
     appearance: none;
@@ -843,14 +786,13 @@ fieldset {
 
 .config-item select:focus {
     outline: none;
-    border-color: #fff;
+    border-color: var(--color-white);
 }
 
 .config-item select option {
     background: #000;
-    color: #fff;
+    color: var(--color-white);
 }
-
 
 .calendar-container {
     background: transparent;
@@ -869,7 +811,7 @@ fieldset {
 .calendar-header h3 {
     font-size: 25px;
     font-weight: 100;
-    color: #fff;
+    color: var(--color-white);
     font-family: var(--font-secondary);
 }
 
@@ -887,7 +829,7 @@ fieldset {
 .calendar-weekdays div {
     text-align: center;
     font-size: 14px;
-    color: rgba(255, 255, 255);
+    color: var(--color-white);
     padding: 0;
     font-weight: 400;
     font-family: var(--font-secondary);
@@ -909,27 +851,27 @@ fieldset {
     cursor: pointer;
     font-size: 14px;
     transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid var(--color-white-30);
     background: transparent;
     height: 32px;
     width: 55px;
-    color: #fff;
+    color: var(--color-white);
 }
 
 .calendar-day:hover:not(.disabled):not(.other-month) {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: #fff;
+    background: var(--color-white-10);
+    border-color: var(--color-white);
 }
 
 .calendar-day.selected {
     background: #fff;
     color: #000;
     font-weight: 500;
-    border-color: #fff;
+    border-color: var(--color-white);
 }
 
 .calendar-day.disabled {
-    color: white;
+    color: var(--color-white);
     cursor: not-allowed;
     border-color: transparent;
 }
@@ -942,7 +884,6 @@ fieldset {
 .calendar-day.today {
     border-color: rgba(255, 255, 255, 0.6);
 }
-
 
 .selected-date {
     display: flex;
@@ -965,29 +906,28 @@ fieldset {
     font-size: 25px;
     font-weight: 100;
     margin-bottom: 2px;
-    color: #fff;
+    color: var(--color-white);
 }
 
 .date-info p {
     font-size: 25px;
-    color: rgba(255, 255, 255);
+    color: var(--color-white);
 }
 
 .duration-toggle {
     display: flex;
     gap: 8px;
-    /* background: rgba(255, 255, 255, 0.05); */
     padding: 5px;
     border-radius: 20px;
-    border: 1px solid white;
-    color: #fff;
+    border: 1px solid var(--color-white);
+    color: var(--color-white);
 }
 
 .toggle-btn {
     font-family: var(--font-secondary);
     background: transparent;
     border: none;
-    color: #fff;
+    color: var(--color-white);
     padding: 4px 12px;
     border-radius: 12px;
     cursor: pointer;
@@ -1000,11 +940,9 @@ fieldset {
     color: #000;
 }
 
-
 .time-slots {
     display: grid;
     gap: 12px;
-    
 }
 
 .time-slots.hidden {
@@ -1014,10 +952,10 @@ fieldset {
 .time-slot {
     font-family: var(--font-secondary);
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid var(--color-white-30);
     border-radius: 25px;
     padding: 8px 16px;
-    color: #fff;
+    color: var(--color-white);
     font-size: 13px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -1025,21 +963,20 @@ fieldset {
 }
 
 .time-slot:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: #fff;
+    background: var(--color-white-10);
+    border-color: var(--color-white);
 }
 
 .time-slot.selected {
     background: #fff;
     color: #000;
-    border-color: #fff;
+    border-color: var(--color-white);
 }
 
 .time-slot.disabled {
     opacity: 0.3;
     cursor: not-allowed;
 }
-
 
 .submit-section {
     display: flex;
@@ -1048,7 +985,6 @@ fieldset {
     align-items: center;
     box-sizing: border-box;
     gap: 0.7rem;
-    /* margin-top: 1rem; */
 }
 
 .hidden {
@@ -1057,7 +993,7 @@ fieldset {
 
 .email-text {
     font-size: 14px;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--color-white-70);
     font-family: var(--font-secondary);
 }
 
@@ -1066,16 +1002,15 @@ fieldset {
 }
 
 .email-text a {
-    color: #fff;
+    color: var(--color-white);
     text-decoration: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
     transition: border-color 0.3s ease;
 }
 
 .email-text a:hover {
-    border-color: #fff;
+    border-color: var(--color-white);
 }
-
 
 .booking-submit-btn:disabled {
     opacity: 0.5;
@@ -1095,7 +1030,7 @@ fieldset {
     width: 16px;
     height: 16px;
     border: 2px solid rgba(0, 0, 0, 0.2);
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     border-top-color: #000;
     animation: spin 0.8s linear infinite;
 }
@@ -1104,10 +1039,6 @@ fieldset {
     to {
         transform: rotate(360deg);
     }
-}
-
-.hidden {
-    display: none !important;
 }
 
 .error-message {
@@ -1120,16 +1051,14 @@ fieldset {
     font-size: 14px;
 }
 
-
-/* Next Step Button (White Pill) */
 .next-step-btn {
     display: flex;
     align-items: center;
     gap: 16px;
     background: transparent;
-    color: white;
-    border: 1px solid white;
-    border-radius: 50px;
+    color: var(--color-white);
+    border: 1px solid var(--color-white);
+    border-radius: var(--radius-pill);
     font-size: 1rem;
     font-weight: 400;
     cursor: pointer;
@@ -1139,20 +1068,19 @@ fieldset {
 }
 
 .next-step-btn span {
-    font-family: 'Delight', sans-serif;
+    font-family: var(--font-primary);
     font-weight: 200;
 }
 
-/* .step-number styles */
 .step-number {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 30px;
     height: 30px;
-    border: 1px solid white;
-    border-radius: 50%;
-    color: white;
+    border: 1px solid var(--color-white);
+    border-radius: var(--radius-full);
+    color: var(--color-white);
 }
 
 .btn-arrowing {
@@ -1162,7 +1090,7 @@ fieldset {
     width: 30px;
     height: 30px;
     background: #ffffff;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     transition: transform 0.3s ease;
     margin-right: -19px;
 }
@@ -1191,19 +1119,14 @@ fieldset {
     transition: transform 0.3s ease;
 }
 
-/* .booking-header{
-    display: flex;
-} */
-
-/* Retain separate styling for booking-submit-btn if needed, or remove if unused */
 .booking-submit-btn {
     display: flex;
     align-items: center;
     gap: 12px;
     background: transparent;
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50px;
+    color: var(--color-white);
+    border: 1px solid var(--color-white-30);
+    border-radius: var(--radius-pill);
     font-size: 14px;
     font-weight: 400;
     cursor: pointer;
@@ -1214,8 +1137,8 @@ fieldset {
 }
 
 .booking-submit-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: #fff;
+    background: var(--color-white-10);
+    border-color: var(--color-white);
 }
 
 .arrow-icon {
@@ -1223,10 +1146,9 @@ fieldset {
     align-items: center;
     justify-content: center;
     width: 30px;
-    /* Smaller circle */
     height: 30px;
     background: #ffffff;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     transition: transform 0.3s ease;
 }
 
@@ -1239,7 +1161,6 @@ fieldset {
 .booking-submit-btn:hover .arrow-icon svg {
     transform: rotate(90deg);
 }
-
 
 .clients-section {
     display: flex;
@@ -1267,8 +1188,8 @@ fieldset {
     top: -5.5px;
     width: 8px;
     height: 8px;
-    background-color: white;
-    border-radius: 50%;
+    background-color: var(--color-white);
+    border-radius: var(--radius-full);
 }
 
 .clients-section::before {
@@ -1304,14 +1225,13 @@ fieldset {
     height: 25px;
 }
 
-
 .client-logo:hover {
     opacity: 1;
 }
 
 .learn-more {
     font-size: 14px;
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--color-white-80);
     font-style: italic;
 }
 
@@ -1327,15 +1247,6 @@ fieldset {
     gap: 3.5rem;
     margin-top: 6rem;
 }
-
-.screen {
-    display: none;
-}
-
-.screen.active {
-    display: block;
-}
-
 
 #confirmationScreen {
     display: none;
@@ -1359,7 +1270,7 @@ fieldset {
 }
 
 .confirmation-subtitle {
-    color: white;
+    color: var(--color-white);
     text-align: center;
     font-size: 1.125rem;
     font-weight: 300;
@@ -1373,7 +1284,6 @@ fieldset {
 .info-row span {
     font-size: 1rem;
     font-family: var(--font-secondary);
-    /* Reduced from 1.5rem */
 }
 
 .customer_info {
@@ -1383,21 +1293,18 @@ fieldset {
 
 .confirmation-title {
     font-size: 2rem;
-    /* Reduced from 3.5rem */
     font-weight: 300;
     letter-spacing: 2px;
-    /* Reduced spacing */
     text-align: center;
     margin-top: 1rem;
-    /* Reduced top margin */
-    color: #fff;
+    color: var(--color-white);
 }
 
 .booking-info {
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    color: #fff;
+    color: var(--color-white);
 }
 
 .customer_info {
@@ -1427,7 +1334,6 @@ fieldset {
 
 .info-row span {
     font-size: 1.1875rem;
-    /* 19px */
 }
 
 .info-icon {
@@ -1452,11 +1358,10 @@ fieldset {
 
 .cancel-btn {
     background: transparent;
-    color: #fff;
+    color: var(--color-white);
     border: 2px solid #fff;
 }
 
-/* Navigation Container - Wraps Back Btn & Indicators */
 .step-navigation-container {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
@@ -1466,11 +1371,9 @@ fieldset {
     top: 3.5rem;
     transition: top 0.3s ease;
     margin-bottom: 30px;
-    margin-bottom: 30px;
     justify-items: center;
 }
 
-/* Step 2 view: Remove top spacing */
 .step-navigation-container.step-2-view {
     top: 30px !important;
     margin-top: 0 !important;
@@ -1482,30 +1385,25 @@ fieldset {
     align-items: center;
     justify-content: center;
     width: auto;
-    /* Reset previous absolute/relative positioning */
     position: static;
     top: 0;
     margin: 0;
     grid-column: 2;
-    /* Center in grid */
 }
 
-/* Back Button Styles */
 .back-btn {
     display: flex;
     align-items: center;
     gap: 8px;
     background: transparent;
     border: none;
-    color: white;
+    color: var(--color-white);
     font-size: 12px;
     font-weight: 500;
     cursor: pointer;
-    /* Grid positioning */
     position: static;
     justify-self: start;
     align-self: center;
-    /* Force vertical centering */
     grid-column: 1;
 }
 
@@ -1524,7 +1422,7 @@ fieldset {
     width: 44px;
     height: 44px;
     background: #000;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     flex-shrink: 0;
 }
 
@@ -1539,7 +1437,7 @@ fieldset {
 .btn-arrow svg {
     width: 18px;
     height: 18px;
-    color: #fff;
+    color: var(--color-white);
     transform: rotate(135deg);
     transition: transform 0.3s ease;
 }
@@ -1548,12 +1446,12 @@ fieldset {
     grid-column: 1 / -1;
     text-align: center;
     font-size: 14px;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--color-white-70);
     margin-top: 40px;
 }
 
 .contact-email-bottom a {
-    color: #fff;
+    color: var(--color-white);
     text-decoration: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
@@ -1571,7 +1469,7 @@ fieldset {
     background: #fff;
     color: #000;
     border: none;
-    border-radius: 50px;
+    border-radius: var(--radius-pill);
     padding: 4px 4px 4px 28px;
     font-size: 18px;
     font-weight: 400;
@@ -1582,7 +1480,7 @@ fieldset {
 
 .cancel-btn {
     background: transparent;
-    color: #fff;
+    color: var(--color-white);
     border: 2px solid #fff;
 }
 
@@ -1593,14 +1491,14 @@ fieldset {
     width: 42px;
     height: 42px;
     background: #000;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     flex-shrink: 0;
 }
 
 .btn-arrow svg {
     width: 18px;
     height: 18px;
-    color: #fff;
+    color: var(--color-white);
     transform: rotate(135deg);
     transition: transform 0.3s ease;
 }
@@ -1634,11 +1532,11 @@ fieldset {
     position: fixed;
     bottom: 40px;
     left: 40px;
-    z-index: 10;
+    z-index: var(--z-booking);
     display: flex;
     flex-direction: column;
     gap: 8px;
-    color: white;
+    color: var(--color-white);
     font-family: 'Helvetica Neue', sans-serif;
     pointer-events: none;
     mix-blend-mode: difference;
@@ -1779,7 +1677,7 @@ fieldset {
     align-items: center;
     border-left: none;
     font-weight: 400;
-    font-style: italic; 
+    font-style: italic;
 }
 
 .popup-part-text span {
@@ -1824,21 +1722,13 @@ fieldset {
     content: '';
     position: absolute;
     width: 20px;
-    /* Square */
     height: 20px;
-    /* Square */
     bottom: -10px;
     right: -10px;
     background: #ffffff;
     z-index: 2;
 }
 
-/* Removed video-text-overlay styles to use global .text-overlay */
-
-/* Removed duplicate video preview styles */
-
-
-/* Restored video expand button styles */
 .video-expand-btn {
     position: absolute;
     bottom: 12px;
@@ -1879,7 +1769,6 @@ fieldset {
     opacity: 0.5;
     cursor: not-allowed;
     background: rgba(255, 255, 255, 0.2);
-    /* Visual cue */
 }
 
 @media screen and (display-mode: fullscreen) {
@@ -1906,18 +1795,14 @@ fieldset {
     padding-top: 0;
 }
 
-/* Ensure video preview stays fixed and visible */
 .form-video-preview {
     position: fixed;
-    /* Changed from absolute to fixed */
     bottom: 30px;
     right: 40px;
     width: 250px;
     height: 120px;
     z-index: 9999;
 }
-
-
 
 .form-video-preview .video-container {
     width: 100%;
@@ -1977,7 +1862,6 @@ fieldset {
     top: -42px;
     left: -24px;
     background: white;
-    /* Ensure visible */
 }
 
 .form-video-preview.expanded .corner-tr {
@@ -2045,7 +1929,6 @@ fieldset {
     content: none;
 }
 
-
 .email-section {
     display: flex;
     flex-direction: column;
@@ -2054,7 +1937,6 @@ fieldset {
     gap: 0.5rem;
 }
 
-/* Interested Screen Scroll Indicator */
 .interested-scroll-indicator {
     position: absolute;
     bottom: 30px;
@@ -2076,7 +1958,6 @@ fieldset {
     white-space: nowrap;
 }
 
-/* Ensure mouse overrides if needed */
 .interested-scroll-indicator .mouse {
     border-color: white;
 }

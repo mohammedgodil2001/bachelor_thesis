@@ -1,4 +1,3 @@
-
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SplitType from 'split-type';
@@ -12,7 +11,7 @@ const revealAudio = new Audio(revealSoundSrc);
 
 gsap.registerPlugin(ScrollTrigger);
 
-export const initBookingScene = (overlay) => { // Accept overlay instance
+export const initBookingScene = (overlay) => { 
     const section = document.querySelector('#third-and-fourth-scene');
     const videoWrapper = document.querySelector('#video-wrapper');
     const video = videoWrapper.querySelector('video');
@@ -33,37 +32,28 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
     if (interestedScreen && formScreen) {
         interestedScreen.classList.add('active');
         formScreen.classList.remove('active');
-        formScreen.style.display = 'none'; // Ensure it's hidden from layout
-
-        // Hide video preview initially
+        formScreen.style.display = 'none'; 
         if (videoPreview) {
             videoPreview.style.display = 'none';
         }
         
     }
 
-    // --- Scroll Interception Logic ---
-    let isTransitionEnabled = false; // Debounce flag
+    let isTransitionEnabled = false; 
 
-    // Helper to determine if we should block scroll
     const isAtTop = (el) => el.scrollTop <= 5;
     const isAtBottom = (el) => el.scrollHeight - el.scrollTop - el.clientHeight <= 5;
 
-    // 1. Interested Screen Logic
     const handleInterestedWheel = (e) => {
         if (!interestedScreen.classList.contains('active')) return;
-        
-        // Handle Scrolling Back Up (Unlock)
+    
         if (e.deltaY < 0) {
-            // Re-enable Lenis so standard scrolling (and ScrollTrigger scrub) works
             if (window.lenis) window.lenis.start();
-            // Allow event to propagate so Lenis/Browser handles it
             return;
         }
         
-        // Prevent accidental triggers
         if (!isTransitionEnabled) {
-            // Block everything aggressively
+
             if (e.deltaY > 0) {
                  e.preventDefault();
                  e.stopImmediatePropagation();
@@ -87,7 +77,7 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
          const diff = interestedScreen.touchStartY - touch.clientY;
          
          if (diff > 50) { 
-             if (!isTransitionEnabled) return; // Ignore if cooling down
+             if (!isTransitionEnabled) return; 
              
              if (e.cancelable) e.preventDefault();
              e.stopPropagation();
@@ -96,14 +86,13 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
          }
     };
     
-    // 2. Form Screen Logic
     const handleFormWheel = (e) => {
         if (!formScreen.classList.contains('active')) return;
         
-        // Prevent scroll to interested if in step 2
+
         if (document.getElementById('step2')?.classList.contains('active')) return;
 
-        // Detect Up AND At Top
+
         if (e.deltaY < 0 && isAtTop(formScreen)) {
              e.preventDefault(); 
              e.stopPropagation(); 
@@ -114,7 +103,6 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
     const handleFormTouch = (e) => {
         if (!formScreen.classList.contains('active')) return;
         
-        // Prevent scroll to interested if in step 2
         if (document.getElementById('step2')?.classList.contains('active')) return;
 
          const touch = e.touches[0];
@@ -130,7 +118,6 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
          }
     };
 
-    // Attach Listeners with { passive: false }
     interestedScreen.addEventListener('wheel', handleInterestedWheel, { passive: false });
     interestedScreen.addEventListener('touchstart', (e) => interestedScreen.touchStartY = e.touches[0].clientY, { passive: true });
     interestedScreen.addEventListener('touchmove', handleInterestedTouch, { passive: false });
@@ -159,11 +146,8 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
             formScreen.style.display = 'flex'; 
             formScreen.classList.add('active'); 
 
-            // Show video preview
             if (videoPreview) {
                 videoPreview.style.display = 'block';
-                // Small delay or autoAlpha if you want animation, but block is sufficient for "visible"
-                // ensure it's on top if needed, typically it is by DOM order
             }
 
             overlay.hide({
@@ -174,8 +158,6 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
                 overlay.DOM.el.classList.remove('white-mode'); 
                 overlay.isAnimating = false;
                 if (window.lenis) window.lenis.start();
-
-                // Ensure form can scroll if needed
                 formScreen.scrollTop = 0;
             });
         });
@@ -196,17 +178,12 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
         }).then(() => {
              formScreen.classList.remove('active');
              formScreen.style.display = 'none';
-
-             // Hide video preview
             if (videoPreview) {
                  videoPreview.style.display = 'none';
             }
 
              interestedScreen.style.display = 'flex'; 
              interestedScreen.classList.add('active');
-             
-             // IMPORTANT: Give a small delay before enabling forward transition again
-             // to prevent accidental bounces if scrolling fast up
              isTransitionEnabled = false;
              setTimeout(() => { isTransitionEnabled = true; }, 800);
 
@@ -222,41 +199,33 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
         });
     };
 
-    // Set video source
     video.src = videoOptimizedSrc;
 
-    // Initial state
     gsap.set(videoWrapper, { opacity: 0, pointerEvents: 'none' }); 
     gsap.set(headsetOverlay, { opacity: 0, pointerEvents: 'none' });
     gsap.set(headsetImage, { opacity: 0, pointerEvents: 'none' });
     gsap.set(headsetPopup, { opacity: 0, pointerEvents: 'none' });
     gsap.set(bookingSection, { opacity: 0, pointerEvents: 'none' });
 
-    // Headset checkpoint state
     let isHeadsetUnlocked = false;
     let hasPopupAnimated = false;
-    // Dynamic checkpoint based on fullscreen state
     const getCheckpoint = () => document.fullscreenElement ? 0.642 : 0.645;
     const BUFFER = 0.002;
 
-    // --- Overlay Text Animations ---
-    const overlayTexts = {}; // Store SplitType instances
+    const overlayTexts = {}; 
 
     const initTextOverlays = () => {
-        // Target elements with data-overlay-id
         const overlays = document.querySelectorAll('[data-overlay-id]');
         overlays.forEach(element => {
             const spanElement = element.querySelector('span');
             if (spanElement) {
                  const id = element.dataset.overlayId;
                  overlayTexts[id] = new SplitType(spanElement, { types: 'words, chars' });
-                 // HIDE initially to override CSS opacity:1, so animation can happen
                  gsap.set(overlayTexts[id].chars, { opacity: 0, y: 8, visibility: 'hidden' }); 
                  gsap.set(element, { opacity: 0 });
             }
         });
         
-        // Headset popup text too
         const headsetText = headsetPopup?.querySelector('.popup-part-text span');
         if (headsetText) {
              overlayTexts['headset'] = new SplitType(headsetText, { types: 'words, chars' });
@@ -264,7 +233,6 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
         }
     };
 
-    // Animate typing effect for headset popup
     const animateHeadsetTyping = () => {
         if (!overlayTexts['headset'] || hasPopupAnimated) return;
         
@@ -295,16 +263,12 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
 
     initTextOverlays();
 
-    // Handle scroll update with checkpoint logic
     const handleScrollUpdate = (self) => {
         const progress = self.progress;
 
 
-
-        // Headset checkpoint logic
         if (headsetOverlay && headsetImage && headsetPopup) {
             if (isHeadsetUnlocked) {
-                // UNLOCKED STATE: Strictly hide headset
                 headsetOverlay.style.opacity = '0';
                 headsetOverlay.style.visibility = 'hidden';
                 headsetImage.style.opacity = '0';
@@ -314,17 +278,12 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
                 headsetPopup.style.visibility = 'hidden';
                 headsetPopup.style.pointerEvents = 'none';
                 
-                // Re-lock if scrolling back significantly
                 if (!ScrollTrigger.isRefreshing && progress < getCheckpoint() - BUFFER) {
                     isHeadsetUnlocked = false;
                     hasPopupAnimated = false;
                 }
             } else {
-                // LOCKED STATE LOGIC
-                // Show headset when at or near checkpoint
-                // Show headset when at or near checkpoint
                 if (progress >= getCheckpoint() - BUFFER) {
-                    // Show headset
                     headsetOverlay.style.opacity = '1';
                     headsetOverlay.style.visibility = 'visible';
                     headsetImage.style.opacity = '1';
@@ -334,7 +293,6 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
                     headsetPopup.style.visibility = 'visible';
                     headsetPopup.style.pointerEvents = 'auto';
                     
-                    // Block forward scroll at checkpoint
                     if (progress > getCheckpoint() && !isHeadsetUnlocked) {
                         const targetScroll = self.start + (self.end - self.start) * getCheckpoint();
                         if (window.lenis) {
@@ -346,7 +304,6 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
                             window.scrollTo(0, targetScroll);
                         }
                     } else if (window.lenis) {
-                        // Ensure lenis is running if not blocked
                         window.lenis.start();
                     }
                     
@@ -357,7 +314,6 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
                         animateHeadsetTyping();
                     }
                 } else {
-                    // Hide headset when below checkpoint
                     headsetOverlay.style.opacity = '0';
                     headsetOverlay.style.visibility = 'hidden';
                     headsetImage.style.opacity = '0';
@@ -372,23 +328,20 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
         }
     };
 
-    // Headset click handler to unlock scrolling
     const handleHeadsetClick = (e) => {
         e.preventDefault();
         e.stopPropagation();
         
-        if (isHeadsetUnlocked) return; // Already unlocked
+        if (isHeadsetUnlocked) return; 
         
         isHeadsetUnlocked = true;
         
-        // Restore scrolling
         if (window.lenis) {
             window.lenis.start();
         }
         document.body.style.overflow = '';
         document.documentElement.style.overflow = '';
         
-        // Hide headset
         if (headsetOverlay) {
             headsetOverlay.style.opacity = '0';
         }
@@ -401,10 +354,9 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
             headsetPopup.style.pointerEvents = 'none';
         }
         
-        // Force scroll past checkpoint
         const scrollTrigger = ScrollTrigger.getById('booking-scene-trigger');
         if (scrollTrigger) {
-            const targetProgress = getCheckpoint() + 0.01; // Just past checkpoint
+            const targetProgress = getCheckpoint() + 0.01; 
             const targetScroll = scrollTrigger.start + (scrollTrigger.end - scrollTrigger.start) * targetProgress;
             if (window.lenis) {
                 window.lenis.scrollTo(targetScroll, { immediate: false });
@@ -414,21 +366,17 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
         }
     };
 
-    // Attach click handler only to the headset image (not the container)
     if (headsetImage) {
         headsetImage.addEventListener('click', handleHeadsetClick);
         headsetImage.style.cursor = 'pointer';
     }
     
-    // Ensure overlay container never blocks clicks
     if (headsetOverlay) {
         headsetOverlay.style.pointerEvents = 'none';
     }
 
-    // Store scroll trigger reference
     let scrollTriggerInstance = null;
 
-    // --- Main Timeline ---
     const timeline = gsap.timeline({
         scrollTrigger: {
             trigger: section,
@@ -440,13 +388,11 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
                 if (ScrollTrigger.isRefreshing || window.isNavigating) return;
                 handleScrollUpdate(self);
                 
-                // Prevent scrolling past checkpoint if not unlocked
                 if (!isHeadsetUnlocked && self.progress > getCheckpoint()) {
                     const checkpointPos = self.start + (self.end - self.start) * getCheckpoint();
                     // Only prevent if trying to scroll forward
                     const currentScroll = window.scrollY || window.pageYOffset;
                     if (currentScroll > checkpointPos - 5) {
-                        // Force scroll back to checkpoint
                         if (window.lenis) {
                             window.lenis.scrollTo(checkpointPos, { immediate: true });
                         } else {
@@ -459,12 +405,10 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
                 video.pause();
             },
             onLeaveBack: () => {
-                // Prevent state reset during refresh OR if already unlocked
                 if (ScrollTrigger.isRefreshing || isHeadsetUnlocked) return;
                 
                 video.currentTime = 0;
                 video.pause();
-                // Reset headset state
                 isHeadsetUnlocked = false;
                 hasPopupAnimated = false;
             }
@@ -472,10 +416,6 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
     });
     
     scrollTriggerInstance = ScrollTrigger.getById('booking-scene-trigger');
-    
-    // Smart State Preservation for Booking Scene Checkpoint
-    // This handles the shift between 0.645 (Normal) and 0.642 (Fullscreen)
-    // ensuring the user stays "locked" if they were at the checkpoint.
     let savedState = {
         wasLockedAtCheckpoint: false,
         progress: null
@@ -485,9 +425,6 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
         const st = ScrollTrigger.getById('booking-scene-trigger');
         if (st && st.isActive) {
             savedState.progress = st.progress;
-            
-            // Check if user was effectively "at the checkpoint" (locked)
-            // We use a broad range (0.63 - 0.66) to catch either 0.642 or 0.645
             const isNearCheckpoint = st.progress > 0.63 && st.progress < 0.66;
             savedState.wasLockedAtCheckpoint = !isHeadsetUnlocked && isNearCheckpoint;
         } else {
@@ -501,7 +438,6 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
             if (st) {
                 let targetProgress = savedState.progress;
                 
-                // If we were locked at the old checkpoint, SNAP to the new checkpoint
                 if (savedState.wasLockedAtCheckpoint) {
                     targetProgress = getCheckpoint();
                 }
@@ -517,13 +453,10 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
         }
     });
 
-    // 1. Fade in video wrapper - Reduced duration to start video sooner
     timeline.to(videoWrapper, { opacity: 1, duration: 0.1, ease: "power2.inOut" });
 
-    // Label for the main sequence start
     timeline.add('sequenceStart');
 
-    // 2. Video Scrubbing
     const addVideoScrub = () => {
         if (video.duration) {
             timeline.fromTo(video, 
@@ -534,7 +467,6 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
         }
     };
 
-    // Use a promise to ensure video metadata is loaded before adding scrub
     const videoLoadedPromise = new Promise(resolve => {
         if (video.readyState >= 1) {
             resolve();
@@ -543,12 +475,10 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
         }
     });
 
-    // Add video scrub to timeline only after metadata is loaded
     videoLoadedPromise.then(() => {
         addVideoScrub();
     });
 
-    // 3. Add text overlay animations
     const addTextOverlaySequence = (tl, startLabel) => {
          const overlays = document.querySelectorAll('[data-overlay-id]');
          const sortedOverlays = Array.from(overlays).sort((a, b) => a.dataset.overlayId - b.dataset.overlayId);
@@ -578,7 +508,6 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
              );
          };
 
-         // Text 1
          tl.to(sortedOverlays[0], { 
                 opacity: 1, 
                 duration: 0.1, 
@@ -645,39 +574,28 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
 
     addTextOverlaySequence(timeline, 'sequenceStart');
 
-    // 4. Fade out video at the end - REMOVED to fix reverse transition issues (seamless reveal)
-    // timeline.to(videoWrapper, { opacity: 0, duration: 1, ease: "power2.inOut" }, 'sequenceStart+=15');
-
-    // 5. Show Booking Form
-    // Also hide header and scroll hint to match reference
     const header = document.querySelector('header');
     const actionHint = document.querySelector('.action-hint');
     
-    // Use the timeline position 'sequenceStart+=15' directly since we removed the previous tween
     timeline.to(bookingSection, { 
         opacity: 1, 
         duration: 1,
-        // Manage pointerEvents dynamically to handle scrub vs interaction
         onUpdate: function() {
              const p = this.progress(); 
              if (p > 0.99) {
                  bookingSection.style.pointerEvents = 'auto';
              } else {
                  bookingSection.style.pointerEvents = 'none';
-                 // Don't disable transition here, let it be controlled by logic
              }
         },
         onComplete: () => {
-             // Lock global scroll and enable custom transition
              if (window.lenis) window.lenis.stop();
              bookingSection.style.pointerEvents = 'auto';
              
-             // Start Cooldown
              setTimeout(() => { isTransitionEnabled = true; }, 100);
         }
     }, 'sequenceStart+=15');
 
-    // Audio Control visibility logic removed - keeps it visible
     
     
     if (actionHint) {
@@ -685,7 +603,7 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
     }
 
 
-    // --- Carousel Logic ---
+
     const initCarousel = () => {
         const track = document.getElementById('carouselTrack');
         if (!track) return;
@@ -696,7 +614,6 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
         const dotsNav = document.querySelector('.carousel-dots');
         const dots = Array.from(dotsNav.children);
 
-        // Pre-split text for all slides
         slides.forEach(slide => {
             const p = slide.querySelector('.slide-caption p');
             if (p) {
@@ -710,37 +627,27 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
         let currentIndex = 0;
 
         const updateCarousel = (index) => {
-            // Update Slides
             slides.forEach(slide => slide.classList.remove('active'));
             slides[index].classList.add('active');
 
-            // Update Dots
             dots.forEach(dot => dot.classList.remove('active'));
             dots[index].classList.add('active');
 
             currentIndex = index;
             
-            // Animation for the new active slide's text
             const activeSlide = slides[index];
             const activeCaption = activeSlide.querySelector('.slide-caption p');
             if (activeCaption) {
-                // Determine existing words or split if needed (though we do it initially)
                 const words = activeCaption.querySelectorAll('.word');
-                
-                // Kill any existing tweens on these elements to prevent conflicts
                 gsap.killTweensOf(words);
-                
-                // Reset state immediately
-                gsap.set(words, { y: 50, opacity: 0 });
-
-                // Animate In matches .project-description
+                gsap.set(words, { y: 50, opacity: 0 });                
                 gsap.to(words, {
                     y: 0,
                     opacity: 1,
                     duration: 0.8,
                     stagger: 0.05,
                     ease: "back.out(1.7)",
-                    delay: 0.1 // Slight delay after slide change
+                    delay: 0.1 
                 });
             }
             
@@ -806,15 +713,11 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
             });
         }
 
-        // Optional: Keyboard navigation if section is active (could be added later)
+
     };
 
-    // Initialize the carousel
     initCarousel();
     
-    // Trigger initial animation for the first slide
-    // We need to wait slightly for the DOM to be ready or just force the update
-    // Since initCarousel is called, we can manually trigger the animation for index 0
     const initialSlide = document.querySelector('.carousel-slide.active');
     if (initialSlide) {
          const caption = initialSlide.querySelector('.slide-caption p');
@@ -831,11 +734,9 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
          }
     }
 
-    // Initialize Booking Form Functionality
     initBookingForm();
 };
 
-// Booking Form Functionality
 const initBookingForm = () => {
     let selectedDuration = 15;
     let selectedDate = null;
@@ -889,7 +790,6 @@ const initBookingForm = () => {
 
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-    // Duration buttons
     function handleDurationClick(btn) {
         document.querySelectorAll('.duration-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
@@ -905,7 +805,6 @@ const initBookingForm = () => {
         if (firstBtn) firstBtn.classList.add('active');
     }
 
-    // Toggle buttons (12h/24h)
     function handleToggleClick(btn) {
         document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
@@ -919,7 +818,6 @@ const initBookingForm = () => {
         });
     }
 
-    // Calendar navigation
     function handlePrevMonth() {
         currentMonth.setMonth(currentMonth.getMonth() - 1);
         renderCalendar();
@@ -935,7 +833,6 @@ const initBookingForm = () => {
         if (nextMonthBtn) nextMonthBtn.addEventListener('click', handleNextMonth);
     }
 
-    // Calendar rendering
     function getFirstDayOfWeek(year, month) {
         const firstDay = new Date(year, month, 1);
         let firstDayOfWeek = firstDay.getDay() - 1;
@@ -975,7 +872,6 @@ const initBookingForm = () => {
         const today = getTodayDate();
         calendarDays.innerHTML = '';
 
-        // Previous month days
         const prevMonthLastDay = new Date(year, month, 0).getDate();
         for (let i = firstDayOfWeek - 1; i >= 0; i--) {
             const day = prevMonthLastDay - i;
@@ -984,7 +880,6 @@ const initBookingForm = () => {
             calendarDays.appendChild(dayElement);
         }
 
-        // Current month days
         for (let day = 1; day <= numDays; day++) {
             const date = new Date(year, month, day);
             date.setHours(0, 0, 0, 0);
@@ -998,7 +893,6 @@ const initBookingForm = () => {
             calendarDays.appendChild(dayElement);
         }
 
-        // Next month days
         const totalCells = calendarDays.children.length;
         const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
         for (let day = 1; day <= remainingCells; day++) {
@@ -1032,7 +926,6 @@ const initBookingForm = () => {
         validateStep2();
     }
 
-    // Time slots
     function formatTime(hour, minute) {
         if (is24HourFormat) {
             return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
@@ -1124,7 +1017,6 @@ const initBookingForm = () => {
         });
     }
 
-    // Form validation
     function validateStep1() {
         const fullName = document.getElementById('fullName')?.value.trim();
         const workEmail = document.getElementById('workEmail')?.value.trim();
@@ -1139,7 +1031,6 @@ const initBookingForm = () => {
         console.log('Validating Step 2:', { selectedDate, selectedTime, isValid });
         if (submitBtn) {
             submitBtn.disabled = !isValid;
-            // Visual force update
             if (isValid) submitBtn.classList.remove('disabled');
             else submitBtn.classList.add('disabled');
         }
@@ -1151,26 +1042,22 @@ const initBookingForm = () => {
             const stepNum = index + 1;
             indicator.classList.remove('active', 'completed');
             
-            // Check for internal spans (added for Step 1)
             const numSpan = indicator.querySelector('.number');
             const iconSpan = indicator.querySelector('.check-icon');
 
             if (stepNum < step) {
-                // Completed Step
                 indicator.classList.add('completed');
                 if (numSpan && iconSpan) {
                     numSpan.classList.add('hidden');
                     iconSpan.classList.remove('hidden');
                 }
             } else if (stepNum === step) {
-                // Current Active Step
                 indicator.classList.add('active');
                 if (numSpan && iconSpan) {
                     numSpan.classList.remove('hidden');
                     iconSpan.classList.add('hidden');
                 }
             } else {
-                // Future Step
                 if (numSpan && iconSpan) {
                     numSpan.classList.remove('hidden');
                     iconSpan.classList.add('hidden');
@@ -1178,7 +1065,6 @@ const initBookingForm = () => {
             }
         });
 
-        // Manage Back Button Visibility
         const backBtn = document.getElementById('backBtn');
         if (backBtn) {
             if (step > 1) {
@@ -1189,7 +1075,6 @@ const initBookingForm = () => {
         }
     }
 
-    // Step navigation
     function goToNextStep() {
         if (!validateStep1()) return;
         currentStep = 2;
@@ -1197,13 +1082,13 @@ const initBookingForm = () => {
         if (step2) step2.classList.add('active');
         updateStepIndicators(2);
         
-        // Add step-2-view class to navigation container
+
         const navContainer = document.querySelector('.step-navigation-container');
         if (navContainer) navContainer.classList.add('step-2-view');
         
         validateStep2();
 
-        // Lock Scroll
+
         if (window.lenis) window.lenis.stop();
         document.body.style.overflow = 'hidden';
         document.documentElement.style.overflow = 'hidden';
@@ -1215,19 +1100,17 @@ const initBookingForm = () => {
         if (step1) step1.classList.add('active');
         updateStepIndicators(1);
         
-        // Remove step-2-view class from navigation container
         const navContainer = document.querySelector('.step-navigation-container');
         if (navContainer) navContainer.classList.remove('step-2-view');
         
         validateStep1();
 
-        // Unlock Scroll
+
         if (window.lenis) window.lenis.start();
         document.body.style.overflow = '';
         document.documentElement.style.overflow = '';
     }
 
-    // Form submission
     function getFormData() {
         return {
             full_name: document.getElementById('fullName')?.value.trim() || '',
@@ -1283,7 +1166,6 @@ const initBookingForm = () => {
         }
     }
 
-    // Confirmation screen
     function formatConfirmationDate(dateString) {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', {
@@ -1324,8 +1206,6 @@ const initBookingForm = () => {
         if (confirmationScreen) confirmationScreen.classList.add('active');
         document.body.style.overflow = 'hidden';
         document.querySelector('#video-wrapper')?.style.setProperty('display', 'none');
-        // REMOVED: document.querySelector('#third-and-fourth-scene')?.style.setProperty('display', 'none');
-        // ScrollTrigger.getAll().forEach(st => st.kill()); // REMOVED: This breaks the scene on reset
         const bookingSection = document.querySelector('.booking-section');
         if (bookingSection) {
             bookingSection.style.opacity = '1';
@@ -1339,48 +1219,39 @@ const initBookingForm = () => {
         switchToConfirmationScreen();
     }
 
-    // Platform change handler
     function handlePlatformChange(e) {
         const selectedPlatform = e.target.value;
         const iconElement = document.getElementById('platformIcon');
         if (iconElement) iconElement.src = platformIcons[selectedPlatform];
     }
 
-    // Initialize all
     function initialize() {
         initializeDurationButtons();
         initializeToggleButtons();
         initializeCalendarNavigation();
         renderCalendar();
 
-        // Form validation
         ['fullName', 'workEmail', 'companyName'].forEach(id => {
             const input = document.getElementById(id);
             if (input) input.addEventListener('input', validateStep1);
         });
 
-        // Step navigation
-        const backBtnNew = document.getElementById('backBtn'); // Get the new button
+        const backBtnNew = document.getElementById('backBtn'); 
         if (nextBtn) nextBtn.addEventListener('click', goToNextStep);
-        if (backBtn) backBtn.addEventListener('click', goToPrevStep); // Old one if exists
-        if (backBtnNew) backBtnNew.addEventListener('click', goToPrevStep); // New specific one
+        if (backBtn) backBtn.addEventListener('click', goToPrevStep); 
+        if (backBtnNew) backBtnNew.addEventListener('click', goToPrevStep); 
 
-        // Form submission - Changed to manual click for robustness
-        // if (form) form.addEventListener('submit', handleFormSubmit);
         if (submitBtn) {
             submitBtn.type = 'button'; // Prevent default submit
             submitBtn.addEventListener('click', handleFormSubmit);
         }
 
-        // Platform change
         const platformSelect = document.getElementById('meetingPlatform');
         if (platformSelect) platformSelect.addEventListener('change', handlePlatformChange);
 
-        // Initial validation
         validateStep1();
     }
 
-    // Video preview expand functionality
     function initVideoPreview() {
         const previewContainer = document.querySelector('.form-video-preview');
         if (!previewContainer) return;
@@ -1394,7 +1265,7 @@ const initBookingForm = () => {
 
         const marker = previewContainer.cloneNode(false);
         marker.classList.add('ghost-marker');
-        marker.style.display = 'block'; // Ensure it has layout even if cloned from hidden element
+        marker.style.display = 'block'; 
         marker.style.visibility = 'hidden';
         marker.style.pointerEvents = 'none';
         marker.style.opacity = '0';
@@ -1455,7 +1326,7 @@ const initBookingForm = () => {
                 video.controls = true;
                 video.load();
                 video.play().catch(() => {});
-                previewContainer.style.cursor = 'default'; // Reset cursor
+                previewContainer.style.cursor = 'default'; 
                 setTimeout(() => { isAnimating = false; }, 500);
             } else {
                 backdrop.classList.remove('active');
@@ -1485,7 +1356,7 @@ const initBookingForm = () => {
                     video.loop = true;
                     video.play().catch(() => {});
                     isAnimating = false;
-                    previewContainer.style.cursor = 'pointer'; // Restore pointer
+                    previewContainer.style.cursor = 'pointer'; 
                     requestAnimationFrame(() => { previewContainer.style.transition = ''; });
                 }, 500);
             }
@@ -1496,14 +1367,11 @@ const initBookingForm = () => {
         });
 
         if (expandBtn) {
-            // Remove specific listener, let bubbling handle it via container
-            expandBtn.style.pointerEvents = 'none'; // distinct visual cue if needed
+            expandBtn.style.pointerEvents = 'none'; 
         }
         
-        // Add click listener to the entire container
         previewContainer.style.cursor = 'pointer';
         previewContainer.addEventListener('click', (e) => {
-             // Only allow opening interactions from the container click
              if (!previewContainer.classList.contains('expanded')) {
                  toggleExpand(e);
              }
@@ -1517,14 +1385,11 @@ const initBookingForm = () => {
         });
     }
 
-    // Initialize everything
     initialize();
     initVideoPreview();
 
-    // Global reset function for confirmation screen
-    // Global reset function for confirmation screen
     window.resetForm = function() {
-        // Reset form fields
+
         if (form) form.reset();
         selectedDate = null;
         selectedTime = null;
@@ -1532,7 +1397,7 @@ const initBookingForm = () => {
         currentStep = 1;
         is24HourFormat = false;
 
-        // Reset UI
+
         document.querySelectorAll('.duration-btn').forEach(b => b.classList.remove('active'));
         const firstDurationBtn = document.querySelector('.duration-btn[data-duration="15"]');
         if (firstDurationBtn) firstDurationBtn.classList.add('active');
@@ -1552,50 +1417,40 @@ const initBookingForm = () => {
         if (btnLoader) btnLoader.classList.add('hidden');
         if (errorMessage) errorMessage.classList.add('hidden');
 
-        // Reset platform icon
         const platformIcon = document.getElementById('platformIcon');
         if (platformIcon) platformIcon.src = platformIcons['google_meet'];
 
-        // Switch back to form screen
         if (confirmationScreen) {
             confirmationScreen.classList.remove('active');
-            confirmationScreen.style.display = 'none'; // Ensure confirmation is hidden
+            confirmationScreen.style.display = 'none'; 
         }
         if (formScreen) {
             formScreen.classList.add('active');
-            formScreen.style.display = 'flex'; // Explicitly restore display to override potential 'none'
+            formScreen.style.display = 'flex'; 
         }
         if (interestedScreen) {
             interestedScreen.classList.remove('active');
             interestedScreen.style.display = 'none';
         }
 
-        // Restore scroll
         document.body.style.overflow = '';
         document.querySelector('#video-wrapper')?.style.setProperty('display', 'block');
         document.querySelector('#third-and-fourth-scene')?.style.setProperty('display', 'block');
 
-        // Force GSAP to recognize the layout change instantly prevents scroll lag
         ScrollTrigger.refresh();
 
-        // Ensure Lenis is restarted if it was stopped
         if (window.lenis) window.lenis.start();
 
-        // Reset to step 1
         if (step2) step2.classList.remove('active');
         if (step1) step1.classList.add('active');
         updateStepIndicators(1);
 
-        // Reset step view classes
         const navContainer = document.querySelector('.step-navigation-container');
         if (navContainer) navContainer.classList.remove('step-2-view');
 
-        // Reset calendar
         currentMonth = new Date();
         renderCalendar();
 
-        // Re-initialize animation if needed
-        // Scroll to bottom (Using Lenis if available)
         const targetScroll = document.body.scrollHeight;
         if (window.lenis) {
             window.lenis.scrollTo(targetScroll, { immediate: true });
