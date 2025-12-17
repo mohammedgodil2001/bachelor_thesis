@@ -1037,7 +1037,7 @@ body {
 
 .loader-logo svg {
   width: 100%;
-  max-width: 200px;
+  max-width: 250px;
   height: auto;
 }
 
@@ -1051,6 +1051,7 @@ body {
 
 .loader-text-group p {
   font-family: var(--font-secondary);
+  font-size: 0.9rem;
 }
 
 .loader-logo-group {
