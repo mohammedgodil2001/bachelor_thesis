@@ -128,7 +128,8 @@ fieldset {
     font-size: 1rem;
     color: rgba(255, 255, 255);
     text-align: left;
-    font-weight: 300;
+    font-family: var(--font-secondary);
+    font-weight: 400;
 }
 
 .title-separator {
@@ -365,6 +366,7 @@ fieldset {
     max-width: 325px;
     font-size: 0.8rem;
     color: rgba(255, 255, 255);
+    font-family: var(--font-secondary);
 }
 
 #mazda_desc {
@@ -657,6 +659,11 @@ fieldset {
     width: 100%;
 }
 
+.label-text{
+    font-family: var(--font-secondary);
+    font-size: 0.8rem;
+}
+
 .form-group.full-width {
     width: 100%;
 }
@@ -685,6 +692,10 @@ fieldset {
     align-items: center;
 }
 
+.label-row input{
+    
+}
+
 .form-group input,
 .form-group textarea {
     width: 100%;
@@ -699,7 +710,7 @@ fieldset {
     font-size: 13px;
     /* Smaller font */
     transition: border-color 0.3s ease;
-    font-family: inherit;
+    font-family: var(--font-secondary);
 }
 
 .form-group textarea {
@@ -743,11 +754,12 @@ fieldset {
 }
 
 .section-title {
-    font-size: 20px;
-    font-weight: 400;
+    font-size: 30px;
     margin-bottom: 10px;
     letter-spacing: 1px;
     color: #fff;
+    font-family: var(--font-primary);
+    font-weight: 100;
 }
 
 .section-description {
@@ -756,6 +768,7 @@ fieldset {
     color: rgba(255, 255, 255, 0.8);
     margin-bottom: 15px;
     max-width: 95%;
+    font-family: var(--font-secondary);
 }
 
 .duration-container {
@@ -854,10 +867,10 @@ fieldset {
 }
 
 .calendar-header h3 {
-    font-size: 24px;
-    font-weight: 300;
-    letter-spacing: 2px;
+    font-size: 25px;
+    font-weight: 100;
     color: #fff;
+    font-family: var(--font-secondary);
 }
 
 .nav-btn {
@@ -874,9 +887,10 @@ fieldset {
 .calendar-weekdays div {
     text-align: center;
     font-size: 14px;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255);
     padding: 0;
-    font-weight: 300;
+    font-weight: 400;
+    font-family: var(--font-secondary);
 }
 
 .calendar-days {
@@ -944,24 +958,25 @@ fieldset {
 .date-info {
     display: flex;
     gap: 0.5rem;
+    font-family: var(--font-secondary);
 }
 
 .date-info h3 {
-    font-size: 16px;
-    font-weight: 500;
+    font-size: 25px;
+    font-weight: 100;
     margin-bottom: 2px;
     color: #fff;
 }
 
 .date-info p {
-    font-size: 16px;
-    color: rgba(255, 255, 255, 0.8);
+    font-size: 25px;
+    color: rgba(255, 255, 255);
 }
 
 .duration-toggle {
     display: flex;
     gap: 8px;
-    background: rgba(255, 255, 255, 0.05);
+    /* background: rgba(255, 255, 255, 0.05); */
     padding: 5px;
     border-radius: 20px;
     border: 1px solid white;
@@ -969,6 +984,7 @@ fieldset {
 }
 
 .toggle-btn {
+    font-family: var(--font-secondary);
     background: transparent;
     border: none;
     color: #fff;
@@ -988,7 +1004,7 @@ fieldset {
 .time-slots {
     display: grid;
     gap: 12px;
-
+    
 }
 
 .time-slots.hidden {
@@ -996,6 +1012,7 @@ fieldset {
 }
 
 .time-slot {
+    font-family: var(--font-secondary);
     background: transparent;
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 25px;
@@ -1041,6 +1058,7 @@ fieldset {
 .email-text {
     font-size: 14px;
     color: rgba(255, 255, 255, 0.7);
+    font-family: var(--font-secondary);
 }
 
 .confirmation-email {
@@ -1349,10 +1367,12 @@ fieldset {
     max-width: 400px;
     align-self: center;
     line-height: 1.5;
+    font-family: var(--font-secondary);
 }
 
 .info-row span {
     font-size: 1rem;
+    font-family: var(--font-secondary);
     /* Reduced from 1.5rem */
 }
 
@@ -1704,7 +1724,7 @@ fieldset {
     transform: translate(-50%, -50%);
     color: #ffffff;
     font-size: 1rem;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family: var(--font-secondary);
     text-align: left;
     opacity: 0;
     pointer-events: none;
@@ -1758,6 +1778,8 @@ fieldset {
     display: flex;
     align-items: center;
     border-left: none;
+    font-weight: 400;
+    font-style: italic; 
 }
 
 .popup-part-text span {
@@ -2046,12 +2068,10 @@ fieldset {
 
 .indicator-text {
     writing-mode: vertical-rl;
-    /* text-orientation: mixed; */
     transform: rotate(180deg);
-    /* Reads bottom to top */
     color: white;
     font-size: 0.9rem;
-    font-family: 'Delight', sans-serif;
+    font-family: var(--font-secondary);
     text-transform: uppercase;
     white-space: nowrap;
 }
