@@ -1718,6 +1718,7 @@ fieldset {
     max-width: 350px;
     transition: opacity 0.3s ease;
     height: 80px;
+    scale: 0.9;
 }
 
 .popup-part-icon {

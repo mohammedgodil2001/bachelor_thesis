@@ -32,7 +32,8 @@ const initPixelTransition = () => {
 
     // Ensure image comparison is visible initially and header is hidden
     gsap.set(".image-comparison", { autoAlpha: 1 });
-    gsap.set("header .submit-btn, header .logo, header .hamburger, .audio-control", {
+    gsap.set(".image-comparison", { autoAlpha: 1 });
+    gsap.set("header .contact-us-btn, header .logo, header .hamburger, .audio-control", {
         autoAlpha: 0,
         pointerEvents: 'none'
     });
@@ -72,13 +73,13 @@ const initPixelTransition = () => {
                     stagger: index => 0.02 * (overlay.cells.flat()[index].row + gsap.utils.random(0, 5))
                 }).then(() => {
                     // Show header elements after transition
-                    gsap.to("header .submit-btn, header .logo, header .hamburger, .audio-control", {
+                    gsap.to("header .contact-us-btn, header .logo, header .hamburger, .audio-control", {
                         autoAlpha: 1,
                         duration: 0.6,
                         ease: 'power2.out',
                         stagger: 0.1,
                         onStart: () => {
-                            gsap.set("header .submit-btn, header .logo, header .hamburger, .audio-control", {
+                            gsap.set("header .contact-us-btn, header .logo, header .hamburger, .audio-control", {
                                 pointerEvents: 'auto'
                             });
                         }
@@ -118,12 +119,12 @@ const initPixelTransition = () => {
             hideGlobalUI();
 
             // Hide header elements first
-            gsap.to("header .submit-btn, header .logo, header .hamburger, .audio-control", {
+            gsap.to("header .contact-us-btn, header .logo, header .hamburger, .audio-control", {
                 autoAlpha: 0,
                 duration: 0.3,
                 ease: 'power2.in',
                 onStart: () => {
-                    gsap.set("header .submit-btn, header .logo, header .hamburger, .audio-control", {
+                    gsap.set("header .contact-us-btn, header .logo, header .hamburger, .audio-control", {
                         pointerEvents: 'none'
                     });
                 }
@@ -264,7 +265,7 @@ const openMenu = () => {
     menuTimeline = gsap.timeline();
 
     // Hide logo and contact button when menu opens
-    menuTimeline.to("header .submit-btn, header .logo, .audio-control", {
+    menuTimeline.to("header .contact-us-btn, header .logo, .audio-control", {
         autoAlpha: 0,
         duration: 0.3,
         ease: 'power2.out'
@@ -316,10 +317,11 @@ const closeMenuFunc = (onCompleteCallback) => {
             }
 
             // Show logo and contact button when menu closes
-            gsap.to("header .submit-btn, header .logo, .audio-control", {
+            gsap.to("header .contact-us-btn, header .logo, .audio-control", {
                 autoAlpha: 1,
-                duration: 0.4,
-                ease: 'power2.out'
+                duration: 0.3,
+                ease: 'power2.in',
+                delay: 0.3
             });
         }
     });

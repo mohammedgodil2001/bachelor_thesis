@@ -1846,4 +1846,66 @@ html.custom-cursor-active * {
   background-color: var(--color-white);
 }
 
+/* Contact Us Button - Header (Matches Booking Next Button) */
+.contact-us-btn {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: white;
+  color: rgb(0, 0, 0);
+  border: 1px solid white;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 1px 18px;
+
+  /* Layout & Visibility */
+  position: fixed;
+  top: var(--spacing-lg);
+  left: var(--spacing-lg);
+  z-index: var(--z-menu);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.contact-us-btn span {
+  font-family: 'Delight', sans-serif;
+  font-weight: 200;
+}
+
+/* Icon Container */
+.contact-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+  background: #000000;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  margin-right: -15px;
+}
+
+/* SVG Styling */
+.contact-icon svg {
+  width: 15px;
+  height: 15px;
+  color: #ffffff;
+  transition: transform 0.3s ease;
+  transform: rotate(135deg);
+}
+
+/* Hover Effects */
+.contact-us-btn:hover .contact-icon {
+  transform: translateY(0);
+}
+
+.contact-us-btn:hover .contact-icon svg {
+  transform: rotate(90deg);
+}
+
 /* Car Dragging Scene Styles moved to carDragging.css */

@@ -82,6 +82,9 @@ const animateText = (element) => {
                 overwrite: 'auto',
                 onStart: () => {
                     const audioToggle = document.querySelector('.audio-toggle');
+                    // Check if loading is active
+                    if (window.isLoading) return;
+
                     if (audioToggle && audioToggle.getAttribute('aria-pressed') === 'true') {
                         revealAudio.currentTime = 0;
                         revealAudio.play().catch(() => {});
