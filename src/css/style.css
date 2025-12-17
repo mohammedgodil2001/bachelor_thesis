@@ -1033,6 +1033,7 @@ body {
   width: 90%;
   color: white;
   gap: 2rem;
+  margin-top: 6rem;
 }
 
 .loader-logo svg {

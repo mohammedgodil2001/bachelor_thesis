@@ -60,6 +60,16 @@ const initPixelTransition = () => {
                 return;
             }
 
+            // Bypass animation if navigating via menu
+            if (window.isNavigating) {
+                gsap.set(".image-comparison", { autoAlpha: 0 });
+                gsap.set(".scroll-indicator", { autoAlpha: 0 });
+                // Also ensure global UI shows if skipping animation
+                showGlobalUI();
+                activateCustomCursor();
+                return;
+            }
+
             if (isAnimating) return;
             isAnimating = true;
             
@@ -104,6 +114,15 @@ const initPixelTransition = () => {
         },
         // When scrolling back up into the pin
         onEnterBack: () => {
+            // Bypass animation if navigating via menu
+            if (window.isNavigating) {
+                gsap.set(".image-comparison", { autoAlpha: 1 });
+                gsap.set(".scroll-indicator", { autoAlpha: 1 });
+                hideGlobalUI();
+                deactivateCustomCursor();
+                return;
+            }
+
             if (isAnimating) return;
             isAnimating = true;
             

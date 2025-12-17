@@ -1911,7 +1911,7 @@ fieldset {
     position: fixed;
     /* Changed from absolute to fixed */
     bottom: 30px;
-    right: 20px;
+    right: 40px;
     width: 250px;
     height: 120px;
     z-index: 9999;

@@ -696,6 +696,17 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
         const dotsNav = document.querySelector('.carousel-dots');
         const dots = Array.from(dotsNav.children);
 
+        // Pre-split text for all slides
+        slides.forEach(slide => {
+            const p = slide.querySelector('.slide-caption p');
+            if (p) {
+                const text = p.textContent.replace(/\s+/g, ' ').trim();
+                p.innerHTML = text.split(' ').map(word => 
+                    `<span class="word" style="display:inline-block; will-change:transform; margin-right:0.25em; opacity: 0; transform: translateY(50px);">${word}</span>`
+                ).join('');
+            }
+        });
+
         let currentIndex = 0;
 
         const updateCarousel = (index) => {
@@ -708,6 +719,42 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
             dots[index].classList.add('active');
 
             currentIndex = index;
+            
+            // Animation for the new active slide's text
+            const activeSlide = slides[index];
+            const activeCaption = activeSlide.querySelector('.slide-caption p');
+            if (activeCaption) {
+                // Determine existing words or split if needed (though we do it initially)
+                const words = activeCaption.querySelectorAll('.word');
+                
+                // Kill any existing tweens on these elements to prevent conflicts
+                gsap.killTweensOf(words);
+                
+                // Reset state immediately
+                gsap.set(words, { y: 50, opacity: 0 });
+
+                // Animate In matches .project-description
+                gsap.to(words, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.8,
+                    stagger: 0.05,
+                    ease: "back.out(1.7)",
+                    delay: 0.1 // Slight delay after slide change
+                });
+            }
+            
+            // Reset other slides
+            slides.forEach((slide, i) => {
+                if (i !== index) {
+                    const caption = slide.querySelector('.slide-caption p');
+                    if (caption) {
+                        const words = caption.querySelectorAll('.word');
+                        gsap.killTweensOf(words);
+                        gsap.set(words, { y: 50, opacity: 0 });
+                    }
+                }
+            });
         };
 
         const goToNextSlide = (e) => {
@@ -740,11 +787,49 @@ export const initBookingScene = (overlay) => { // Accept overlay instance
             });
         });
 
+        // Learn More Button Logic
+        const learnMoreBtn = document.querySelector('.learn-more-btn');
+        const slideUrls = [
+            'https://static1.squarespace.com/static/6513fe5dc027a77c7b908405/t/663b740dbb6c166f9bc00ac0/1715172368210/Renault+Design+Workshop+on+DigiPHY+%281%29.pdf',
+            'https://www.granstudio.com/granstudio-lynkco-coolfamilycar-project',
+            'https://static1.squarespace.com/static/6513fe5dc027a77c7b908405/t/663b75b5ced1cc4d17055427/1715172796600/Mazda+Design+Workshop+on+DigiPHY+%281%29.pdf'
+        ];
+
+        if (learnMoreBtn) {
+            learnMoreBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const url = slideUrls[currentIndex];
+                if (url) {
+                    window.open(url, '_blank');
+                }
+            });
+        }
+
         // Optional: Keyboard navigation if section is active (could be added later)
     };
 
     // Initialize the carousel
     initCarousel();
+    
+    // Trigger initial animation for the first slide
+    // We need to wait slightly for the DOM to be ready or just force the update
+    // Since initCarousel is called, we can manually trigger the animation for index 0
+    const initialSlide = document.querySelector('.carousel-slide.active');
+    if (initialSlide) {
+         const caption = initialSlide.querySelector('.slide-caption p');
+         if (caption) {
+             const words = caption.querySelectorAll('.word');
+             gsap.to(words, {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                stagger: 0.05,
+                ease: "back.out(1.7)",
+                delay: 0.2
+            });
+         }
+    }
 
     // Initialize Booking Form Functionality
     initBookingForm();
